@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 public class PlayerSelectionScreen extends JPanel{
@@ -20,14 +21,15 @@ public class PlayerSelectionScreen extends JPanel{
 	
 	//Manual connect to other player panel 
 	private JPanel pPnlManualConnect;
-	private JPanel pPnlPlayerList;
+	private JScrollPane pSclPnlPlayers;
 	private JLabel pLblOpponentIp;
 	private JButton pBtnConnect;
 	private JLabel pLblYourIp;
 	private JTextField pTxtHostAddress;
 
 	//Auto find other players panel
-	private JList<ArrayList<String>>  pLstPlayers;
+	private JList<ArrayList<String>> pLstPlayers;
+	private JPanel pPnlPlayerList;
 	private JButton pBtnPlay;
 	private JButton pBtnRefresh;
 
@@ -42,27 +44,44 @@ public class PlayerSelectionScreen extends JPanel{
 		
 		
 		//add panels to screen
-		Dimension size = pPnlManualConnect.getPreferredSize();
+		Dimension size;
 		Insets insets = this.getInsets();
 		
+		size = pPnlManualConnect.getPreferredSize();
 		pPnlManualConnect.setBounds(5+insets.left, 5+insets.top, size.width+16, size.height+16);
 		pPnlManualConnect.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.add(pPnlManualConnect);
-
-
+		
+		size = pPnlPlayerList.getPreferredSize();
+		pPnlPlayerList.setBounds(5+insets.left, 100+insets.top, size.width+16, size.height+16);
+		pPnlPlayerList.setBorder(BorderFactory.createLineBorder(Color.black));
+		this.add(pPnlPlayerList);
+	
 	}
 	private void createPlayerListPanel(){
+		
 		pPnlPlayerList = new JPanel();
 		
-		GridBagConstraints layout = new GridBagConstraints();
 		pPnlPlayerList.setLayout(new GridBagLayout());
+		GridBagConstraints layout = new GridBagConstraints();
 		
+		//instantiate gui objects
+		pBtnPlay = new JButton("Play Selected Player");
+		pBtnRefresh = new JButton("Refresh Players List");
 		pLstPlayers = new JList<ArrayList<String>>();
+		pSclPnlPlayers = new JScrollPane(pLstPlayers);
+		
+		layout.gridx=1;
+		layout.gridy=0;
+		pPnlPlayerList.add(pBtnPlay,layout);
 		
 		layout.gridx=0;
 		layout.gridy=0;
-		pPnlManualConnect.add(pLblOpponentIp,layout);
+		pPnlPlayerList.add(pSclPnlPlayers,layout);
 		
+		layout.gridx=0;
+		layout.gridy=1;
+		pPnlPlayerList.add(pBtnRefresh,layout);
 		
 	}
 	
@@ -132,6 +151,10 @@ public class PlayerSelectionScreen extends JPanel{
 
 	public void setpBtnConnectAction(ActionListener a) {
 		pBtnConnect.addActionListener(a);
+	}
+	
+	public void updatePlayersList(){
+		
 	}
 
 
