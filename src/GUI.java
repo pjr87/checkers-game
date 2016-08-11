@@ -28,6 +28,6 @@ public class GUI extends JFrame{
 		return playerSelectionScreen;
 	}
 	public void updatePlayersList(){
-		playerSelectionScreen.updatePlayersList();
+		//playerSelectionScreen.updatePlayersList();
 	}
 }

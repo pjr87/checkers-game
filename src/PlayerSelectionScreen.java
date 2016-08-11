@@ -85,7 +85,7 @@ public class PlayerSelectionScreen extends JPanel{
 		
 		pPnlPlayerList.setLayout(new GridBagLayout());
 		GridBagConstraints layout = new GridBagConstraints();
-		Vector<String> players = getPlayers();
+		Vector<String> players = new Vector<String>();
 		players.add("hey");
 		players.add("te");
 		players.add("hey");
@@ -97,6 +97,7 @@ public class PlayerSelectionScreen extends JPanel{
 		players.add("hey");
 		players.add("te");
 		players.add("hey");
+		
 		//instantiate gui objects
 		pBtnPlay = new JButton("Play Selected Player");
 		pBtnRefresh = new JButton("Refresh Players List");
@@ -203,16 +204,12 @@ public class PlayerSelectionScreen extends JPanel{
 		pBtnConnect.addActionListener(a);
 	}
 	
-	public int getSelectedPlayerName(){
-		return pLstPlayers.getSelectedIndex();
-	}
-	
-	public int getSelectedPlayerIp(){
-		return pLstPlayers.getSelectedIndex();
+	public String getSelectedPlayerName(){
+		return pLstPlayers.getSelectedValue().toString();
 	}
 	
 	public void updatePlayersList(Map<String,String> newPlayers){
-		players = newPlayers
+		//players = newPlayers
 	}
 
 
