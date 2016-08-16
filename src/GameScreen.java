@@ -19,6 +19,13 @@ public class GameScreen extends JPanel{
 	private JButton gBtnNotation;
 	private JButton gBtnDraw;
 	private JLabel[][] gLblSpaces;
+	
+	final static private Color clrDisabledGreen = new Color(160, 255, 170);
+	final static private Color clrEnabledGreen = new Color(0, 255, 127);
+	final static private Color clrOffTiles = new Color(238, 238, 224);
+	final static private Color clrDisableBorders = new Color(205, 205, 193);
+	final static private Color clrEnableBorders = new Color(139, 136, 120);
+	
 
 
 	//Constructor - GUI Setup
@@ -67,19 +74,22 @@ public class GameScreen extends JPanel{
 				layout.gridy=j+2;
 				if(layout.gridx%2 != layout.gridy%2){
 					spaces[i][j] = new JLabel();
-					spaces[i][j].setBackground(new Color(160, 255, 170));
+					spaces[i][j].setBackground(clrDisabledGreen);
 				}
 				else{
 					spaces[i][j] = new JLabel();
-					spaces[i][j].setBackground(new Color(238, 238, 224));
+					spaces[i][j].setBackground(clrOffTiles);
 				}
 				spaces[i][j].setPreferredSize(new Dimension(65, 65));
 				spaces[i][j].setOpaque(true);
-				spaces[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
+				spaces[i][j].setBorder(BorderFactory.createLineBorder(clrDisableBorders));
 
 				this.add(spaces[i][j], layout);
 			}
+			
 		}
+		spaces[2][3].setBackground(clrEnabledGreen);
+		spaces[2][3].setBorder(BorderFactory.createLineBorder(clrEnableBorders));
 	}
 
 	public void setpBtnResignAction(ActionListener a) { gBtnResign.addActionListener(a); }

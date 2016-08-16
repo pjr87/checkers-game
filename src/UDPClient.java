@@ -10,7 +10,7 @@ import java.util.List;
 
 public class UDPClient implements UDPNetwork{
 	
-	public static final int DEFAULT_PORT = 7777;
+	public static final int DEFAULT_PORT = 5001;
 	private DatagramSocket socket = null;
 	private DatagramPacket packet;
 	//private String hostname= "localhost";
@@ -20,8 +20,8 @@ public class UDPClient implements UDPNetwork{
 	public void socket() {
 		try 
 		{
-			//host = InetAddress.getByName(hostname);
-			host = InetAddress.getLocalHost();
+			host = InetAddress.getByName("255.255.255.255");
+			//host = InetAddress.getLocalHost();
 			socket = new DatagramSocket (null);
 		} 
 		catch (Exception e) 

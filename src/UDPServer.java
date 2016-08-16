@@ -11,7 +11,7 @@ import java.util.List;
 
 public class UDPServer implements UDPNetwork{
 	
-	public static final int DEFAULT_PORT = 7777;
+	public static final int DEFAULT_PORT = 5001;
 	private DatagramSocket socket = null;
 	private DatagramPacket packet;
 	List<String> ipAddresses = new ArrayList<String>();
