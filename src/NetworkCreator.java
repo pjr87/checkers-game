@@ -75,6 +75,7 @@ public class NetworkCreator{
 	}
 	
 	protected void SendMove(){
+		
 		//When player is ready to send
 			//Sends message, waits for response, 5 second delay
 			//Sends again until response is received

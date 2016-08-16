@@ -13,14 +13,15 @@ public class UDPClient implements UDPNetwork{
 	public static final int DEFAULT_PORT = 7777;
 	private DatagramSocket socket = null;
 	private DatagramPacket packet;
-	private String hostname= "localhost";
+	//private String hostname= "localhost";
     private InetAddress host;
 
 	@Override
 	public void socket() {
 		try 
 		{
-			host = InetAddress.getByName(hostname);
+			//host = InetAddress.getByName(hostname);
+			host = InetAddress.getLocalHost();
 			socket = new DatagramSocket (null);
 		} 
 		catch (Exception e) 
