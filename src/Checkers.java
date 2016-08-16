@@ -18,11 +18,14 @@ public class Checkers {
 	private static Checkers checkers;
 	private GUI gui;
 	private String username;
+	private NetworkCreator network;
 	private Map<String,String> foundPlayers = new HashMap<String,String>();
 
 	private Checkers(){
 		username = JOptionPane.showInputDialog(null, "Please enter a unique username!");
 		gui = new GUI();
+		network = new NetworkCreator(); 
+		network.StartNetworking();
 		setButtonActions();
 	}
 	private void setButtonActions(){
@@ -39,7 +42,8 @@ public class Checkers {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Play selected player.");
-				int index = pScreen.getSelectedPlayer();
+				String playerIp = foundPlayers.get( pScreen.getSelectedPlayerName() );
+				
 			}
 		});
 
