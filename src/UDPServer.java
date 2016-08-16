@@ -20,7 +20,7 @@ public class UDPServer implements UDPNetwork{
 	public void socket() {
 		try{
             // creating a socket
-			socket = new DatagramSocket(DEFAULT_PORT, InetAddress.getByName("0.0.0.0"));
+			socket = new DatagramSocket(DEFAULT_PORT);
 			socket.setBroadcast(true);
         }
 		catch(IOException e){
@@ -34,8 +34,8 @@ public class UDPServer implements UDPNetwork{
         try{
             socket.receive (packet);
             String address = packet.getAddress().toString();
-            System.out.println("Received from: " + address + ":" +
-                               packet.getPort());
+            //System.out.println("Received from: " + address + ":" +
+             //                  packet.getPort());
             addAddress(address);
             byte[] outBuffer = new java.util.Date ().toString ().getBytes ();
 		    packet.setData (outBuffer);
