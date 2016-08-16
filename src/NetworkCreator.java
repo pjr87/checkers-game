@@ -19,7 +19,7 @@ public class NetworkCreator{
 	
 	protected void StartNetworking(){
 		//Start Server
-		UDPserver.socket();
+	//	UDPserver.socket();
 		
 		//Start client
 		UDPclient.socket();
@@ -28,7 +28,7 @@ public class NetworkCreator{
 		sendThread.start();
 			
 		//Server recv
-		recvThread.start();
+		//recvThread.start();
 	}
 	
 	Thread sendThread = new Thread (){

@@ -20,10 +20,12 @@ public class UDPClient implements UDPNetwork{
 	public void socket() {
 		try 
 		{
+
 			//host = InetAddress.getByName(hostname);
 			host = InetAddress.getByName("255.255.255.255");
 			//host = InetAddress.getLocalHost();
 			socket = new DatagramSocket ();
+
 		} 
 		catch (Exception e) 
 		{
