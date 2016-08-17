@@ -1,0 +1,6 @@
+
+public enum Screen {
+	GAME_SCREEN,
+	PLAYER_SELECTION_SCREEN,
+	NOTATION_SCREEN
+}

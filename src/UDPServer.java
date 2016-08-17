@@ -11,7 +11,7 @@ import java.util.List;
 
 public class UDPServer implements UDPNetwork{
 	
-	public static final int DEFAULT_PORT = 7777;
+	public static final int DEFAULT_PORT = 5001;
 	private DatagramSocket socket = null;
 	private DatagramPacket packet;
 	List<String> ipAddresses = new ArrayList<String>();
@@ -21,6 +21,7 @@ public class UDPServer implements UDPNetwork{
 		try{
             // creating a socket
 			socket = new DatagramSocket(DEFAULT_PORT);
+			socket.setBroadcast(true);
         }
 		catch(IOException e){
             System.err.println("IOException " + e);
@@ -33,8 +34,8 @@ public class UDPServer implements UDPNetwork{
         try{
             socket.receive (packet);
             String address = packet.getAddress().toString();
-            System.out.println("Received from: " + address + ":" +
-                               packet.getPort());
+            //System.out.println("Received from: " + address + ":" +
+             //                  packet.getPort());
             addAddress(address);
             byte[] outBuffer = new java.util.Date ().toString ().getBytes ();
 		    packet.setData (outBuffer);

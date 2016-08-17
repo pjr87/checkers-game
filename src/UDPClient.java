@@ -10,19 +10,19 @@ import java.util.List;
 
 public class UDPClient implements UDPNetwork{
 	
-	public static final int DEFAULT_PORT = 7777;
+	public static final int DEFAULT_PORT = 5001;
 	private DatagramSocket socket = null;
 	private DatagramPacket packet;
-	//private String hostname= "localhost";
     private InetAddress host;
 
 	@Override
 	public void socket() {
 		try 
 		{
-			//host = InetAddress.getByName(hostname);
-			host = InetAddress.getLocalHost();
-			socket = new DatagramSocket (null);
+
+			host = InetAddress.getByName("255.255.255.255");
+			socket = new DatagramSocket ();
+
 		} 
 		catch (Exception e) 
 		{
@@ -48,8 +48,8 @@ public class UDPClient implements UDPNetwork{
 		try 
 		{
 			packet = new DatagramPacket (new byte[100], 0,host, DEFAULT_PORT);
-			 System.out.println("Sent from: " + packet.getAddress () + ":" +
-                     packet.getPort ());
+			// System.out.println("Sent from: " + packet.getAddress () + ":" +
+             //        packet.getPort ());
 			socket.send (packet);
 		} 
 		catch (IOException e) 
