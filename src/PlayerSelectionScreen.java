@@ -1,17 +1,12 @@
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Vector;
+import java.util.List;
 
-import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -19,10 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
 public class PlayerSelectionScreen extends JPanel{
 
@@ -37,69 +33,54 @@ public class PlayerSelectionScreen extends JPanel{
 	private JTextField pTxtHostAddress;
 
 	//Auto find other players panel
-	private JList<Vector<String>> pLstPlayers;
 	private JPanel pPnlPlayerList;
+	private JList<Object[]> pLstPlayers;
 	private JButton pBtnPlay;
 	private JButton pBtnRefresh;
 	
-	//helper variables 
-	
-
-	private Vector<String> getPlayers(Map<String, String> players){
-		Vector<String> vector = null;
-		for (String playerName : players.keySet()) {
-			vector.add(playerName);
-		}
-		return vector;
-	}
-	
+	//helper vars
+	private DefaultListModel<String> players;
 	
 	//Constructor - GUI Setup
 	public PlayerSelectionScreen() {
 		
 		this.setLayout(null);
+		players = new DefaultListModel<String>();
 		
 		//player Screen sub-panels
 		createManualConnectPanel();
 		createPlayerListPanel();
 		
+		updatePlayBtn();
+		updateConnectBtn();
 		
 		//add panels to screen
 		Dimension size;
 		Insets insets = this.getInsets();
 		
 		size = pPnlManualConnect.getPreferredSize();
-		pPnlManualConnect.setBounds(5+insets.left, 5+insets.top, size.width+16, size.height+16);
-		pPnlManualConnect.setBorder(BorderFactory.createLineBorder(Color.black));
+		pPnlManualConnect.setBounds(15+insets.left, 10+insets.top, size.width+30, size.height+30);
+		pPnlManualConnect.setBorder(new TitledBorder("Manually Connect"));
 		this.add(pPnlManualConnect);
 		
 		size = pPnlPlayerList.getPreferredSize();
-		pPnlPlayerList.setBounds(5+insets.left, 55+insets.top, size.width+16, size.height+16);
-		pPnlPlayerList.setBorder(BorderFactory.createLineBorder(Color.black));
+		pPnlPlayerList.setBounds(86+insets.left, 80+insets.top, size.width+30, size.height+30);
+		pPnlPlayerList.setBorder(new TitledBorder("Select Opponent From List"));
 		this.add(pPnlPlayerList);
 	
 	}
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void createPlayerListPanel(){
 		
 		pPnlPlayerList = new JPanel();
-		
+		pPnlPlayerList.setToolTipText("sample text");
+		 
 		pPnlPlayerList.setLayout(new GridBagLayout());
 		GridBagConstraints layout = new GridBagConstraints();
-		Vector<String> players = getPlayers();
-		players.add("hey");
-		players.add("te");
-		players.add("hey");
-		players.add("te");
-		players.add("hey");
-		players.add("te");
-		players.add("hey");
-		players.add("te");
-		players.add("hey");
-		players.add("te");
-		players.add("hey");
+		
 		//instantiate gui objects
-		pBtnPlay = new JButton("Play Selected Player");
-		pBtnRefresh = new JButton("Refresh Players List");
+		pBtnPlay = new JButton("Challenge Selected Player");
+		pBtnRefresh = new JButton("     Refresh Players List      ");
 		pLstPlayers = new JList(players);
 		pSclPnlPlayers = new JScrollPane(pLstPlayers);
 		
@@ -110,42 +91,67 @@ public class PlayerSelectionScreen extends JPanel{
 		pLstPlayers.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent arg) {
-				if (pLstPlayers.getSelectedIndex() == -1) {
-					//No selection, disable play button.
-					pBtnPlay.setEnabled(false);
-
-				} else {
-					//Selection, enable the play button.
-					pBtnPlay.setEnabled(true);
-				}
+				updatePlayBtn();
 			}
 		});
 		
-		layout.gridx=1;
+	//position all elements on panel
+		layout.gridx=2;
 		layout.gridy=0;
+		pPnlPlayerList.add(new JLabel("   "),layout);
+		
+		layout.gridx=2;
+		layout.gridy=1;
+		layout.gridheight=1;
 		pPnlPlayerList.add(pBtnPlay,layout);
 		
-		layout.gridx=0;
+		layout.gridx=1;
 		layout.gridy=0;
-		pSclPnlPlayers.setPreferredSize(new Dimension(200, 80));
-		pPnlPlayerList.add(pSclPnlPlayers,layout);
+		pPnlPlayerList.add(new JLabel("   "),layout);
 		
-		layout.gridx=0;
-		layout.gridy=1;
+		layout.gridx=2;
+		layout.gridy=3;
+		JLabel padding = new JLabel();
+		padding.setPreferredSize(new Dimension(10,0));
+		padding.setOpaque(true);
+		pPnlPlayerList.add(padding,layout);
+		
+		layout.gridx=2;
+		layout.gridy=4;
 		pPnlPlayerList.add(pBtnRefresh,layout);
 		
+		layout.gridx=0;
+		layout.gridy=0;
+		layout.gridheight=5;
+		pSclPnlPlayers.setPreferredSize(new Dimension(200, 102));
+		pPnlPlayerList.add(pSclPnlPlayers,layout);
 	}
 	
-
 	private void createManualConnectPanel(){
 		
-		//instantiate Gui objects
+		//gridbag setup
 		GridBagConstraints layout = new GridBagConstraints();
-		JLabel padding = new JLabel("  ");
+		layout.fill=GridBagConstraints.HORIZONTAL;
+		layout.anchor=GridBagConstraints.WEST;
+		
+		//instantiate Gui objects
 		pPnlManualConnect = new JPanel();
 		pTxtHostAddress = new JTextField();
-		pBtnConnect = new JButton("Connect");
-		pLblOpponentIp = new JLabel("Enter opponents IP address to start a game: ");
+		pBtnConnect = new JButton("Challenge");
+		pLblOpponentIp = new JLabel("Opponents IP address: ");
+		
+		//add listener for when text in pTxtHostAddress changes.
+		pTxtHostAddress.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) { updateConnectBtn(); }
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) { updateConnectBtn(); }
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) { updateConnectBtn(); }
+		});
 
 		pPnlManualConnect.setLayout(new GridBagLayout());
 
@@ -155,12 +161,7 @@ public class PlayerSelectionScreen extends JPanel{
 
 		pLblYourIp = new JLabel("Your IP address is: "+address);
 
-		//layout settings 
-		//layout.weightx=1.0;
-		//layout.weighty=1.0;
-		layout.fill=GridBagConstraints.HORIZONTAL;
-		layout.anchor=GridBagConstraints.WEST;
-		
+	//position all elements on panel
 		layout.gridx=0;
 		layout.gridy=0;
 		pPnlManualConnect.add(pLblOpponentIp,layout);
@@ -172,7 +173,7 @@ public class PlayerSelectionScreen extends JPanel{
 
 		layout.gridx=2;
 		layout.gridy=0;
-		pPnlManualConnect.add(padding,layout);
+		pPnlManualConnect.add(new JLabel("   "),layout);
 
 		layout.gridx=3;
 		layout.gridy=0;
@@ -180,39 +181,48 @@ public class PlayerSelectionScreen extends JPanel{
 
 		layout.gridx=4;
 		layout.gridy=0;
-		padding.setText("       ");
-		pPnlManualConnect.add(padding,layout);
+		pPnlManualConnect.add(new JLabel("   "),layout);
 
 		layout.gridx=5;
 		layout.gridy=0;
 		pPnlManualConnect.add(pLblYourIp,layout);
-
-	}
-
-	//
-	public void setpBtnPlayAction(ActionListener a) {
-		pBtnPlay.addActionListener(a);
-	}
-
-	public void setpBtnRefreshAction(ActionListener a) {
-		pBtnRefresh.addActionListener(a);
-	}
-
-
-	public void setpBtnConnectAction(ActionListener a) {
-		pBtnConnect.addActionListener(a);
 	}
 	
-	public int getSelectedPlayerName(){
-		return pLstPlayers.getSelectedIndex();
+	//enables and disables the Challenge button
+	public void updateConnectBtn(){
+		String ipText = pTxtHostAddress.getText();
+		if(ipText.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"))
+			pBtnConnect.setEnabled(true);
+		else
+			pBtnConnect.setEnabled(false);
 	}
 	
-	public int getSelectedPlayerIp(){
-		return pLstPlayers.getSelectedIndex();
+	//enables and disables the "found players" play button 
+	public void updatePlayBtn(){
+		if (pLstPlayers.getSelectedIndex() == -1)
+			pBtnPlay.setEnabled(false);
+		else 
+			pBtnPlay.setEnabled(true);
 	}
+
+	//set action listerners
+	public void setpBtnPlayAction(ActionListener a) { pBtnPlay.addActionListener(a); }
+	public void setpBtnRefreshAction(ActionListener a) { pBtnRefresh.addActionListener(a); }
+	public void setpBtnConnectAction(ActionListener a) { pBtnConnect.addActionListener(a); }
+
+	//returns opponents ip address
+	public String getSelectedIp(){ return (String) players.getElementAt(pLstPlayers.getSelectedIndex()); }
+	public String getInputtedIp(){ return pTxtHostAddress.getText(); }
 	
-	public void updatePlayersList(Map<String,String> newPlayers){
-		players = newPlayers
+	//update the found players list
+	public void updatePlayersList(List<String> newPlayers){
+		players.removeAllElements();
+		for(int i = 0;i<newPlayers.size();i++){
+			players.addElement(newPlayers.get(i));
+			pLstPlayers.ensureIndexIsVisible(i);
+			pLstPlayers.setSelectedIndex(0);
+		}
+		updatePlayBtn();
 	}
 
 

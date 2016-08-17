@@ -1,20 +1,29 @@
 
 public class Move {
-	private Square start;
-	private Square end;
+	private Space start;
+	private Space end;
 	
-	public void get_start_pos(){
-		//what should this function return?
+	public Move(Space start, Space end){
+		this.start = start;
+		this.end = end;
 	}
 	
-	public void get_end_pos(){
-		//see above
+	public int get_start_pos(){
+		return start.get_pos();
+	}
+	
+	public int get_end_pos(){
+		return end.get_pos();
+	}
+	
+	public int get_captured(){
+		return -1;
 	}
 	
 	public void apply(){
 		end.set_piece(start.get_piece);
-		stare.remove_piece();
+		start.remove_piece();
 		
-		//Networking has to happen. How are we doing that?
+		Network.sendMove(this);
 	}
 }
