@@ -16,6 +16,8 @@ public class Checkers{
 
 	private GUI gui;
 	private NetworkCreator network;
+	private Board board;
+	private boolean isRed;
 	//private String username;
 	//private Map<String,String> foundPlayers = new HashMap<String,String>();
 
@@ -24,6 +26,8 @@ public class Checkers{
 		network = new NetworkCreator(); 
 		network.StartNetworking();
 		//username = JOptionPane.showInputDialog(null, "Please enter a unique username!");
+		board = new Board();
+		
 		gui = new GUI(new JLabel[8][8]);
 		gui.updatePlayersList( network.getAvailablePlayers() );
 		
@@ -71,9 +75,7 @@ public class Checkers{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Manual connect to host.");
-				System.out.println(chooseWhoGoesFirst());
-				network.Connect(  gui.getInputtedIp()  );
-				gui.setScreen(Screen.GAME_SCREEN);
+				challengePlayer(gui.getInputtedIp());
 			}
 		});
 		
@@ -82,9 +84,7 @@ public class Checkers{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Play selected player.");
-				System.out.println( chooseWhoGoesFirst() );
-				network.Connect(  gui.getSelectedIp()  );
-				gui.setScreen(Screen.GAME_SCREEN);
+				challengePlayer(gui.getSelectedIp());
 			}
 		});
 
@@ -109,6 +109,21 @@ public class Checkers{
                 	//do nothing. 
             }
 		});
+	}
+	
+	public void challengePlayer(String player){
+		//System.out.println( chooseWhoGoesFirst() );
+		if(network.Connect(player)){
+			isRed=true;
+			startGame();
+		}
+	}
+	
+	public void startGame(){
+		board.setBoard(isRed);
+		gui.setScreen(Screen.GAME_SCREEN);
+		gui.refreshScreen();
+		board.getValidMoves(isRed);
 	}
 	
 	public static ArrayList<String> getIps() throws SocketException{

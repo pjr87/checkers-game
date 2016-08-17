@@ -18,20 +18,26 @@ public class GameScreen extends JPanel{
 	private JButton gBtnResign;
 	private JButton gBtnNotation;
 	private JButton gBtnDraw;
-	private JLabel[][] gLblSpaces;
-	
+	private JLabel[] gLblSquares;
+
 	final static private Color clrDisabledGreen = new Color(160, 255, 170);
 	final static private Color clrEnabledGreen = new Color(0, 255, 127);
 	final static private Color clrOffTiles = new Color(238, 238, 224);
 	final static private Color clrDisableBorders = new Color(205, 205, 193);
 	final static private Color clrEnableBorders = new Color(139, 136, 120);
-	
 
 
 	//Constructor - GUI Setup
-	public GameScreen(JLabel[][] spaces){
+	public GameScreen(JLabel[] squares){
 
-		gLblSpaces = spaces;
+		gLblSquares = new JLabel[64];
+		int indx=0;
+		for(int i = 0; i< squares.length; i++){
+			gLblSquares[indx++]=new JLabel();
+			gLblSquares[indx++]=squares[i];
+		}
+
+		gLblSquares = squares;
 		//set layout
 		this.setLayout(new GridBagLayout());
 
@@ -68,30 +74,34 @@ public class GameScreen extends JPanel{
 		this.add(new JLabel("   "), layout);
 
 		layout.gridwidth=1;
-		for(int i = 0; i < spaces.length;i++){
-			layout.gridx=i+2;
-			for(int j = 0;j<spaces[i].length;j++){
-				layout.gridy=j+2;
-				if(layout.gridx%2 != layout.gridy%2){
-					spaces[i][j] = new JLabel();
-					spaces[i][j].setBackground(clrDisabledGreen);
-				}
-				else{
-					spaces[i][j] = new JLabel();
-					spaces[i][j].setBackground(clrOffTiles);
-				}
-				spaces[i][j].setPreferredSize(new Dimension(65, 65));
-				spaces[i][j].setOpaque(true);
-				spaces[i][j].setBorder(BorderFactory.createLineBorder(clrDisableBorders));
-
-				this.add(spaces[i][j], layout);
+		layout.gridy=2;
+		int yCounter=0;
+		for(int i = 0;i<squares.length;i++){
+			layout.gridx=i%8+2;
+			if(yCounter==7){
+				yCounter=0;
+				layout.gridy++;
 			}
-			
-		}
-		spaces[2][3].setBackground(clrEnabledGreen);
-		spaces[2][3].setBorder(BorderFactory.createLineBorder(clrEnableBorders));
-	}
 
+			if(layout.gridx%2 != layout.gridy%2)
+				squares[i].setBackground(clrDisabledGreen);
+
+			else
+				squares[i].setBackground(clrOffTiles);
+
+			squares[i].setPreferredSize(new Dimension(65, 65));
+			squares[i].setOpaque(true);
+			squares[i].setBorder(BorderFactory.createLineBorder(clrDisableBorders));
+
+			this.add(squares[i], layout);
+			yCounter++;
+		}
+
+
+		squares[3].setBackground(clrEnabledGreen);
+		squares[3].setBorder(BorderFactory.createLineBorder(clrEnableBorders));
+
+	}
 	public void setpBtnResignAction(ActionListener a) { gBtnResign.addActionListener(a); }
 
 	public void setpBtnDrawAction(ActionListener a) { gBtnDraw.addActionListener(a); }
@@ -99,10 +109,9 @@ public class GameScreen extends JPanel{
 	public void setpBtnNotationAction(ActionListener a) { gBtnNotation.addActionListener(a); }
 
 	public void setAllSpacesMouseListener(MouseAdapter mouseA) {
-		for (JLabel[] jLabels : gLblSpaces) {
-			for (JLabel jLabel : jLabels){
-				jLabel.addMouseListener(mouseA);
-			}
+		for (int i =0; i<gLblSquares.length;i++){
+			if(i%2==0)
+				gLblSquares[i].addMouseListener(mouseA);
 		}
 	}
 }
