@@ -1,9 +1,12 @@
 public class King extends Piece
 {
-    Direction[] get_move_directions()
+	private static final long serialVersionUID = 5808630875414058730L;
+
+	public King(boolean team)
     {
-       Direction[] directions = {Direction.UpRight, Direction.UpLeft, Direction.DownLeft, Direction.DownRight};
-       return directions;
+    	super(team);
+    	Direction[] directions = {Direction.UpRight, Direction.UpLeft, Direction.DownLeft, Direction.DownRight};
+    	this.directions = directions;
     }
 }
 
