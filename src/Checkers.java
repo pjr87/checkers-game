@@ -117,6 +117,7 @@ public class Checkers{
 	public void challengePlayer(String player){
 		//System.out.println( chooseWhoGoesFirst() );
 		//if(network.Connect( player )){
+
 			isRed=true;
 			startGame();
 		//}
