@@ -10,10 +10,10 @@ public class Board {
 	Square[] squares;
 	
 	public Board(){
-		squares = new square[32];
+		squares = new Square[32];
 		
 		for(int i=0; i<32; i++)
-			squares[i] = new square(i);
+			squares[i] = new Square(i);
 		
 		for(int i=0; i<32; i++){
 			//topleft link
@@ -49,7 +49,7 @@ public class Board {
 	public ArrayList<Move> getValidMoves(boolean i){
 		ArrayList<Move> list = new ArrayList<Move>();
 		boolean mandatoryMoveExists = false;
-		for (Squares square : squares) {
+		for (Square square : squares) {
 			if(square.getPiece()!=null && square.getPiece().getTeam()==i){
 				Move[] moves = square.getMoves();
 				for (Move move : moves) {
@@ -77,7 +77,10 @@ public class Board {
 	}
 
 	public void setBoard(boolean isRed) {
-		// TODO Auto-generated method stub
+		for(int i = 0; i<12;i++)
+			squares[i].setPiece( new Piece(!isRed) );
 		
+		for(int i=20; i<32;i++)
+			squares[i].setPiece( new Piece(isRed) );
 	}
 }
