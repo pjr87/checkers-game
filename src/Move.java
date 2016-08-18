@@ -1,19 +1,19 @@
 
 public class Move {
-	private Space start;
-	private Space end;
+	private Square start;
+	private Square end;
 	
-	public Move(Space start, Space end){
+	public Move(Square start, Square end){
 		this.start = start;
 		this.end = end;
 	}
 	
 	public int get_start_pos(){
-		return start.get_pos();
+		return start.getLabel();
 	}
 	
 	public int get_end_pos(){
-		return end.get_pos();
+		return end.getLabel();
 	}
 	
 	public int get_captured(){
