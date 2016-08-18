@@ -1,9 +1,9 @@
 
 public class Move {
-	private Space start;
-	private Space end;
+	private Square start;
+	private Square end;
 	
-	public Move(Space start, Space end){
+	public Move(Square start, Square end){
 		this.start = start;
 		this.end = end;
 	}
