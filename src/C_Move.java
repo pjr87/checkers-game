@@ -8,11 +8,11 @@ public class C_Move extends Move {
 	}
 	
 	public int get_captured(){
-		return captured.get_pos();
+		return captured.getLabel();
 	}
 	
 	public void apply(){
-		captured.remove_piece();
+		captured.removePiece();
 		super.apply();
 	}
 }

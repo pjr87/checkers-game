@@ -21,8 +21,8 @@ public class Move {
 	}
 	
 	public void apply(){
-		end.set_piece(start.get_piece);
-		start.remove_piece();
+		end.setPiece(start.getPiece());
+		start.removePiece();
 		
 		Network.sendMove(this);
 	}
