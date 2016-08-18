@@ -1,8 +1,8 @@
 
 public class C_Move extends Move {
-	private Space captured;
+	private Square captured;
 	
-	public C_Move(Space start, Space end, Space captured){
+	public C_Move(Square start, Square end, Square captured){
 		super(start, end);
 		this.captured = captured;
 	}
