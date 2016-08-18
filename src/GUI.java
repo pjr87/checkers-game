@@ -15,8 +15,8 @@ public class GUI extends JFrame{
 	GameScreen gameScreen;
 	PlayerSelectionScreen playerSelectionScreen;
 	
-	public GUI(JLabel[][] spaces){
-		gameScreen = new GameScreen(spaces);
+	public GUI(JLabel[] j){
+		gameScreen = new GameScreen(j);
 		playerSelectionScreen = new PlayerSelectionScreen();
 		
 		setScreen(Screen.PLAYER_SELECTION_SCREEN);

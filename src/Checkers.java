@@ -26,9 +26,12 @@ public class Checkers{
 		network = new NetworkCreator(); 
 		network.StartNetworking();
 		//username = JOptionPane.showInputDialog(null, "Please enter a unique username!");
-		board = new Board();
-		
-		gui = new GUI(new JLabel[8][8]);
+		//board = new Board();
+		JLabel[] j = new JLabel[32];
+		for(int i=0;i<j.length;i++) {
+			j[i]=new JLabel();
+		}
+		gui = new GUI(j);
 		gui.updatePlayersList( network.getAvailablePlayers() );
 		
 		setButtonActions();
@@ -113,10 +116,10 @@ public class Checkers{
 	
 	public void challengePlayer(String player){
 		//System.out.println( chooseWhoGoesFirst() );
-		if(network.Connect(player)){
+		//if(network.Connect(player)){
 			isRed=true;
 			startGame();
-		}
+		//}
 	}
 	
 	public void startGame(){
