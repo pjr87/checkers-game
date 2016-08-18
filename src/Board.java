@@ -75,6 +75,23 @@ public class Board {
 		if(m.get_captured()>=0)
 			squares[m.get_captured()].setPiece(null);
 	}
+	
+	public ArrayList<Move> getAbailableMoves(Square s){
+		boolean mandatoryMoveExists=false;
+		ArrayList<Move> list = s.getMoves();
+		for (Move move : list) {
+			if(move instanceof C_Move)
+				mandatoryMoveExists=true;
+			list.add(move);
+		}
+		if(mandatoryMoveExists){
+			for (int x = list.size()-1; x > -1; x--){
+				if(!(list.get(x) instanceof C_Move))
+					list.remove(x);
+			}
+		}
+		return list;
+	}
 
 	public void setBoard(boolean isRed) {
 		for(int i = 0; i<12;i++)
