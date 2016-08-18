@@ -83,20 +83,24 @@ public class Square extends JLabel {
 		}
 		ArrayList<Move> moves = new ArrayList<Move>();
 		for (Square neighbour : neighbours.values()) {
+			if(neighbour == null)
+			{
+				continue;
+			}
 		    if(neighbour.getPiece() == null )
 		    {
 		    	moves.add(new Move(this, neighbour));
 		    }
 		    else if(neighbour.getPiece().getTeam() != this.getPiece().getTeam())
 		    {
-		    	ArrayList<Square> emptyNieghbours = neighbour.emptyNeighbours();
-		    	if(emptyNieghbours.isEmpty())
+		    	ArrayList<Square> emptyNeighbours = neighbour.emptyNeighbours();
+		    	if(emptyNeighbours.isEmpty())
 		    	{
 		    		return null;
 		    	}
 		    	else
 		    	{
-		    		for(Square n: emptyNieghbours)
+		    		for(Square n: emptyNeighbours)
 		    		{
 		    			moves.add(new C_Move(this, neighbour, n));
 		    		}
