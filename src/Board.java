@@ -1,10 +1,5 @@
 import java.util.ArrayList;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
-
-import com.sun.jmx.snmp.SnmpPduPacket;
-import com.sun.xml.internal.ws.api.config.management.policy.ManagedServiceAssertion.NestedParameters;
-
 public class Board {
 
 	Square[] squares;
