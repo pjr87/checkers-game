@@ -4,12 +4,25 @@
  * @author phillipryan
  */
 
+import java.net.*; 
+import java.io.*;
+
 public class TCPServer implements TCPNetwork {
+	
+	ServerSocket serverSocket = null; 
+	Socket clientSocket = null; 
 
 	@Override
-	public void socket() {
-		// TODO Auto-generated method stub
-		
+	public boolean socket(String ipAddress) {
+		try { 
+			serverSocket = new ServerSocket(10007); 
+		} 
+		catch (IOException e) 
+		{ 
+			System.err.println("Could not listen on port: 10007."); 
+			System.exit(1); 
+		}
+		return false;
 	}
 
 	@Override
@@ -25,9 +38,16 @@ public class TCPServer implements TCPNetwork {
 	}
 
 	@Override
-	public void accept() {
-		// TODO Auto-generated method stub
-		
+	public boolean accept() {
+		try { 
+			System.out.println ("Waiting for Client");
+			clientSocket = serverSocket.accept(); 
+			return true;
+		} 
+		catch (IOException e) { 
+			System.err.println("Accept failed."); 
+			return false;
+		} 
 	}
 
 	@Override

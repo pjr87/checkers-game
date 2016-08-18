@@ -19,10 +19,8 @@ public class UDPClient implements UDPNetwork{
 	public void socket() {
 		try 
 		{
-
 			host = InetAddress.getByName("255.255.255.255");
 			socket = new DatagramSocket ();
-
 		} 
 		catch (Exception e) 
 		{
@@ -31,7 +29,7 @@ public class UDPClient implements UDPNetwork{
 	}
 
 	@Override
-	public void recv() {
+	public boolean recv() {
 		try 
 		{
 			 packet.setLength(100);
@@ -41,15 +39,18 @@ public class UDPClient implements UDPNetwork{
 		{
 			e.printStackTrace();
 		}
+		return false;
 	}
 
 	@Override
-	public void send() {
+	public void send(String message) {
+		System.out.println("UDPclient Have " + message);
 		try 
 		{
-			packet = new DatagramPacket (new byte[100], 0,host, DEFAULT_PORT);
-			// System.out.println("Sent from: " + packet.getAddress () + ":" +
-             //        packet.getPort ());
+            byte[] sendData = message.getBytes("UTF-8");
+			packet = new DatagramPacket (sendData, sendData.length, host, DEFAULT_PORT);
+			System.out.println("UDPClient sent from: " + packet.getAddress () + ":" +
+                     packet.getPort () + " " + packet.getData());
 			socket.send (packet);
 		} 
 		catch (IOException e) 

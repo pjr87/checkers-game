@@ -29,21 +29,30 @@ public class UDPServer implements UDPNetwork{
 	}
 	
 	@Override
-	public void recv() {
-		packet = new DatagramPacket (new byte[1], 1);
+	public boolean recv() {
+		byte[] receiveData = new byte[255];
+
+		packet = new DatagramPacket(receiveData, receiveData.length);
         try{
-            socket.receive (packet);
+        	socket.receive(packet);
+            String sentence = new String( packet.getData(), 0,
+            		packet.getLength() );
+            System.out.println("RECEIVED: " + sentence);
+            
             String address = packet.getAddress().toString();
-            //System.out.println("Received from: " + address + ":" +
-             //                  packet.getPort());
             addAddress(address);
-            byte[] outBuffer = new java.util.Date ().toString ().getBytes ();
-		    packet.setData (outBuffer);
-            packet.setLength (outBuffer.length);
+            
+            System.out.println("UDPServer Received from: " + address + ":" +
+                    packet.getPort() + " " + sentence);
+            
+            if(sentence.equals("Listen")){
+            	return true;
+            }
         }
         catch (IOException ie){
             ie.printStackTrace();
         }
+        return false;
 	}
 	
 	public boolean addAddress(String address){
@@ -60,7 +69,7 @@ public class UDPServer implements UDPNetwork{
 	}
 
 	@Override
-	public void send() {
+	public void send(String message) {
 		try{
             socket.send (packet);
 		} 
@@ -78,5 +87,4 @@ public class UDPServer implements UDPNetwork{
 	public List<String> getAddresses() {
 		return ipAddresses;
 	}
-	
 }
