@@ -18,6 +18,7 @@ public class Checkers{
 	private NetworkCreator network;
 	private Board board;
 	private boolean isRed;
+	private ArrayList<Move> moves;
 	//private String username;
 	//private Map<String,String> foundPlayers = new HashMap<String,String>();
 
@@ -26,7 +27,7 @@ public class Checkers{
 		network = new NetworkCreator(); 
 		network.StartNetworking();
 		//username = JOptionPane.showInputDialog(null, "Please enter a unique username!");
-		//board = new Board();
+		board = new Board();
 		JLabel[] j = new JLabel[32];
 		for(int i=0;i<j.length;i++) {
 			j[i]=new JLabel();
@@ -104,7 +105,12 @@ public class Checkers{
 			@Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Yay you clicked me");
-                //if space is highlighted showing that it can move 
+                
+                for (int i = 0; i < 10; i++)
+                    if (e.getSource() == jLabelArr[i]) {
+                        System.out.println("Label" + i + "was clicked");
+                    }
+                if(e)
                 	//call function to highlight all the spaces that the piece can move to 
                 //else if space is empty but highlighted 
                 	//call function to move the previously selected piece to the space
@@ -116,7 +122,8 @@ public class Checkers{
 	
 	public void challengePlayer(String player){
 		//System.out.println( chooseWhoGoesFirst() );
-		//if(network.Connect(player)){
+		//if(network.Connect( player )){
+
 			isRed=true;
 			startGame();
 		//}
@@ -126,7 +133,7 @@ public class Checkers{
 		board.setBoard(isRed);
 		gui.setScreen(Screen.GAME_SCREEN);
 		gui.refreshScreen();
-		board.getValidMoves(isRed);
+		moves = board.getValidMoves(isRed);
 	}
 	
 	public static ArrayList<String> getIps() throws SocketException{
