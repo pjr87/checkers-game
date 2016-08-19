@@ -26,11 +26,11 @@ public class Move {
 		return -1;
 	}
 	
-	public void apply(){
+	public void apply(Network send){
 		end.setPiece(start.getPiece());
 		start.removePiece();
 		
-		Network.sendMove(make_send_string());
+		send.SendMove(make_send_string());
 	}
 	
 	public String make_send_string(){
@@ -108,7 +108,7 @@ public class Move {
 			return new C_Move(get_square(startID), get_square(endID), get_square(captureID)); // TODO Make a C_Move and return it
 		}
 		else {
-			//TODO report error1
+			//TODO report error
 			return null;
 		}
 	}
