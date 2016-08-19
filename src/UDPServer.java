@@ -24,7 +24,7 @@ public class UDPServer implements UDPNetwork{
 			socket.setBroadcast(true);
         }
 		catch(IOException e){
-            System.err.println("IOException " + e);
+            //System.err.println("IOException " + e);
         }
 	}
 	
@@ -37,20 +37,20 @@ public class UDPServer implements UDPNetwork{
         	socket.receive(packet);
             String sentence = new String( packet.getData(), 0,
             		packet.getLength() );
-            System.out.println("RECEIVED: " + sentence);
+            //System.out.println("RECEIVED: " + sentence);
             
             String address = packet.getAddress().toString();
             addAddress(address);
             
-            System.out.println("UDPServer Received from: " + address + ":" +
-                    packet.getPort() + " " + sentence);
+           // System.out.println("UDPServer Received from: " + address + ":" +
+           //         packet.getPort() + " " + sentence);
             
             if(sentence.equals("Listen")){
             	return true;
             }
         }
         catch (IOException ie){
-            ie.printStackTrace();
+            //ie.printStackTrace();
         }
         return false;
 	}
@@ -74,7 +74,7 @@ public class UDPServer implements UDPNetwork{
             socket.send (packet);
 		} 
 		catch (IOException e){
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 

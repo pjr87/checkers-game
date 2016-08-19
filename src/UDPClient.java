@@ -24,7 +24,7 @@ public class UDPClient implements UDPNetwork{
 		} 
 		catch (Exception e) 
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -37,25 +37,25 @@ public class UDPClient implements UDPNetwork{
 		} 
 		catch (IOException e) 
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return false;
 	}
 
 	@Override
 	public void send(String message) {
-		System.out.println("UDPclient Have " + message);
+		//System.out.println("UDPclient Have " + message);
 		try 
 		{
             byte[] sendData = message.getBytes("UTF-8");
 			packet = new DatagramPacket (sendData, sendData.length, host, DEFAULT_PORT);
-			System.out.println("UDPClient sent from: " + packet.getAddress () + ":" +
-                     packet.getPort () + " " + packet.getData());
+			//System.out.println("UDPClient sent from: " + packet.getAddress () + ":" +
+            //         packet.getPort () + " " + packet.getData());
 			socket.send (packet);
 		} 
 		catch (IOException e) 
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
