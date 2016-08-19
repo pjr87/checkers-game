@@ -162,10 +162,15 @@ NetworkCreator network;
 				else if(square.getBackground() == GUI.clrEnabledGreen && square.getPiece()==null){
 					for (Move move : currentMoves) {
 						if(move.get_end_pos()==square.getLabel()){
+<<<<<<< HEAD
 							
 							move.apply(network);
 							receiveFromNetwork();
 							
+=======
+							move.apply(network);
+							//board.movePiece(move);
+>>>>>>> b0f48ae69722210002b89d7b7b726659975c44ec
 							break;
 						}
 					}
