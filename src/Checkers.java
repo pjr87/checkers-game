@@ -11,7 +11,7 @@ import java.util.Random;
 
 import javax.swing.JLabel;
 
-public class Checkers{
+public class Checkers implements ConnectionStatus{
 
 	private GUI gui;
 	private NetworkCreator network;
@@ -20,11 +20,52 @@ public class Checkers{
 	private ArrayList<Move> currentMoves;
 	//private String username;
 	//private Map<String,String> foundPlayers = new HashMap<String,String>();
+	
+	
+NetworkCreator network;
+	
+	public Player(NetworkCreator network) {
+		this.network = network;
+	}
+
+	@Override
+	public void connectionMade(int status) {
+		//Do something here, this only happens when TCP connection is made
+		System.out.println("Server connection recevied from player " + status);
+		
+		switch(status){
+		case 0:
+			System.out.println("Player2: Failed to connect");
+			break;
+		case 1:
+			System.out.println("Player2: Player 2's turn");
+			try {
+				//Runs for 1 seconds
+				Thread.sleep(1000);
+				//This is used to represent the action of a player picking a game
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			this.network.SendMove("Hello");
+			break;
+		case 2:
+			System.out.println("Player2: Player 1's turn");
+			String str = this.network.RecvMove();
+			System.out.println("Player2: Receieved " + str);
+			break;
+		}
+	}
+	
+	
+	
 
 	private Checkers(){
 
 		network = new NetworkCreator(); 
+		Player player = new Player(network);
+		network.addListener(player);
 		network.StartNetworking();
+		
 		//username = JOptionPane.showInputDialog(null, "Please enter a unique username!");
 		board = new Board();
 
@@ -121,8 +162,10 @@ public class Checkers{
 				else if(square.getBackground() == GUI.clrEnabledGreen && square.getPiece()==null){
 					for (Move move : currentMoves) {
 						if(move.get_end_pos()==square.getLabel()){
-							move.apply();
-							//board.movePiece(move);
+							
+							move.apply(network);
+							receiveFromNetwork();
+							
 							break;
 						}
 					}
@@ -132,14 +175,27 @@ public class Checkers{
 		});
 	}
 	
+	public void receiveFromNetwork(){
+		String rMove = network.RecvMove();
+		Move move = makeMove(rMove);
+		//check to make sure it is valid ??
+		board.movePiece(move);
+		//check if ther is winner
+		
+		//need to implement a draw here  
+	}
+	
 	//connects to opponent and if connected successfully it will begin a game
 	public void challengePlayer(String player){
-		//System.out.println( chooseWhoGoesFirst() );
-		//if(network.Connect( player )){
-
-			isRed=true;
+		System.out.println( chooseWhoGoesFirst() );
+		int turn;
+		if((turn = network.Connect( player ))>0){
+			if(turn==1)
+				isRed=true;
+			else
+				isRed=false;
 			startGame();
-		//}
+		}
 	}
 
 	public void startGame(){
@@ -152,7 +208,8 @@ public class Checkers{
 		//refreshes the GUI to display the changes
 		gui.refreshScreen();
 		
-		board.showAllValidMoves(isRed);
+		if(isRed)
+			board.showAllValidMoves(isRed);
 	}
 
 	//will be replaced by method from NetworkCreator when implemented (it returns our ip address)

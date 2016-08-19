@@ -116,7 +116,6 @@ public class GUI extends JFrame{
 		s.setBorder(BorderFactory.createLineBorder(GUI.clrEnabledBorders));
 	}
 	
-	
 	public void displayWinner(int winner){
 		//winner values: 0=white won, 1=red won, 2=Tie 	
 		String strWinner = "Something bad happened... winner could not be found.";

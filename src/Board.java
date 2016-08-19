@@ -93,7 +93,7 @@ public class Board {
 			GUI.highlightSquare(squares[move.get_start_pos()]);
 	}
 	
-	@Deprecated
+	
 	public void movePiece(Move m){
 		Piece piece = squares[m.get_start_pos()].getPiece();
 		squares[m.get_end_pos()].setPiece(piece);
