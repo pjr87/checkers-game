@@ -133,32 +133,30 @@ public class Board {
 			squares[i].setPiece( new Piece(isRed) );
 	}
 	
-	//returns 1 for red won, 0 for white won, 2 for draw, and -1 for no winner yet
+	//returns 1 for red won, 0 for white won, and -1 for no winner yet
 	public int isGameOver(boolean turn){ // input is whoever's turn it is to move (red = true, white = false)
 	
-		boolean redHasPieces=false, whiteHasPieces=false, redPieceCanMove=false, whitePieceCanMove=false;
+		boolean redHasPieces=false, whiteHasPieces=false, redPiecesCanMove=false, whitePiecesCanMove=false;
 		for (Square square : squares) {
 			if(square.getPiece()!=null){
 				if(square.getPiece().getTeam()==true){
 					redHasPieces=true;
 					if(square.getMoves().size()>0)
-						redPieceCanMove=true;
+						redPiecesCanMove=true;
 				}
 				else{
 					whiteHasPieces=true;
 					if(square.getMoves().size()>0)
-						whitePieceCanMove=true;
+						whitePiecesCanMove=true;
 				}
 			}
 		}
 		
-		if(!redHasPieces)//red has no pieces - WHITE WON
+		if((!redHasPieces) || (!redPiecesCanMove && turn) )//red has no pieces or can't move - WHITE WON
 			return 0;
-		else if(!whiteHasPieces)//white has no pieces - RED WON
+		else if(!whiteHasPieces || (!whitePiecesCanMove && !turn))//white has no pieces or can't move - RED WON
 			return 1;
-		else if( (!whitePieceCanMove && !turn) || (!redPieceCanMove && turn) )//the player whose turn it is cannot more - TIE
-			return 2;
-
+		
 		return -1;
 	}
 }
