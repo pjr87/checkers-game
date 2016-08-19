@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Board {
 
@@ -11,33 +13,38 @@ public class Board {
 			squares[i] = new Square(i);
 		
 		for(int i=0; i<32; i++){
+			
+			Map<Direction, Square> tempMap = new HashMap<Direction, Square>();
+			
 			//topleft link
-			if(i-5>=0 && i%4!=0)
-				squares[i].setNeighbor(Direction.UpLeft,squares[i-5]);
+			if((i-5)>=0 && i%4!=0)
+				tempMap.put(Direction.UpLeft, squares[i-5]);
 			else
-				squares[i].setNeighbor(Direction.UpLeft,null);
+				tempMap.put(Direction.UpLeft,null);
 			
 			//topright link
-			if(i-4>=0  && i+1%4!=0)
-				squares[i].setNeighbor(Direction.UpRight, squares[i-4]);
+			if((i-4)>=0  && (i+1)%4!=0)
+				tempMap.put(Direction.UpRight, squares[i-4]);
 			else
-				squares[i].setNeighbor(Direction.UpRight, null);
+				tempMap.put(Direction.UpRight, null);
 			
 			//bottom left link
-			if(i+4<32  && i%4!=0)
-				squares[i].setNeighbor(Direction.DownLeft, squares[i+4]);
+			if((i+4)<32  && i%4!=0)
+				tempMap.put(Direction.DownLeft, squares[i+4]);
 			else
-				squares[i].setNeighbor(Direction.DownLeft, null);
+				tempMap.put(Direction.DownLeft, null);
 			
 			//bottomright link
-			if(i+5<32  && i+1%4!=0)
-				squares[i].setNeighbor(Direction.DownRight, squares[i+5]);
+			if((i+5)<32  && (i+1)%4!=0)
+				tempMap.put(Direction.DownRight, squares[i+5]);
 			else
-				squares[i].setNeighbor(Direction.DownRight, null);
+				tempMap.put(Direction.DownRight, null);
+			
+			squares[i].setNeighbours(tempMap);
 		}
 	}
 	
-	public Squares[] getSquares(){
+	public Square[] getSquares(){
 		return squares;
 	}
 	
@@ -46,7 +53,7 @@ public class Board {
 		boolean mandatoryMoveExists = false;
 		for (Square square : squares) {
 			if(square.getPiece()!=null && square.getPiece().getTeam()==i){
-				Move[] moves = square.getMoves();
+				ArrayList<Move> moves = square.getMoves();
 				for (Move move : moves) {
 					if(move instanceof C_Move || !mandatoryMoveExists)
 						mandatoryMoveExists=true;
@@ -60,6 +67,7 @@ public class Board {
 					list.remove(x);
 			}
 		}
+		return list;
 	}
 	
 	public void movePiece(Move m){

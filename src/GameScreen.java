@@ -29,15 +29,33 @@ public class GameScreen extends JPanel{
 
 	//Constructor - GUI Setup
 	public GameScreen(JLabel[] squares){
-
+		
 		gLblSquares = new JLabel[64];
 		int indx=0;
+		int grn =0;
+		int wht =1;
 		for(int i = 0; i< squares.length; i++){
-			gLblSquares[indx++]=new JLabel();
-			gLblSquares[indx++]=squares[i];
+			
+			gLblSquares[indx+grn]=new JLabel();
+			gLblSquares[indx+grn].setBackground(clrOffTiles);
+			gLblSquares[indx+grn].setPreferredSize(new Dimension(65, 65));
+			gLblSquares[indx+grn].setOpaque(true);
+			gLblSquares[indx+grn].setBorder(BorderFactory.createLineBorder(clrDisableBorders));
+			
+			gLblSquares[indx+wht]=squares[i];
+			gLblSquares[indx+wht].setPreferredSize(new Dimension(65, 65));
+			gLblSquares[indx+wht].setOpaque(true);
+			gLblSquares[indx+wht].setBorder(BorderFactory.createLineBorder(clrDisableBorders));
+			gLblSquares[indx+wht].setBackground(clrDisabledGreen);
+			indx+=2;
+			
+			if((i+1)%4==0){
+				int tmp=grn;
+				grn=wht;
+				wht=tmp;
+			}
 		}
 
-		gLblSquares = squares;
 		//set layout
 		this.setLayout(new GridBagLayout());
 
@@ -75,26 +93,24 @@ public class GameScreen extends JPanel{
 
 		layout.gridwidth=1;
 		layout.gridy=2;
-		int yCounter=0;
-		for(int i = 0;i<squares.length;i++){
+		int yCounter=-1;
+		for(int i = 0;i<gLblSquares.length;i++){
 			layout.gridx=i%8+2;
+			yCounter++;
+
+			//if(layout.gridx%2 != layout.gridy%2)
+				//gLblSquares[i].setBackground(clrDisabledGreen);
+
+			//else
+			//	gLblSquares[i].setBackground(clrOffTiles);
+
+			this.add(gLblSquares[i], layout);
+			
 			if(yCounter==7){
-				yCounter=0;
+				yCounter=-1;
 				layout.gridy++;
 			}
-
-			if(layout.gridx%2 != layout.gridy%2)
-				squares[i].setBackground(clrDisabledGreen);
-
-			else
-				squares[i].setBackground(clrOffTiles);
-
-			squares[i].setPreferredSize(new Dimension(65, 65));
-			squares[i].setOpaque(true);
-			squares[i].setBorder(BorderFactory.createLineBorder(clrDisableBorders));
-
-			this.add(squares[i], layout);
-			yCounter++;
+			
 		}
 
 
@@ -109,9 +125,14 @@ public class GameScreen extends JPanel{
 	public void setpBtnNotationAction(ActionListener a) { gBtnNotation.addActionListener(a); }
 
 	public void setAllSpacesMouseListener(MouseAdapter mouseA) {
-		for (int i =0; i<gLblSquares.length;i++){
-			if(i%2==0)
+		boolean isEven = false;
+		for (int i =0; i<64;i++){
+			if(isEven && (i+1)%2!=0)
 				gLblSquares[i].addMouseListener(mouseA);
+			else if(!isEven && i%2!=0)
+				gLblSquares[i].addMouseListener(mouseA);
+			if((i+1)%8==0)
+				isEven=!isEven;
 		}
 	}
 }

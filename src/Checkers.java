@@ -30,7 +30,7 @@ public class Checkers{
 		board = new Board();
 		JLabel[] j = new JLabel[32];
 		for(int i=0;i<j.length;i++) {
-			j[i]=new JLabel();
+			j[i]=new JLabel(i+"");
 		}
 		gui = new GUI(j);
 		gui.updatePlayersList( network.getAvailablePlayers() );
@@ -107,11 +107,10 @@ public class Checkers{
                 System.out.println("Yay you clicked me");
                 
                 for (int i = 0; i < 10; i++)
-                    if (e.getSource() == jLabelArr[i]) {
+                    if (e.getSource() == board.getSquares()[i]) {
                         System.out.println("Label" + i + "was clicked");
                     }
-                if(e)
-                	//call function to highlight all the spaces that the piece can move to 
+               	//call function to highlight all the spaces that the piece can move to 
                 //else if space is empty but highlighted 
                 	//call function to move the previously selected piece to the space
                 //else if space doesn't have a piece on it or isn't highlighted 
