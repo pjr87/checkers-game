@@ -102,10 +102,6 @@ public class NetworkCreator{
 				clientTurn = 2;
 				serverTurn = 1;
 			}
-			else{
-				clientTurn = 0;
-				serverTurn = 0;
-			}
 			
 			String turn = Integer.toString(serverTurn);
 			TCPserver.send(turn);
@@ -127,17 +123,26 @@ public class NetworkCreator{
 		if(connect){
 			System.out.println("Client connected");
 			String Serverturn = TCPclient.recv();
-			if( Serverturn == "1"){
+			System.out.println("Recv server turn " + Serverturn);
+			if(Serverturn.equals("1")){
+				System.out.println("Server turn 1");
 				serverTurn = 1;
+				System.out.println("BANG");
 				clientTurn = 2;
+				System.out.println("BOOM " + clientTurn);
 			}
-			else if( Serverturn == "2"){
+			else if(Serverturn.equals("2")){
+				System.out.println("Server turn 2");
 				serverTurn = 2;
+				System.out.println("BANG");
 				clientTurn = 1;
+				System.out.println("BOOM " + clientTurn);
 			}
 				
 			isClient = true;
 		}
+		
+		System.out.println("clientTurn " + clientTurn);
 		
 		return clientTurn;
 	}
@@ -158,6 +163,8 @@ public class NetworkCreator{
 		
 		//Start TCP client
 		int turn = StartTCPClient(ipAddress);
+		
+		System.out.println("turn " + turn);
 		
 		return turn;
 	}
