@@ -121,7 +121,7 @@ public class Checkers{
 				else if(square.getBackground() == GUI.clrEnabledGreen && square.getPiece()==null){
 					for (Move move : currentMoves) {
 						if(move.get_end_pos()==square.getLabel()){
-							move.apply();
+							move.apply(network);
 							//board.movePiece(move);
 							break;
 						}
