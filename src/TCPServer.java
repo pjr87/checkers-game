@@ -59,6 +59,7 @@ public class TCPServer implements TCPNetwork {
 	@Override
 	public void send(String str) {
 		try { 
+			System.out.println("TCPServer Sending " + str);
 			out = new PrintWriter(clientSocket.getOutputStream(), true); 
 			out.println(str);
 			System.out.println("TCPServer send");
