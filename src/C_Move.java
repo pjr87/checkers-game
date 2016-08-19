@@ -12,7 +12,7 @@ public class C_Move extends Move {
 		return captured.getLabel();
 	}
 	
-	public void apply(Network send){
+	public void apply(NetworkCreator send){
 		captured.removePiece();
 		super.apply(send);
 	}

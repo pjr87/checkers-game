@@ -26,7 +26,7 @@ public class Move {
 		return -1;
 	}
 	
-	public void apply(Network send){
+	public void apply(NetworkCreator send){
 		end.setPiece(start.getPiece());
 		start.removePiece();
 		
