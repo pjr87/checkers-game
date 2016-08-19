@@ -108,7 +108,7 @@ public class Move {
 			return new C_Move(get_square(startID), get_square(endID), get_square(captureID)); // TODO Make a C_Move and return it
 		}
 		else {
-			//TODO report error1
+			//TODO report error
 			return null;
 		}
 	}
