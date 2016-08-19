@@ -43,7 +43,7 @@ public class Player implements ConnectionStatus{
 		Player1thread();
 		
 		//Start Player2
-		//Player2thread();
+		Player2thread();
 	}
 	
 	public static void Player1thread(){
@@ -54,14 +54,17 @@ public class Player implements ConnectionStatus{
 		
 		network.StartNetworking();
 		
-		/*try {
+		try {
 			//Runs for 3 seconds
-			Thread.sleep(6000);
+			Thread.sleep(3000);
 			//This is used to represent the action of a player picking a game
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}*/
-		int n = 3;
+		}
+		List<String> players = network.getAvailablePlayers();
+		System.out.println(Arrays.toString(players.toArray()));
+		
+		/*int n = 3;
 		List<String> players = null;
 		
 		while(n == 3){
@@ -72,9 +75,9 @@ public class Player implements ConnectionStatus{
 			Scanner reader = new Scanner(System.in);  // Reading from System.in
 			System.out.println("Enter a number: ");
 			n = reader.nextInt();
-		}
+		}*/
 		
-		int turn = network.Connect(players.get(n));
+		int turn = network.Connect(players.get(0));
 		
 		System.out.println("turn " + turn);
 		
@@ -115,14 +118,14 @@ public class Player implements ConnectionStatus{
 		
 		try {
 			//Runs for 3 seconds
-			Thread.sleep(30000);
+			Thread.sleep(3000);
 			//This is used to represent the action of a player picking a game
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
-		List<String> players = network.getAvailablePlayers();
-		System.out.println(Arrays.toString(players.toArray()));
+		//List<String> players = network.getAvailablePlayers();
+		//System.out.println(Arrays.toString(players.toArray()));
 		
 		network.CloseNetworking();
 	}
