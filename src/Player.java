@@ -109,6 +109,9 @@ public class Player implements ConnectionStatus{
 			e.printStackTrace();
 		}
 		
+		List<String> players = network.getAvailablePlayers();
+		System.out.println(Arrays.toString(players.toArray()));
+		
 		network.CloseNetworking();
 	}
 }

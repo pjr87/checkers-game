@@ -15,8 +15,8 @@ public class NetworkCreator{
 	private boolean isClient = false;
 	private boolean isServer = false;
 	
-	private int clientTurn = 0;
-	private int serverTurn = 0;
+	public int clientTurn = 0;
+	public int serverTurn = 0;
 	
 	private List<ConnectionStatus> listeners = new ArrayList<ConnectionStatus>();
 	
@@ -107,6 +107,9 @@ public class NetworkCreator{
 				serverTurn = 0;
 			}
 			
+			String turn = Integer.toString(serverTurn);
+			TCPserver.send(turn);
+			
 			System.out.println("TCP Server connected");
 			//alert all the listeners that the tcp server has been connected
 			//for each listener thats registered: call listener function
@@ -123,16 +126,17 @@ public class NetworkCreator{
 		boolean connect = TCPclient.socket(ipAddress);
 		if(connect){
 			System.out.println("Client connected");
-			isClient = true;
-			if( clientTurn == 0){
-				try {
-					//Sleep for 1 second
-					Thread.sleep(1000);
-					//This is used to represent the action of a player picking a game
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+			String Serverturn = TCPclient.recv();
+			if( Serverturn == "1"){
+				serverTurn = 1;
+				clientTurn = 2;
 			}
+			else if( Serverturn == "2"){
+				serverTurn = 2;
+				clientTurn = 1;
+			}
+				
+			isClient = true;
 		}
 		
 		return clientTurn;
