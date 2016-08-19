@@ -1,16 +1,27 @@
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.DisplayMode;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class GUI extends JFrame{
 	
 	private static final long serialVersionUID = 3346418586960045067L;
+	
+	final static Color clrDisabledGreen = new Color(160, 255, 170);
+	final static Color clrEnabledGreen = new Color(0, 255, 127);
+	final static Color clrOffTiles = new Color(238, 238, 224);
+	final static Color clrDisabledBorders = new Color(205, 205, 193);
+	final static Color clrEnabledBorders = new Color(139, 136, 120);
 	
 	GameScreen gameScreen;
 	PlayerSelectionScreen playerSelectionScreen;
@@ -81,8 +92,8 @@ public class GUI extends JFrame{
 		playerSelectionScreen.setpBtnPlayAction(actionListener);	
 	}
 	
-	public void setSpaceClickedAction(MouseAdapter mouseA) {
-		gameScreen.setAllSpacesMouseListener(mouseA);	
+	public void setSquareClickedAction(MouseAdapter mouseA) {
+		gameScreen.setAllSquaresMouseListener(mouseA);	
 	}
 
 	public String getSelectedIp() {
@@ -91,5 +102,35 @@ public class GUI extends JFrame{
 
 	public String getInputtedIp() {
 		return playerSelectionScreen.getInputtedIp();
+	}
+	public void deselectAllsquares(){
+		gameScreen.deselectAllSquares();
+	}
+	
+	public static void unhighlightSquare(JLabel s){
+		s.setBackground(GUI.clrDisabledGreen);
+		s.setBorder(BorderFactory.createLineBorder(GUI.clrDisabledBorders));
+	}
+	public static void highlightSquare(JLabel s){
+		s.setBackground(GUI.clrEnabledGreen);
+		s.setBorder(BorderFactory.createLineBorder(GUI.clrEnabledBorders));
+	}
+	
+	
+	public void displayWinner(int winner){
+		//winner values: 0=white won, 1=red won, 2=Tie 	
+		String strWinner = "";
+		switch(winner){
+			case 0:
+				strWinner="White Won!";
+				break;
+			case 1:
+				strWinner="Red Won!";
+				break;
+			case 2:
+				strWinner="It's a Tie!";
+				break;
+		}
+		JOptionPane.showMessageDialog(null, strWinner);
 	}
 }
