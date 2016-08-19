@@ -16,17 +16,19 @@ public class Test {
 		network.StartNetworking();
 		
 		try {
-			//Runs for 30 seconds
-			Thread.sleep(30000);
+			//Runs for 3 seconds
+			Thread.sleep(3000);
 			//This is used to represent the action of a player picking a game
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
-		network.CloseNetworking();
-		
 		List<String> players = network.getAvailablePlayers();
 		System.out.println(Arrays.toString(players.toArray()));
+		
+		network.Connect(players.get(0)); //TODO
+		
+		network.CloseNetworking();
 	}
 	
 	public static void Player2thread(){
@@ -34,17 +36,17 @@ public class Test {
 		network.StartNetworking();
 		
 		try {
-			//Runs for 30 seconds
-			Thread.sleep(30000);
+			//Runs for 3 seconds
+			Thread.sleep(3000);
 			//This is used to represent the action of a player picking a game
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
-		network.CloseNetworking();
+		//List<String> players = network.getAvailablePlayers();
+		//System.out.println(Arrays.toString(players.toArray()));
 		
-		List<String> players = network.getAvailablePlayers();
-		System.out.println(Arrays.toString(players.toArray()));
+		//network.CloseNetworking();
 	}
 
 }

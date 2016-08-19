@@ -3,13 +3,31 @@
  * 
  * @author phillipryan
  */
+import java.io.*;
+import java.net.*;
 
 public class TCPClient implements TCPNetwork {
+	
+    Socket Socket = null;
+    ObjectOutputStream out = null;
+    ObjectInputStream in = null;
 
 	@Override
-	public void socket() {
-		// TODO Auto-generated method stub
-		
+	public boolean socket(String ipAddress) {
+		try{
+			System.out.println("Start TCP client");
+			Socket = new Socket(ipAddress, 10007);
+         
+			out = new ObjectOutputStream(Socket.getOutputStream());
+			in = new ObjectInputStream(Socket.getInputStream());
+			
+			return true;
+		} 
+		catch (IOException e) {
+			System.err.println("Couldn't get I/O for "
+                            + "the connection to: " + ipAddress);
+		}
+		return false;
 	}
 
 	@Override
@@ -25,9 +43,9 @@ public class TCPClient implements TCPNetwork {
 	}
 
 	@Override
-	public void accept() {
+	public boolean accept() {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class NetworkCreator{
 		public void run () {
 			while(running){
 				try {
-					UDPclient.send();
+					UDPclient.send("");
 					Thread.sleep(10000);
 				}
 				catch (InterruptedException e) {
@@ -48,7 +48,10 @@ public class NetworkCreator{
 	Thread recvThread = new Thread () {
 		public void run () {
 			while(running){
-				UDPserver.recv();
+				boolean open = UDPserver.recv();
+				if(open){
+					StartTCPServer();
+				}
 			}
 		}
 	};
@@ -61,7 +64,50 @@ public class NetworkCreator{
 		return UDPserver.getAddresses();
 	}
 	
-	protected void Connect(String ipAddress){
+	private void StartTCPServer(){
+		/*terminate();
+		UDPclient.close();
+		UDPserver.close();*/
+		
+		TCPserver.socket("");
+		boolean connect = TCPserver.accept();
+		if(connect)
+			System.out.println("Server connected");
+	}
+	
+	private boolean StartTCPClient(String ipAddress){
+		/*terminate();
+		UDPclient.close();
+		UDPserver.close();*/
+		
+		boolean connect = TCPclient.socket(ipAddress);
+		if(connect){
+			System.out.println("Client connected");
+			return true;
+		}
+		return false;
+	}
+	
+	protected boolean Connect(String ipAddress){
+		
+		System.out.println("Sending Listen to connect");
+		
+		UDPclient.send("Listen");
+		
+		System.out.println("Attempting to connect to " + ipAddress);
+		
+		//Sleep for 1 Second to make sure server is listening
+		try {
+		    Thread.sleep(1000);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
+		
+		//Start TCP client
+		boolean connected = StartTCPClient(ipAddress);
+		
+		return connected;
+		
 		//Player 1 chooses a game, sends IP info to P2
 			//UDP message sent P1 -> P2
 			//P1 starts TCP server
