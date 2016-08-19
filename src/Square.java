@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +9,6 @@ public class Square extends JLabel {
 	private static final long serialVersionUID = -7358340280413951025L;	
 	private Piece here = null;
 	
-	@SuppressWarnings("unused")
 	private Map<Direction, Square> neighbours;
 	
 	private int label;
@@ -59,5 +59,54 @@ public class Square extends JLabel {
 	public void removePiece()
 	{
 		this.here = null;
+	}
+	
+	private ArrayList<Square> emptyNeighbours()
+	{
+		ArrayList<Square> emptyneighbours = new ArrayList<Square>();
+		for (Square neighbour : neighbours.values()){
+			if(neighbour.getPiece() == null)
+			{
+				emptyneighbours.add(neighbour);
+			}
+		}
+		return emptyneighbours;
+	}
+	
+	/*
+	 * Returns all possible moves that can be done 
+	 */
+	public ArrayList<Move> getMoves()
+	{
+		if(this.here == null){
+			return null;
+		}
+		ArrayList<Move> moves = new ArrayList<Move>();
+		for (Square neighbour : neighbours.values()) {
+			if(neighbour == null)
+			{
+				continue;
+			}
+		    if(neighbour.getPiece() == null )
+		    {
+		    	moves.add(new Move(this, neighbour));
+		    }
+		    else if(neighbour.getPiece().getTeam() != this.getPiece().getTeam())
+		    {
+		    	ArrayList<Square> emptyNeighbours = neighbour.emptyNeighbours();
+		    	if(emptyNeighbours.isEmpty())
+		    	{
+		    		return null;
+		    	}
+		    	else
+		    	{
+		    		for(Square n: emptyNeighbours)
+		    		{
+		    			moves.add(new C_Move(this, neighbour, n));
+		    		}
+		    	}
+		    }
+		}
+		return null;
 	}
 }

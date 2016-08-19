@@ -9,11 +9,11 @@ public class Move {
 	}
 	
 	public int get_start_pos(){
-		return start.get_pos();
+		return start.getLabel();
 	}
 	
 	public int get_end_pos(){
-		return end.get_pos();
+		return end.getLabel();
 	}
 	
 	public int get_captured(){
@@ -21,8 +21,8 @@ public class Move {
 	}
 	
 	public void apply(){
-		end.set_piece(start.get_piece);
-		start.remove_piece();
+		end.setPiece(start.getPiece());
+		start.removePiece();
 		
 		Network.sendMove(this);
 	}

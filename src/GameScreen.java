@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -20,24 +21,34 @@ public class GameScreen extends JPanel{
 	private JButton gBtnDraw;
 	private JLabel[] gLblSquares;
 
-	final static private Color clrDisabledGreen = new Color(160, 255, 170);
-	final static private Color clrEnabledGreen = new Color(0, 255, 127);
-	final static private Color clrOffTiles = new Color(238, 238, 224);
-	final static private Color clrDisableBorders = new Color(205, 205, 193);
-	final static private Color clrEnableBorders = new Color(139, 136, 120);
-
-
 	//Constructor - GUI Setup
 	public GameScreen(JLabel[] squares){
-
+		
 		gLblSquares = new JLabel[64];
 		int indx=0;
+		int grn =0;
+		int wht =1;
 		for(int i = 0; i< squares.length; i++){
-			gLblSquares[indx++]=new JLabel();
-			gLblSquares[indx++]=squares[i];
+			
+			gLblSquares[indx+grn]=new JLabel();
+			gLblSquares[indx+grn].setPreferredSize(new Dimension(65, 65));
+			gLblSquares[indx+grn].setOpaque(true);
+			gLblSquares[indx+grn].setBackground(GUI.clrOffTiles);
+			gLblSquares[indx+grn].setBorder(BorderFactory.createLineBorder(GUI.clrDisabledBorders));
+			
+			gLblSquares[indx+wht]=squares[i];
+			gLblSquares[indx+wht].setPreferredSize(new Dimension(65, 65));
+			gLblSquares[indx+wht].setOpaque(true);
+			GUI.unhighlightSquare(gLblSquares[indx+wht]);
+			indx+=2;
+			
+			if((i+1)%4==0){
+				int tmp=grn;
+				grn=wht;
+				wht=tmp;
+			}
 		}
 
-		gLblSquares = squares;
 		//set layout
 		this.setLayout(new GridBagLayout());
 
@@ -75,32 +86,18 @@ public class GameScreen extends JPanel{
 
 		layout.gridwidth=1;
 		layout.gridy=2;
-		int yCounter=0;
-		for(int i = 0;i<squares.length;i++){
+		int yCounter=-1;
+		for(int i = 0;i<gLblSquares.length;i++){
 			layout.gridx=i%8+2;
+			yCounter++;
+
+			this.add(gLblSquares[i], layout);
+			
 			if(yCounter==7){
-				yCounter=0;
+				yCounter=-1;
 				layout.gridy++;
 			}
-
-			if(layout.gridx%2 != layout.gridy%2)
-				squares[i].setBackground(clrDisabledGreen);
-
-			else
-				squares[i].setBackground(clrOffTiles);
-
-			squares[i].setPreferredSize(new Dimension(65, 65));
-			squares[i].setOpaque(true);
-			squares[i].setBorder(BorderFactory.createLineBorder(clrDisableBorders));
-
-			this.add(squares[i], layout);
-			yCounter++;
 		}
-
-
-		squares[3].setBackground(clrEnabledGreen);
-		squares[3].setBorder(BorderFactory.createLineBorder(clrEnableBorders));
-
 	}
 	public void setpBtnResignAction(ActionListener a) { gBtnResign.addActionListener(a); }
 
@@ -108,10 +105,21 @@ public class GameScreen extends JPanel{
 
 	public void setpBtnNotationAction(ActionListener a) { gBtnNotation.addActionListener(a); }
 
-	public void setAllSpacesMouseListener(MouseAdapter mouseA) {
-		for (int i =0; i<gLblSquares.length;i++){
-			if(i%2==0)
+	public void setAllSquaresMouseListener(MouseAdapter mouseA) {
+		boolean isEven = false;
+		for (int i =0; i<64;i++){
+			if(isEven && (i+1)%2!=0)
 				gLblSquares[i].addMouseListener(mouseA);
+			else if(!isEven && i%2!=0)
+				gLblSquares[i].addMouseListener(mouseA);
+			if((i+1)%8==0)
+				isEven=!isEven;
+		}
+	}
+	
+	public void deselectAllSquares() {
+		for(int i =0;i<gLblSquares.length;i++){
+			gLblSquares[i].setBackground(GUI.clrDisabledGreen);
 		}
 	}
 }

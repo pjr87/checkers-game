@@ -2,7 +2,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -18,33 +17,36 @@ public class Checkers{
 	private NetworkCreator network;
 	private Board board;
 	private boolean isRed;
+	private ArrayList<Move> currentMoves;
 	//private String username;
 	//private Map<String,String> foundPlayers = new HashMap<String,String>();
 
 	private Checkers(){
-		
+
 		network = new NetworkCreator(); 
 		network.StartNetworking();
 		//username = JOptionPane.showInputDialog(null, "Please enter a unique username!");
 		board = new Board();
-		
-		gui = new GUI(new JLabel[8][8]);
+
+		gui = new GUI(board.getSquares());
 		gui.updatePlayersList( network.getAvailablePlayers() );
-		
+
 		setButtonActions();
 	}
-	
+
 	public static void main(String[] args) {
 		new Checkers();
 	}
+	
 	
 	private int chooseWhoGoesFirst(){
 		Random random = new Random();
 		return random.nextInt(2);
 	}
 	
+	//implements all the GUI buttons and the actions for when squares are clicked
 	private void setButtonActions(){
-		
+
 		//Offer Draw Button
 		gui.setpBtnDrawAction(new ActionListener() {
 			@Override
@@ -52,7 +54,7 @@ public class Checkers{
 				System.out.println("Offer Draw.");
 			}
 		});
-		
+
 		//Resign Button
 		gui.setpBtnResignAction(new ActionListener() {
 			@Override
@@ -61,7 +63,7 @@ public class Checkers{
 				gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);
 			}
 		});
-		
+
 		//Notation Button
 		gui.setpBtnNotationAction(new ActionListener() {
 			@Override
@@ -69,7 +71,7 @@ public class Checkers{
 				System.out.println("View Notation.");
 			}
 		});
-		
+
 		//Manual Connect button
 		gui.setpBtnConnectAction(new ActionListener(){
 			@Override
@@ -78,7 +80,7 @@ public class Checkers{
 				challengePlayer(gui.getInputtedIp());
 			}
 		});
-		
+
 		//play button
 		gui.setpBtnPlayAction(new ActionListener(){
 			@Override
@@ -88,7 +90,7 @@ public class Checkers{
 			}
 		});
 
-		//refresh players found list
+		//refresh players found list button
 		gui.setpBtnRefreshAction(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -96,36 +98,65 @@ public class Checkers{
 				gui.updatePlayersList( network.getAvailablePlayers() );
 			}
 		});
-		
-		gui.setSpaceClickedAction(new MouseAdapter() {
+
+		//is called when a square is clicked
+		gui.setSquareClickedAction(new MouseAdapter() {
 			@Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println("Yay you clicked me");
-                //if space is highlighted showing that it can move 
-                	//call function to highlight all the spaces that the piece can move to 
-                //else if space is empty but highlighted 
-                	//call function to move the previously selected piece to the space
-                //else if space doesn't have a piece on it or isn't highlighted 
-                	//do nothing. 
-            }
+			public void mouseClicked(MouseEvent e) {
+				Square square = null;
+				//find out which square was clicked
+				for (int i = 0; i < 32; i++){
+					if (e.getSource() == board.getSquares()[i]) {
+						System.out.println("Square: " + i + " was clicked");
+						square= board.getSquares()[i];
+					}
+				}
+				
+				//if we are selected a piece we can move
+				if(square.getBackground() == GUI.clrEnabledGreen && square.getPiece()!=null){
+					currentMoves = board.getAvailableMoves(square);
+				}
+
+				//if we selected a space to move a piece to
+				else if(square.getBackground() == GUI.clrEnabledGreen && square.getPiece()==null){
+					for (Move move : currentMoves) {
+						if(move.get_end_pos()==square.getLabel()){
+							move.apply();
+							//board.movePiece(move);
+							break;
+						}
+					}
+				}
+				
+			}
 		});
 	}
 	
+	//connects to opponent and if connected successfully it will begin a game
 	public void challengePlayer(String player){
 		//System.out.println( chooseWhoGoesFirst() );
-		if(network.Connect(player)){
+		//if(network.Connect( player )){
+
 			isRed=true;
 			startGame();
-		}
+		//}
 	}
-	
+
 	public void startGame(){
+		//sets the board
 		board.setBoard(isRed);
+		
+		//changes the screen
 		gui.setScreen(Screen.GAME_SCREEN);
+		
+		//refreshes the GUI to display the changes
 		gui.refreshScreen();
-		board.getValidMoves(isRed);
+		
+		board.showAllValidMoves(isRed);
 	}
-	
+
+	//will be replaced by method from NetworkCreator when implemented (it returns our ip address)
+	@Deprecated
 	public static ArrayList<String> getIps() throws SocketException{
 		ArrayList<String> arrayList = new ArrayList<String>();
 		@SuppressWarnings("rawtypes")
