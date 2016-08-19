@@ -107,6 +107,6 @@ public class Square extends JLabel {
 		    	}
 		    }
 		}
-		return null;
+		return moves;
 	}
 }

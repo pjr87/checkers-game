@@ -11,6 +11,9 @@ public class TCPServer implements TCPNetwork {
 	
 	ServerSocket serverSocket = null; 
 	Socket clientSocket = null; 
+	
+	PrintWriter out;
+	BufferedReader in;
 
 	@Override
 	public boolean socket(String ipAddress) {
@@ -26,22 +29,11 @@ public class TCPServer implements TCPNetwork {
 	}
 
 	@Override
-	public void bind() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void listen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public boolean accept() {
 		try { 
 			System.out.println ("Waiting for Client");
 			clientSocket = serverSocket.accept(); 
+			
 			return true;
 		} 
 		catch (IOException e) { 
@@ -51,27 +43,50 @@ public class TCPServer implements TCPNetwork {
 	}
 
 	@Override
-	public void connect() {
-		// TODO Auto-generated method stub
-		
+	public String recv() {
+		try {
+			in = new BufferedReader(new InputStreamReader( clientSocket.getInputStream())); 
+			System.out.println("TCPServer recv");
+			String str = in.readLine();
+			return str;
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
-	public void recv() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void send() {
-		// TODO Auto-generated method stub
-		
+	public void send(String str) {
+		try { 
+			out = new PrintWriter(clientSocket.getOutputStream(), true); 
+			out.println(str);
+			System.out.println("TCPServer send");
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
-		
+		try {
+			serverSocket.close();
+			clientSocket.close();
+			out.close();
+			in.close();
+		} 
+		catch (IOException e) {
+		}
+	}
+
+	@Override
+	public boolean isConnected() {
+		try {
+			return serverSocket.getInetAddress().isReachable(0);
+		} catch (IOException e) {
+			return false;
+		}
 	}
 
 }

@@ -1,5 +1,10 @@
 import java.lang.*;
+import java.util.ArrayList;
 import java.util.List;
+
+interface ConnectionStatus {
+	void connectionMade(int status);
+}
 
 public class NetworkCreator{
 	private UDPNetwork UDPserver;
@@ -7,7 +12,19 @@ public class NetworkCreator{
 	private TCPNetwork TCPserver;
 	private TCPNetwork TCPclient;
 	
+	private boolean isClient = false;
+	private boolean isServer = false;
+	
+	private int clientTurn = 0;
+	private int serverTurn = 0;
+	
+	private List<ConnectionStatus> listeners = new ArrayList<ConnectionStatus>();
+	
 	private volatile boolean running = true;
+	
+	public void addListener(ConnectionStatus toAdd){
+		listeners.add(toAdd);
+	}
 	
 	public NetworkCreator(){
 		UDPserver = new UDPServer();
@@ -51,6 +68,7 @@ public class NetworkCreator{
 				boolean open = UDPserver.recv();
 				if(open){
 					StartTCPServer();
+					break;
 				}
 			}
 		}
@@ -65,31 +83,62 @@ public class NetworkCreator{
 	}
 	
 	private void StartTCPServer(){
-		/*terminate();
+		terminate();
 		UDPclient.close();
-		UDPserver.close();*/
+		UDPserver.close();
 		
 		TCPserver.socket("");
 		boolean connect = TCPserver.accept();
-		if(connect)
-			System.out.println("Server connected");
+		if(connect){
+			isServer = true;
+			//Determine who goes first randomly
+			int tmp = (int) ( Math.random() * 2 + 1);
+			System.out.println("Random Generated number: " + tmp);
+			if(tmp == 1){
+				clientTurn = 1;
+				serverTurn = 2;
+			}
+			else if(tmp == 2){
+				clientTurn = 2;
+				serverTurn = 1;
+			}
+			else{
+				clientTurn = 0;
+				serverTurn = 0;
+			}
+			
+			System.out.println("TCP Server connected");
+			//alert all the listeners that the tcp server has been connected
+			//for each listener thats registered: call listener function
+			for(ConnectionStatus cs : listeners)
+				cs.connectionMade(serverTurn);
+		}
 	}
 	
-	private boolean StartTCPClient(String ipAddress){
-		/*terminate();
+	private int StartTCPClient(String ipAddress){
+		terminate();
 		UDPclient.close();
-		UDPserver.close();*/
+		UDPserver.close();
 		
 		boolean connect = TCPclient.socket(ipAddress);
 		if(connect){
 			System.out.println("Client connected");
-			return true;
+			isClient = true;
+			if( clientTurn == 0){
+				try {
+					//Sleep for 1 second
+					Thread.sleep(1000);
+					//This is used to represent the action of a player picking a game
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		return false;
+		
+		return clientTurn;
 	}
 	
-	protected boolean Connect(String ipAddress){
-		
+	protected int Connect(String ipAddress){
 		System.out.println("Sending Listen to connect");
 		
 		UDPclient.send("Listen");
@@ -104,39 +153,36 @@ public class NetworkCreator{
 		}
 		
 		//Start TCP client
-		boolean connected = StartTCPClient(ipAddress);
+		int turn = StartTCPClient(ipAddress);
 		
-		return connected;
-		
-		//Player 1 chooses a game, sends IP info to P2
-			//UDP message sent P1 -> P2
-			//P1 starts TCP server
-				//Timeout after 2 min
-			//P2 takes IP info from UDP and starts TCP client
-			//P2 connects to P1
-		//Interrupts StartNetworking Thread to try and connect
-		//Throw error if failure, Client should handle error and restart networking
-		
-		//Players enter state based on sending and receiving moves
+		return turn;
 	}
 	
-	protected void SendMove(){
+	protected void SendMove(String str){
+		/*if(isServer)
+			TCPserver.send(str);
+		else if(isClient)*/
+			TCPclient.send(str);
 		
-		//When player is ready to send
-			//Sends message, waits for response, 5 second delay
-			//Sends again until response is received
-				//If fail 5 times then throw error
+		System.out.println("Sent " + str);
 	}
 	
-	protected void RecvMove(){
-		//When player is ready to receive
-			//Player enters loop till message is received
-			//Sends back size of message received
+	protected String RecvMove(){
+		String str = null;
+		/*if(isServer)
+			str = TCPserver.recv();
+		else if(isClient)
+			str = TCPclient.recv();*/
+		str = TCPserver.recv();
+
+		System.out.println("Received " + str);
+		
+		return str;
 	}
 	
 	protected void CloseNetworking(){
 		terminate();
-		
+	
 		UDPserver.close();
 		UDPclient.close();
 	}

@@ -6,11 +6,9 @@
 
 public interface TCPNetwork {
 	boolean socket(String ipAddress);
-	void bind();
-	void listen();
 	boolean accept();
-	void connect();
-	void recv();
-	void send();
+	boolean isConnected();
+	String recv();
+	void send(String str);
 	void close();
 }
