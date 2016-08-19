@@ -12,9 +12,9 @@ public class C_Move extends Move {
 		return captured.getLabel();
 	}
 	
-	public void apply(){
+	public void apply(Network send){
 		captured.removePiece();
-		super.apply();
+		super.apply(send);
 	}
 	
 	public String make_send_string(){

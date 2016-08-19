@@ -26,11 +26,11 @@ public class Move {
 		return -1;
 	}
 	
-	public void apply(){
+	public void apply(Network send){
 		end.setPiece(start.getPiece());
 		start.removePiece();
 		
-		Network.sendMove(make_send_string());
+		send.SendMove(make_send_string());
 	}
 	
 	public String make_send_string(){
