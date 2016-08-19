@@ -17,11 +17,7 @@ public class TCPClient implements TCPNetwork {
 		try{
 			System.out.println("Start TCP client");
 			Socket = new Socket(ipAddress, 10007);
-         
-			
-			
-            
-			
+
 			return true;
 		}
 		catch (IOException e) {
@@ -54,6 +50,7 @@ public class TCPClient implements TCPNetwork {
 	@Override
 	public void send(String str) {
 		try {
+			System.out.println("TCPClient Sending " + str);
 			out = new PrintWriter(Socket.getOutputStream(), true);
 			out.println(str);
 			System.out.println("TCPClient send");
