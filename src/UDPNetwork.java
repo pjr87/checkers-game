@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface UDPNetwork {
 	void socket();
-	void recv();
-	void send();
+	boolean recv();
+	void send(String message);
 	void close();
 	List<String> getAddresses();
 }

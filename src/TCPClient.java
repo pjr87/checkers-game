@@ -3,54 +3,79 @@
  * 
  * @author phillipryan
  */
+import java.io.*;
+import java.net.*;
 
 public class TCPClient implements TCPNetwork {
+	
+    Socket Socket = null;
+    PrintWriter out = null;
+    BufferedReader in = null;
 
 	@Override
-	public void socket() {
-		// TODO Auto-generated method stub
-		
+	public boolean socket(String ipAddress) {
+		try{
+			System.out.println("Start TCP client");
+			Socket = new Socket(ipAddress, 10007);
+         
+			
+			
+            
+			
+			return true;
+		}
+		catch (IOException e) {
+			System.err.println("Couldn't get I/O for "
+                            + "the connection to: " + ipAddress);
+		}
+		return false;
 	}
 
 	@Override
-	public void bind() {
+	public boolean accept() {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override
-	public void listen() {
-		// TODO Auto-generated method stub
-		
+	public String recv() {
+		try {
+			in = new BufferedReader(new InputStreamReader(Socket.getInputStream()));
+			System.out.println("TCPClient recv");
+			String str = in.readLine();
+			return str;
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
-	public void accept() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void connect() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void recv() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void send() {
-		// TODO Auto-generated method stub
-		
+	public void send(String str) {
+		try {
+			out = new PrintWriter(Socket.getOutputStream(), true);
+			out.println(str);
+			System.out.println("TCPClient send");
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
-		
+		try {
+			Socket.close();
+			out.close();
+			in.close();
+		} 
+		catch (IOException e) {
+		}
+	}
+
+	@Override
+	public boolean isConnected() {
+		return Socket.isConnected();
 	}
 }

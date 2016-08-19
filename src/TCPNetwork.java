@@ -5,12 +5,10 @@
  */
 
 public interface TCPNetwork {
-	void socket();
-	void bind();
-	void listen();
-	void accept();
-	void connect();
-	void recv();
-	void send();
+	boolean socket(String ipAddress);
+	boolean accept();
+	boolean isConnected();
+	String recv();
+	void send(String str);
 	void close();
 }
