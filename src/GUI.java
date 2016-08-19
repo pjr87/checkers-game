@@ -119,7 +119,7 @@ public class GUI extends JFrame{
 	
 	public void displayWinner(int winner){
 		//winner values: 0=white won, 1=red won, 2=Tie 	
-		String strWinner = "";
+		String strWinner = "Something bad happened... winner could not be found.";
 		switch(winner){
 			case 0:
 				strWinner="White Won!";
@@ -129,6 +129,8 @@ public class GUI extends JFrame{
 				break;
 			case 2:
 				strWinner="It's a Tie!";
+				break;
+			default:
 				break;
 		}
 		JOptionPane.showMessageDialog(null, strWinner);

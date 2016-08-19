@@ -52,7 +52,6 @@ public class GameScreen extends JPanel{
 		//set layout
 		this.setLayout(new GridBagLayout());
 
-		JLabel padding = new JLabel("   ");
 		//Instantiate variables
 		gBtnResign = new JButton("   Resign   ");
 		gBtnNotation = new JButton("View Notation");
