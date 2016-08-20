@@ -36,6 +36,7 @@ public class TCPClient implements TCPNetwork {
 	@Override
 	public String recv() {
 		try {
+			System.out.println("TCPClient recv");
 			in = new BufferedReader(new InputStreamReader(Socket.getInputStream()));
 			System.out.println("TCPClient recv");
 			String str = in.readLine();

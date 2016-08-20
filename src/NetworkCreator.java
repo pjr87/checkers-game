@@ -165,6 +165,8 @@ public class NetworkCreator{
 	}
 	
 	protected void SendMove(String str){
+		System.out.println("SendMove as: " + isServer);
+		System.out.println("SendMove as: " + isClient);
 		/*if(isServer)
 			TCPserver.send(str);
 		else if(isClient)*/
@@ -174,6 +176,8 @@ public class NetworkCreator{
 	}
 	
 	protected String RecvMove(){
+		System.out.println("RecvMove as: " + isServer);
+		System.out.println("RecvMove as: " + isClient);
 		String str = null;
 		/*if(isServer)
 			str = TCPserver.recv();

@@ -45,6 +45,7 @@ public class TCPServer implements TCPNetwork {
 	@Override
 	public String recv() {
 		try {
+			System.out.println("TCPServer recv");
 			in = new BufferedReader(new InputStreamReader( clientSocket.getInputStream())); 
 			System.out.println("TCPServer recv");
 			String str = in.readLine();

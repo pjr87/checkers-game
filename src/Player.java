@@ -119,7 +119,7 @@ public class Player implements ConnectionStatus{
 		
 		try {
 			//Runs for 3 seconds
-			Thread.sleep(30000);
+			Thread.sleep(3000);
 			//This is used to represent the action of a player picking a game
 		} catch (InterruptedException e) {
 			e.printStackTrace();
