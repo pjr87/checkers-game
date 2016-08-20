@@ -39,6 +39,8 @@ public class Checkers implements ConnectionStatus{
 			break;
 		case 1:
 			System.out.println("Player2: Player 2's turn");
+			isRed=false;
+			startGame();
 			try {
 				//Runs for 1 seconds
 				Thread.sleep(1000);
@@ -194,14 +196,14 @@ public class Checkers implements ConnectionStatus{
 	
 	//connects to opponent and if connected successfully it will begin a game
 	public void challengePlayer(String player){
-		System.out.println( chooseWhoGoesFirst() );
+		//System.out.println( chooseWhoGoesFirst() );
 		int turn;
 		if((turn = network.Connect( player ))>0){
 			if(turn==1)
 				isRed=true;
 			else
 				isRed=false;
-			isRed=true;
+			//isRed=true;
 			startGame();
 		}
 	}
