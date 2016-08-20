@@ -53,7 +53,7 @@ public class NetworkCreator{
 			while(running){
 				try {
 					UDPclient.send("");
-					Thread.sleep(10000);
+					Thread.sleep(1000);
 				}
 				catch (InterruptedException e) {
 					e.printStackTrace();
@@ -126,18 +126,12 @@ public class NetworkCreator{
 			String Serverturn = TCPclient.recv();
 			System.out.println("Recv server turn " + Serverturn);
 			if(Serverturn.equals("1")){
-				System.out.println("Server turn 1");
 				serverTurn = 1;
-				System.out.println("BANG");
 				clientTurn = 2;
-				System.out.println("BOOM " + clientTurn);
 			}
 			else if(Serverturn.equals("2")){
-				System.out.println("Server turn 2");
 				serverTurn = 2;
-				System.out.println("BANG");
 				clientTurn = 1;
-				System.out.println("BOOM " + clientTurn);
 			}
 				
 			isClient = true;
