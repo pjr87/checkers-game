@@ -1,3 +1,8 @@
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class Piece extends ImageIcon{
@@ -11,6 +16,26 @@ public class Piece extends ImageIcon{
 		Direction[] directions = {Direction.UpRight, Direction.UpLeft};
 		this.directions = directions;
 		this.team = team;
+		if(team){
+			Image redImage = null;
+			try {
+			    File pathToFile = new File("images/red-piece.png");
+			    redImage = ImageIO.read(pathToFile);
+			} catch (IOException ex) {
+			    ex.printStackTrace();
+			}
+			this.setImage(redImage);
+		}
+		else{
+			Image whiteImage = null;
+			try {
+			    File pathToFile = new File("images/white-piece.png");
+			    whiteImage = ImageIO.read(pathToFile);
+			} catch (IOException ex) {
+			    ex.printStackTrace();
+			}
+			this.setImage(whiteImage);
+		}
 	}
 
     Direction[] getMoveDirections()

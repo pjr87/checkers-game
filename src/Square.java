@@ -65,6 +65,10 @@ public class Square extends JLabel {
 	{
 		ArrayList<Square> emptyneighbours = new ArrayList<Square>();
 		for (Square neighbour : neighbours.values()){
+			if(neighbours == null)
+			{
+				continue;
+			}
 			if(neighbour.getPiece() == null)
 			{
 				emptyneighbours.add(neighbour);
