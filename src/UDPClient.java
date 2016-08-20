@@ -24,7 +24,7 @@ public class UDPClient implements UDPNetwork{
 		} 
 		catch (Exception e) 
 		{
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -37,7 +37,7 @@ public class UDPClient implements UDPNetwork{
 		} 
 		catch (IOException e) 
 		{
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -55,7 +55,7 @@ public class UDPClient implements UDPNetwork{
 		} 
 		catch (IOException e) 
 		{
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 

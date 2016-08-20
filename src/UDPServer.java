@@ -24,7 +24,7 @@ public class UDPServer implements UDPNetwork{
 			socket.setBroadcast(true);
         }
 		catch(IOException e){
-            //System.err.println("IOException " + e);
+            System.err.println("IOException " + e);
         }
 	}
 	
@@ -50,7 +50,7 @@ public class UDPServer implements UDPNetwork{
             }
         }
         catch (IOException ie){
-            //ie.printStackTrace();
+            ie.printStackTrace();
         }
         return false;
 	}
@@ -74,7 +74,7 @@ public class UDPServer implements UDPNetwork{
             socket.send (packet);
 		} 
 		catch (IOException e){
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 

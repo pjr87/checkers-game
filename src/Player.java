@@ -54,7 +54,7 @@ public class Player implements ConnectionStatus{
 		
 		network.StartNetworking();
 		
-		/*try {
+		try {
 			//Runs for 3 seconds
 			Thread.sleep(3000);
 			//This is used to represent the action of a player picking a game
@@ -62,9 +62,9 @@ public class Player implements ConnectionStatus{
 			e.printStackTrace();
 		}
 		List<String> players = network.getAvailablePlayers();
-		System.out.println(Arrays.toString(players.toArray()));*/
+		System.out.println(Arrays.toString(players.toArray()));
 		
-		int n = 3;
+		/*int n = 3;
 		List<String> players = null;
 		
 		while(n == 3){
@@ -77,9 +77,9 @@ public class Player implements ConnectionStatus{
 			n = reader.nextInt();
 		}
 		
-		int turn = network.Connect(players.get(n));
+		int turn = network.Connect(players.get(n));*/
 		//int turn = network.Connect(players.get(0));
-		
+		/*
 		System.out.println("turn " + turn);
 		
 		//TODO remove this switch and have it return as a listener after a Connet() is called
@@ -105,7 +105,7 @@ public class Player implements ConnectionStatus{
 			System.out.println("Player1: Receieved " + str);
 			break;
 		}
-		
+		*/
 		network.CloseNetworking();
 	}
 	
@@ -117,14 +117,14 @@ public class Player implements ConnectionStatus{
 		
 		network.StartNetworking();
 		
-		/*try {
+		try {
 			//Runs for 3 seconds
 			Thread.sleep(30000);
 			//This is used to represent the action of a player picking a game
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}*/
-		
+		}
+		/*
 		int n = 3;
 		List<String> players = null;
 		
@@ -141,10 +141,10 @@ public class Player implements ConnectionStatus{
 		int turn = network.Connect(players.get(n));
 		//int turn = network.Connect(players.get(0));
 		
-		System.out.println("turn " + turn);
+		System.out.println("turn " + turn);*/
 		
-		//List<String> players = network.getAvailablePlayers();
-		//System.out.println(Arrays.toString(players.toArray()));
+		List<String> players = network.getAvailablePlayers();
+		System.out.println(Arrays.toString(players.toArray()));
 		
 		network.CloseNetworking();
 	}
