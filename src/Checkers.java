@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Random;
 
-import javax.swing.JLabel;
-
-import org.omg.CORBA.TIMEOUT;
-
 public class Checkers implements ConnectionStatus{
 
 	private GUI gui;
@@ -22,17 +18,12 @@ public class Checkers implements ConnectionStatus{
 	private ArrayList<Move> currentMoves;
 	//private String username;
 	//private Map<String,String> foundPlayers = new HashMap<String,String>();
-	
-	
-	//public Player(NetworkCreator network) {
-	//	this.network = network;
-	//}
 
 	@Override
 	public void connectionMade(int status) {
 		//Do something here, this only happens when TCP connection is made
 		System.out.println("Server connection recevied from player " + status);
-		
+
 		switch(status){
 		case 0:
 			System.out.println("Player2: Failed to connect");
@@ -54,12 +45,10 @@ public class Checkers implements ConnectionStatus{
 			System.out.println("Player2: Player 1's turn");
 			isRed=false;
 			startGame();
-			String str = this.network.RecvMove();
-			System.out.println("Player2: Receieved " + str);
+			receiveFromNetwork();
 			break;
 		}
 	}
-	
 
 	private Checkers(){
 
@@ -67,7 +56,7 @@ public class Checkers implements ConnectionStatus{
 		//Player player = new Player(network);
 		network.addListener(this);
 		network.StartNetworking();
-		
+
 		//username = JOptionPane.showInputDialog(null, "Please enter a unique username!");
 		board = new Board();
 
@@ -80,13 +69,13 @@ public class Checkers implements ConnectionStatus{
 	public static void main(String[] args) {
 		new Checkers();
 	}
-	
-	
+
+
 	private int chooseWhoGoesFirst(){
 		Random random = new Random();
 		return random.nextInt(2);
 	}
-	
+
 	//implements all the GUI buttons and the actions for when squares are clicked
 	private void setButtonActions(){
 
@@ -154,7 +143,7 @@ public class Checkers implements ConnectionStatus{
 						square= board.getSquares()[i];
 					}
 				}
-				
+
 				//if we are selected a piece we can move
 				if(square.getBackground() == GUI.clrEnabledGreen && square.getPiece()!=null){
 					gui.deselectAllsquares();
@@ -165,7 +154,7 @@ public class Checkers implements ConnectionStatus{
 				else if(square.getBackground() == GUI.clrEnabledGreen && square.getPiece()==null){
 					for (Move move : currentMoves) {
 						if(move.get_end_pos()==square.getLabel()){
-							
+
 							move.apply(network);
 							receiveFromNetwork();
 
@@ -173,27 +162,25 @@ public class Checkers implements ConnectionStatus{
 						}
 					}
 				}
-				
+
 			}
 		});
 	}
-	
+
 	public void receiveFromNetwork(){
 		try {
 			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (InterruptedException e) {}
 		String rMove = network.RecvMove();
 		Move move = makeMove(rMove);
 		//check to make sure it is valid ??
 		board.movePiece(move);
-		//check if ther is winner
-		
+		board.showAllValidMoves(isRed);
+		//check if the is winner
+
 		//need to implement a draw here  
 	}
-	
+
 	//connects to opponent and if connected successfully it will begin a game
 	public void challengePlayer(String player){
 		//System.out.println( chooseWhoGoesFirst() );
@@ -211,89 +198,32 @@ public class Checkers implements ConnectionStatus{
 	public void startGame(){
 		//sets the board
 		board.setBoard(isRed);
-		
+
 		//changes the screen
 		gui.setScreen(Screen.GAME_SCREEN);
-		
+
 		//refreshes the GUI to display the changes
-		
+
 		if(isRed)
 			board.showAllValidMoves(isRed);
-		
+
 		gui.refreshScreen();
 	}
-	
+
 	public Move makeMove(String moveStr){
-		String lines[] = moveStr.split(Move.lineDelim);
-		if (lines.length < 4){
-			//TODO report error
-		}
-		
-		int startID = 0;
-		int endID = 0;
-		
-		{ // parse the second line for the id of the start square
-			String fields[] = lines[1].split(Move.delim);	
-			if (fields.length < 2){
-				//TODO report error
-				return null;
-			}
-		
-			if (fields[0] == Move.startRep){
-				startID = Integer.parseInt(fields[1]);
-			}
-			else {
-				//TODO report error
-				return null;
-			}
-		}
-		
-		{ // parse the third line for the id of the end square
-			String fields[] = lines[2].split(Move.delim);
-			if (fields.length < 2){
-				//TODO report error
-				return null;
-			}
+		String values[] = moveStr.split(Move.delim);
+		if(values.length>3){
+			int startID = Integer.parseInt(values[1]);
+			int endID = Integer.parseInt(values[2]);
 			
-			if (fields[0] == Move.endRep){
-				endID = Integer.parseInt(fields[1]);
-			}
-			else {
-				//TODO report error
-				return null;
-			}
+			if(values[3].equals("null"))
+				return new Move(board.getSquares()[startID], board.getSquares()[endID]);
+			else 
+				return new C_Move(board.getSquares()[startID], board.getSquares()[endID], board.getSquares()[Integer.parseInt(values[3])]);
 		}
-		
-		if (lines[0] == Move.name){ // check if the move was a regular move...		
-			return new Move(board.getSquares()[startID], board.getSquares()[endID]); // TODO Make a Move and return it
-		}
-		else if (lines[0] == C_Move.name){ // ...or a capturing move
-			int captureID = 0;
-			
-			{ // parse the fourth line for the id of the captured square
-				String fields[] = lines[3].split(Move.delim);
-				if (fields.length < 2){
-					//TODO report error
-					return null;
-				}
-				
-				if (fields[0] == Move.capturedRep){
-					endID = Integer.parseInt(fields[1]);
-				}
-				else {
-					//TODO report error
-					return null;
-				}
-			}
-			
-			return new C_Move(board.getSquares()[startID], board.getSquares()[endID], board.getSquares()[captureID]); // TODO Make a C_Move and return it
-		}
-		else {
-			//TODO report error
-			return null;
-		}
+		return null;
 	}
-	
+
 	//will be replaced by method from NetworkCreator when implemented (it returns our ip address)
 	@Deprecated
 	public static ArrayList<String> getIps() throws SocketException{

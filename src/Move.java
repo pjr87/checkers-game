@@ -34,10 +34,10 @@ public class Move {
 	}
 	
 	public String make_send_string(){
-		String s = name + lineDelim;
-		s += startRep + delim + String.valueOf(get_start_pos()) + lineDelim;
-		s += endRep + delim + String.valueOf(get_end_pos()) + lineDelim;
-		s += capturedRep + delim + "null" + lineDelim;
+		String s = name +delim;
+		s +=  String.valueOf(get_start_pos());
+		s += delim + String.valueOf(get_end_pos());
+		s += delim + "null\n";
 		
 		return s;
 	}
