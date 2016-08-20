@@ -45,6 +45,7 @@ public class Checkers implements ConnectionStatus{
 			System.out.println("Player2: Player 1's turn");
 			isRed=false;
 			startGame();
+			
 			receiveFromNetwork();
 			break;
 		}
@@ -168,14 +169,15 @@ public class Checkers implements ConnectionStatus{
 	}
 
 	public void receiveFromNetwork(){
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {}
+		try { Thread.sleep(1000); } catch (InterruptedException e) {}
+		gui.enableDraw(false);
 		String rMove = network.RecvMove();
 		Move move = makeMove(rMove);
 		//check to make sure it is valid ??
 		board.movePiece(move);
+		int gameOver = board.isGameOver(isRed);
 		board.showAllValidMoves(isRed);
+		gui.enableDraw(true);
 		//check if the is winner
 
 		//need to implement a draw here  
@@ -190,7 +192,7 @@ public class Checkers implements ConnectionStatus{
 				isRed=true;
 			else
 				isRed=false;
-			//isRed=true;
+			
 			startGame();
 		}
 	}
@@ -213,13 +215,13 @@ public class Checkers implements ConnectionStatus{
 	public Move makeMove(String moveStr){
 		String values[] = moveStr.split(Move.delim);
 		if(values.length>3){
-			int startID = Integer.parseInt(values[1]);
-			int endID = Integer.parseInt(values[2]);
+			int startID = 31-Integer.parseInt(values[1]);
+			int endID = 31-Integer.parseInt(values[2]);
 			
 			if(values[3].equals("null"))
 				return new Move(board.getSquares()[startID], board.getSquares()[endID]);
 			else 
-				return new C_Move(board.getSquares()[startID], board.getSquares()[endID], board.getSquares()[Integer.parseInt(values[3])]);
+				return new C_Move(board.getSquares()[startID], board.getSquares()[endID], board.getSquares()[31-Integer.parseInt(values[3])]);
 		}
 		return null;
 	}

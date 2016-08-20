@@ -61,7 +61,7 @@ public class Board {
 		for (Square square : squares) {
 			if(square.getPiece()!=null && square.getPiece().getTeam()==i){
 				ArrayList<Move> moves = square.getMoves();
-				//### ^ square.getMoves(); is returning NULL ############################
+				
 				for (Move move : moves) {
 					if(move instanceof C_Move){
 						//if there is a jump move break out start over only getting jump moves
