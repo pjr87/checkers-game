@@ -52,5 +52,25 @@ public class Piece extends ImageIcon{
 
 	public void setTeam(boolean team) {
 		this.team = team;
+		if(team){
+			Image redImage = null;
+			try {
+			    File pathToFile = new File("images/red-piece.png");
+			    redImage = ImageIO.read(pathToFile);
+			} catch (IOException ex) {
+			    ex.printStackTrace();
+			}
+			this.setImage(redImage);
+		}
+		else{
+			Image whiteImage = null;
+			try {
+			    File pathToFile = new File("images/white-piece.png");
+			    whiteImage = ImageIO.read(pathToFile);
+			} catch (IOException ex) {
+			    ex.printStackTrace();
+			}
+			this.setImage(whiteImage);
+		}
 	}	
 }
