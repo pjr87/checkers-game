@@ -115,6 +115,9 @@ public class GUI extends JFrame{
 		s.setBackground(GUI.clrEnabledGreen);
 		s.setBorder(BorderFactory.createLineBorder(GUI.clrEnabledBorders));
 	}
+	public void enableDraw(boolean b){
+		gameScreen.setBtnDrawEnabled(b);
+	}
 	
 	public void displayWinner(int winner){
 		//winner values: 0=white won, 1=red won, 2=Tie 	

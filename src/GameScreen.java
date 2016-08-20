@@ -103,6 +103,10 @@ public class GameScreen extends JPanel{
 	public void setpBtnDrawAction(ActionListener a) { gBtnDraw.addActionListener(a); }
 
 	public void setpBtnNotationAction(ActionListener a) { gBtnNotation.addActionListener(a); }
+	
+	public void setBtnDrawEnabled(boolean b){
+		gBtnDraw.setEnabled(b);
+	}
 
 	public void setAllSquaresMouseListener(MouseAdapter mouseA) {
 		boolean isEven = false;
