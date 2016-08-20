@@ -108,9 +108,9 @@ public class Board {
 		boolean mandatoryMoveExists=false;
 		ArrayList<Move> list = s.getMoves();
 		for (Move move : list) {
-			if(move instanceof C_Move)
+			if(move instanceof C_Move){
 				mandatoryMoveExists=true;
-			list.add(move);
+			}
 			GUI.highlightSquare(squares[move.get_end_pos()]);
 		}
 		if(mandatoryMoveExists){

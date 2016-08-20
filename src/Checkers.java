@@ -151,6 +151,7 @@ public class Checkers implements ConnectionStatus{
 				
 				//if we are selected a piece we can move
 				if(square.getBackground() == GUI.clrEnabledGreen && square.getPiece()!=null){
+					gui.deselectAllsquares();
 					currentMoves = board.getAvailableMoves(square);
 				}
 
@@ -190,6 +191,7 @@ public class Checkers implements ConnectionStatus{
 				isRed=true;
 			else
 				isRed=false;
+			isRed=true;
 			startGame();
 		}
 	}
@@ -202,12 +204,84 @@ public class Checkers implements ConnectionStatus{
 		gui.setScreen(Screen.GAME_SCREEN);
 		
 		//refreshes the GUI to display the changes
-		gui.refreshScreen();
 		
 		if(isRed)
 			board.showAllValidMoves(isRed);
+		
+		gui.refreshScreen();
 	}
-
+	
+	public Move makeMove(String moveStr){
+		String lines[] = moveStr.split(Move.lineDelim);
+		if (lines.length < 4){
+			//TODO report error
+		}
+		
+		int startID = 0;
+		int endID = 0;
+		
+		{ // parse the second line for the id of the start square
+			String fields[] = lines[1].split(Move.delim);	
+			if (fields.length < 2){
+				//TODO report error
+				return null;
+			}
+		
+			if (fields[0] == Move.startRep){
+				startID = Integer.parseInt(fields[1]);
+			}
+			else {
+				//TODO report error
+				return null;
+			}
+		}
+		
+		{ // parse the third line for the id of the end square
+			String fields[] = lines[2].split(Move.delim);
+			if (fields.length < 2){
+				//TODO report error
+				return null;
+			}
+			
+			if (fields[0] == Move.endRep){
+				endID = Integer.parseInt(fields[1]);
+			}
+			else {
+				//TODO report error
+				return null;
+			}
+		}
+		
+		if (lines[0] == Move.name){ // check if the move was a regular move...		
+			return new Move(board.getSquares()[startID], board.getSquares()[endID]); // TODO Make a Move and return it
+		}
+		else if (lines[0] == C_Move.name){ // ...or a capturing move
+			int captureID = 0;
+			
+			{ // parse the fourth line for the id of the captured square
+				String fields[] = lines[3].split(Move.delim);
+				if (fields.length < 2){
+					//TODO report error
+					return null;
+				}
+				
+				if (fields[0] == Move.capturedRep){
+					endID = Integer.parseInt(fields[1]);
+				}
+				else {
+					//TODO report error
+					return null;
+				}
+			}
+			
+			return new C_Move(board.getSquares()[startID], board.getSquares()[endID], board.getSquares()[captureID]); // TODO Make a C_Move and return it
+		}
+		else {
+			//TODO report error
+			return null;
+		}
+	}
+	
 	//will be replaced by method from NetworkCreator when implemented (it returns our ip address)
 	@Deprecated
 	public static ArrayList<String> getIps() throws SocketException{
