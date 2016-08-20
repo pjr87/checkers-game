@@ -51,6 +51,7 @@ public class Square extends JLabel {
 	 */
 	public void setPiece(Piece here) {
 		this.here = here;
+		this.setIcon(here);
 	}
 	
 	/*
