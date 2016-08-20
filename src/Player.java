@@ -78,7 +78,7 @@ public class Player implements ConnectionStatus{
 		}
 		
 		int turn = network.Connect(players.get(n));*/
-		//int turn = network.Connect(players.get(0));
+		int turn = network.Connect(players.get(0));
 		
 		System.out.println("turn " + turn);
 		

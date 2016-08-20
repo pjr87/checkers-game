@@ -29,7 +29,7 @@ public class Piece extends ImageIcon{
 		else{
 			Image whiteImage = null;
 			try {
-			    File pathToFile = new File("images/white-piece.png");
+			    File pathToFile = new File("images/black-piece.png");
 			    whiteImage = ImageIO.read(pathToFile);
 			} catch (IOException ex) {
 			    ex.printStackTrace();
