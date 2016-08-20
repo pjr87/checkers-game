@@ -155,7 +155,7 @@ public class Checkers implements ConnectionStatus{
 				else if(square.getBackground() == GUI.clrEnabledGreen && square.getPiece()==null){
 					for (Move move : currentMoves) {
 						if(move.get_end_pos()==square.getLabel()){
-
+							gui.deselectAllsquares();
 							move.apply(network);
 							receiveFromNetwork();
 
