@@ -117,13 +117,31 @@ public class Player implements ConnectionStatus{
 		
 		network.StartNetworking();
 		
-		try {
+		/*try {
 			//Runs for 3 seconds
-			Thread.sleep(3000);
+			Thread.sleep(30000);
 			//This is used to represent the action of a player picking a game
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}*/
+		
+		int n = 3;
+		List<String> players = null;
+		
+		while(n == 3){
+		
+			players = network.getAvailablePlayers();
+			System.out.println(Arrays.toString(players.toArray()));
+			
+			Scanner reader = new Scanner(System.in);  // Reading from System.in
+			System.out.println("Enter a number: ");
+			n = reader.nextInt();
 		}
+		
+		int turn = network.Connect(players.get(n));
+		//int turn = network.Connect(players.get(0));
+		
+		System.out.println("turn " + turn);
 		
 		//List<String> players = network.getAvailablePlayers();
 		//System.out.println(Arrays.toString(players.toArray()));
