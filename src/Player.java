@@ -43,7 +43,7 @@ public class Player implements ConnectionStatus{
 		Player1thread();
 		
 		//Start Player2
-		//Player2thread();
+		Player2thread();
 	}
 	
 	public static void Player1thread(){
@@ -79,7 +79,7 @@ public class Player implements ConnectionStatus{
 		
 		int turn = network.Connect(players.get(n));*/
 		//int turn = network.Connect(players.get(0));
-		/*
+		
 		System.out.println("turn " + turn);
 		
 		//TODO remove this switch and have it return as a listener after a Connet() is called
@@ -105,7 +105,7 @@ public class Player implements ConnectionStatus{
 			System.out.println("Player1: Receieved " + str);
 			break;
 		}
-		*/
+		
 		network.CloseNetworking();
 	}
 	
