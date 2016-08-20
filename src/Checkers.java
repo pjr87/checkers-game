@@ -11,6 +11,8 @@ import java.util.Random;
 
 import javax.swing.JLabel;
 
+import org.omg.CORBA.TIMEOUT;
+
 public class Checkers implements ConnectionStatus{
 
 	private GUI gui;
@@ -48,6 +50,8 @@ public class Checkers implements ConnectionStatus{
 			break;
 		case 2:
 			System.out.println("Player2: Player 1's turn");
+			isRed=false;
+			startGame();
 			String str = this.network.RecvMove();
 			System.out.println("Player2: Receieved " + str);
 			break;
@@ -58,8 +62,8 @@ public class Checkers implements ConnectionStatus{
 	private Checkers(){
 
 		network = new NetworkCreator(); 
-		Player player = new Player(network);
-		network.addListener(player);
+		//Player player = new Player(network);
+		network.addListener(this);
 		network.StartNetworking();
 		
 		//username = JOptionPane.showInputDialog(null, "Please enter a unique username!");
@@ -173,6 +177,12 @@ public class Checkers implements ConnectionStatus{
 	}
 	
 	public void receiveFromNetwork(){
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String rMove = network.RecvMove();
 		Move move = makeMove(rMove);
 		//check to make sure it is valid ??

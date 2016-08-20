@@ -56,7 +56,7 @@ public class GUI extends JFrame{
 		//change to the player selection screen
 		else if(screen == Screen.PLAYER_SELECTION_SCREEN){
 	        contain.add(playerSelectionScreen);
-			setSize(600, 257);
+			setSize(630, 257);
 		}
 		
 		//refreshScreen();
