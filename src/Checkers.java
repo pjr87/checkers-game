@@ -268,11 +268,17 @@ public class Checkers implements ConnectionStatus{
 			else
 				startRecv();
 		}
+		else if(data.split(" ")[0].equals("GAMEOVER")){
+			//if(data.split(" ")[1].equals("1") )
+			gui.displayWinner(Integer.parseInt(data.split(" ")[1]));
+			exitToPlayerSelectionScreen();
+		}
 		else
 			startRecv();
 		
 		if(gameOver>-1){
 			gui.displayWinner(gameOver);
+			network.SendMove("GAMEOVER "+gameOver);
 			exitToPlayerSelectionScreen();
 		}
 	}

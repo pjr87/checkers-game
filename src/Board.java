@@ -152,10 +152,10 @@ public class Board {
 	
 	//sets up the board for a new game  
 	public void setBoard(boolean isRed) {
-		for(int i = 0; i<12;i++)
+		for(int i = 10; i<11;i++)
 			squares[i].setPiece( new Piece(!isRed) );
 
-		for(int i=20; i<32;i++)
+		for(int i=21; i<22;i++)
 			squares[i].setPiece( new Piece(isRed) );
 	}
 	
