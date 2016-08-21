@@ -20,6 +20,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.omg.PortableServer.POAPackage.AdapterAlreadyExists;
+
 public class PlayerSelectionScreen extends JPanel{
 
 	private static final long serialVersionUID = 7893337942915288121L;
@@ -42,12 +44,13 @@ public class PlayerSelectionScreen extends JPanel{
 	//helper vars
 	private DefaultListModel<String> players;
 	private String ourIp;
+	private boolean alreadySet;
 	private static final String versionText="Version: ";
 	private static final String version="2.0";
 	
 	//Constructor - GUI Setup
 	public PlayerSelectionScreen() {
-		
+		alreadySet=false;
 		this.setLayout(null);
 		players = new DefaultListModel<String>();
 
@@ -224,9 +227,16 @@ public class PlayerSelectionScreen extends JPanel{
 	
 	//update the found players list
 	public void updatePlayersList(List<String> newPlayers){
-		
-		ourIp = newPlayers.remove(0);
-		pLblYourIp.setText("Your IP address is: "+ourIp);
+		if(!alreadySet){
+			ourIp = newPlayers.remove(0);
+			pLblYourIp.setText("Your IP address is: "+ourIp);
+		}
+		else{
+			for(int i=newPlayers.size()-1; i>-1; i--){
+				if(newPlayers.get(i).equals(ourIp))
+					newPlayers.remove(i);
+			}
+		}
 		
 		int ind = pLstPlayers.getSelectedIndex();
 		players.removeAllElements();
