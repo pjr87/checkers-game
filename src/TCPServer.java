@@ -72,8 +72,6 @@ public class TCPServer implements TCPNetwork {
 		try {
 			serverSocket.close();
 			clientSocket.close();
-			out.close();
-			in.close();
 		} 
 		catch (IOException e) {
 		}
