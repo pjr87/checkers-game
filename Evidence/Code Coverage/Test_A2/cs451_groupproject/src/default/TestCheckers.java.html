@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestCheckers.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Checkers (Aug 21, 2016 5:22:01 PM)</a> &gt; <a href="../../index.html" class="el_group">cs451_groupproject</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">TestCheckers.java</span></div><h1>TestCheckers.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">import java.awt.event.ActionEvent;</span>
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Random;
+
+public class TestCheckers implements ConnectionStatus{
+
+	private GUI gui;
+	private NetworkCreator network;
+	private Board board;
+	private boolean isRed;
+	private ArrayList&lt;Move&gt; currentMoves;
+	//private String username;
+	//private Map&lt;String,String&gt; foundPlayers = new HashMap&lt;String,String&gt;();
+
+	@Override
+	public void connectionMade(int status) {
+		//Do something here, this only happens when TCP connection is made
+<span class="nc" id="L25">		System.out.println(&quot;Server connection recevied from player &quot; + status);</span>
+
+<span class="nc bnc" id="L27" title="All 4 branches missed.">		switch(status){</span>
+		case 0:
+<span class="nc" id="L29">			System.out.println(&quot;Player2: Failed to connect&quot;);</span>
+<span class="nc" id="L30">			break;</span>
+		case 1:
+<span class="nc" id="L32">			System.out.println(&quot;Player2: Player 2's turn&quot;);</span>
+<span class="nc" id="L33">			isRed=false;</span>
+<span class="nc" id="L34">			startGame();</span>
+			try {
+				//Runs for 1 seconds
+<span class="nc" id="L37">				Thread.sleep(1000);</span>
+				//This is used to represent the action of a player picking a game
+<span class="nc" id="L39">			} catch (InterruptedException e) {</span>
+<span class="nc" id="L40">				e.printStackTrace();</span>
+			}
+<span class="nc" id="L42">			this.network.SendMove(&quot;Hello&quot;);</span>
+<span class="nc" id="L43">			break;</span>
+		case 2:
+<span class="nc" id="L45">			System.out.println(&quot;Player2: Player 1's turn&quot;);</span>
+<span class="nc" id="L46">			isRed=false;</span>
+<span class="nc" id="L47">			startGame();</span>
+			
+<span class="nc" id="L49">			startRecv();</span>
+			break;
+		}
+<span class="nc" id="L52">	}</span>
+
+<span class="nc" id="L54">	private TestCheckers(){</span>
+
+		//network = new NetworkCreator(); 
+		//Player player = new Player(network);
+		//network.addListener(this);
+		//network.StartNetworking();
+
+		//username = JOptionPane.showInputDialog(null, &quot;Please enter a unique username!&quot;);
+<span class="nc" id="L62">		board = new Board();</span>
+
+<span class="nc" id="L64">		gui = new GUI(board.getSquares());</span>
+		//gui.updatePlayersList( network.getAvailablePlayers() );
+<span class="nc" id="L66">		gui.setScreen(Screen.GAME_SCREEN);</span>
+<span class="nc" id="L67">		setButtonActions();</span>
+<span class="nc" id="L68">		isRed=true;</span>
+<span class="nc" id="L69">		startGame();</span>
+<span class="nc" id="L70">	}</span>
+
+	public static void main(String[] args) {
+<span class="nc" id="L73">		new TestCheckers();</span>
+<span class="nc" id="L74">	}</span>
+
+	@Deprecated
+	private int chooseWhoGoesFirst(){
+<span class="nc" id="L78">		Random random = new Random();</span>
+<span class="nc" id="L79">		return random.nextInt(2);</span>
+	}
+
+	//implements all the GUI buttons and the actions for when squares are clicked
+	private void setButtonActions(){
+
+		//Offer Draw Button
+<span class="nc" id="L86">		gui.setpBtnDrawAction(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L89">				System.out.println(&quot;Offer Draw.&quot;);</span>
+<span class="nc" id="L90">			}</span>
+		});
+
+		//Resign Button
+<span class="nc" id="L94">		gui.setpBtnResignAction(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L97">				System.out.println(&quot;Resign.&quot;);</span>
+<span class="nc" id="L98">				gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);</span>
+<span class="nc" id="L99">			}</span>
+		});
+
+		//Notation Button
+<span class="nc" id="L103">		gui.setpBtnNotationAction(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L106">				System.out.println(&quot;View Notation.&quot;);</span>
+<span class="nc" id="L107">			}</span>
+		});
+
+		//Manual Connect button
+<span class="nc" id="L111">		gui.setpBtnConnectAction(new ActionListener(){</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L114">				System.out.println(&quot;Manual connect to host.&quot;);</span>
+<span class="nc" id="L115">				challengePlayer(gui.getInputtedIp());</span>
+<span class="nc" id="L116">			}</span>
+		});
+
+		//play button
+<span class="nc" id="L120">		gui.setpBtnPlayAction(new ActionListener(){</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L123">				System.out.println(&quot;Play selected player.&quot;);</span>
+<span class="nc" id="L124">				challengePlayer(gui.getSelectedIp());</span>
+<span class="nc" id="L125">			}</span>
+		});
+
+		//refresh players found list button
+<span class="nc" id="L129">		gui.setpBtnRefreshAction(new ActionListener(){</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L132">				System.out.println(&quot;Refresh players found list.&quot;);</span>
+<span class="nc" id="L133">				gui.updatePlayersList( network.getAvailablePlayers() );</span>
+<span class="nc" id="L134">			}</span>
+		});
+
+		//is called when a square is clicked
+<span class="nc" id="L138">		gui.setSquareClickedAction(new MouseAdapter() {</span>
+			@Override
+			public void mouseClicked(MouseEvent e) {
+<span class="nc" id="L141">				Square square = null;</span>
+				//find out which square was clicked
+<span class="nc bnc" id="L143" title="All 2 branches missed.">				for (int i = 0; i &lt; 32; i++){</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">					if (e.getSource() == board.getSquares()[i]) {</span>
+<span class="nc" id="L145">						System.out.println(&quot;Square: &quot; + i + &quot; was clicked&quot;);</span>
+<span class="nc" id="L146">						square= board.getSquares()[i];</span>
+					}
+				}
+
+				//if we are selected a piece we can move
+<span class="nc bnc" id="L151" title="All 4 branches missed.">				if(square.getBackground() == GUI.clrEnabledGreen &amp;&amp; square.getPiece()!=null){</span>
+<span class="nc" id="L152">					gui.deselectAllsquares();</span>
+<span class="nc" id="L153">					currentMoves = board.getAvailableMoves(square);</span>
+<span class="nc" id="L154">				}</span>
+
+				//if we selected a space to move a piece to
+<span class="nc bnc" id="L157" title="All 4 branches missed.">				else if(square.getBackground() == GUI.clrEnabledGreen &amp;&amp; square.getPiece()==null){</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">					for (Move move : currentMoves) {</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">						if(move.get_end_pos()==square.getLabel()){</span>
+<span class="nc" id="L160">							gui.deselectAllsquares();</span>
+							//move.apply(network);
+<span class="nc" id="L162">							board.movePiece(move);</span>
+<span class="nc" id="L163">							gui.refreshScreen();</span>
+							//startRecv();
+<span class="nc" id="L165">							break;</span>
+						}
+					}
+				}
+
+<span class="nc" id="L170">			}</span>
+		});
+<span class="nc" id="L172">	}</span>
+	private void startRecv(){
+<span class="nc" id="L174">		Thread recvThread = new Thread () {</span>
+			public void run () {
+<span class="nc" id="L176">				receivedFromNetwork(network.RecvMove());</span>
+<span class="nc" id="L177">			}</span>
+		};
+<span class="nc" id="L179">		recvThread.start();</span>
+<span class="nc" id="L180">	}</span>
+	
+
+	public void receivedFromNetwork(String rMove){
+		int gameOver;
+		if(rMove.split(&quot; &quot;)[0].equals(&quot;MOVE&quot;)){
+			Move move= makeMove(rMove);
+			board.movePiece(move);
+			gameOver = board.isGameOver(isRed);
+			board.showAllValidMoves(isRed);
+<span class="nc" id="L190">			gui.enableDraw(true);</span>
+		}
+		//check to make sure it is valid ??
+		
+		
+		//check if the is winner
+
+		//need to implement a draw here  
+	}
+
+	//connects to opponent and if connected successfully it will begin a game
+	public void challengePlayer(String player){
+		//System.out.println( chooseWhoGoesFirst() );
+		int turn;
+<span class="nc bnc" id="L204" title="All 2 branches missed.">		if((turn = network.Connect( player ))&gt;0){</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">			if(turn==1)</span>
+<span class="nc" id="L206">				isRed=true;</span>
+			else
+<span class="nc" id="L208">				isRed=false;</span>
+			
+<span class="nc" id="L210">			startGame();</span>
+		}
+<span class="nc" id="L212">	}</span>
+
+	public void startGame(){
+		//sets the board
+<span class="nc" id="L216">		board.setBoard(isRed);</span>
+
+		//changes the screen
+<span class="nc" id="L219">		gui.setScreen(Screen.GAME_SCREEN);</span>
+
+		//refreshes the GUI to display the changes
+
+<span class="nc bnc" id="L223" title="All 2 branches missed.">		if(isRed)</span>
+<span class="nc" id="L224">			board.showAllValidMoves(isRed);</span>
+
+<span class="nc" id="L226">		gui.refreshScreen();</span>
+<span class="nc" id="L227">	}</span>
+
+	public Move makeMove(String moveStr){
+<span class="nc" id="L230">		String values[] = moveStr.split(Move.delim);</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">		if(values.length&gt;3){</span>
+<span class="nc" id="L232">			int startID = 31-Integer.parseInt(values[1]);</span>
+<span class="nc" id="L233">			int endID = 31-Integer.parseInt(values[2]);</span>
+			
+<span class="nc bnc" id="L235" title="All 2 branches missed.">			if(values[3].equals(&quot;null&quot;))</span>
+<span class="nc" id="L236">				return new Move(board.getSquares()[startID], board.getSquares()[endID]);</span>
+			else 
+<span class="nc" id="L238">				return new C_Move(board.getSquares()[startID], board.getSquares()[endID], board.getSquares()[31-Integer.parseInt(values[3])]);</span>
+		}
+<span class="nc" id="L240">		return null;</span>
+	}
+
+	//will be replaced by method from NetworkCreator when implemented (it returns our ip address)
+	@Deprecated
+	public static ArrayList&lt;String&gt; getIps() throws SocketException{
+<span class="nc" id="L246">		ArrayList&lt;String&gt; arrayList = new ArrayList&lt;String&gt;();</span>
+		@SuppressWarnings(&quot;rawtypes&quot;)
+<span class="nc" id="L248">		Enumeration interfaces = NetworkInterface.getNetworkInterfaces();</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">		while (interfaces.hasMoreElements()) {</span>
+<span class="nc" id="L250">			NetworkInterface networkInterface = (NetworkInterface) interfaces.nextElement();</span>
+<span class="nc bnc" id="L251" title="All 4 branches missed.">			if(networkInterface.isLoopback() || !networkInterface.isUp())</span>
+<span class="nc" id="L252">				continue;</span>
+
+<span class="nc bnc" id="L254" title="All 2 branches missed.">			for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {</span>
+<span class="nc" id="L255">				String a = interfaceAddress.getAddress().getHostAddress();</span>
+<span class="nc bnc" id="L256" title="All 2 branches missed.">				if(!a.contains(&quot;:&quot;))</span>
+<span class="nc" id="L257">					arrayList.add(a);</span>
+<span class="nc" id="L258">				System.out.println(a);</span>
+			}
+		}
+<span class="nc" id="L261">		return arrayList;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>Checkers (Aug 21, 2016 5:22:01 PM)</div></body></html>

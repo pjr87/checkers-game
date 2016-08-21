@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Board.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Checkers (Aug 21, 2016 5:22:01 PM)</a> &gt; <a href="../../index.html" class="el_group">cs451_groupproject</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Board.java</span></div><h1>Board.java</h1><pre class="source lang-java linenums">import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.BorderFactory;
+
+public class Board {
+
+	Square[] squares;
+
+	//initialization
+<span class="fc" id="L12">	public Board(){</span>
+<span class="fc" id="L13">		squares = new Square[32];</span>
+
+<span class="fc bfc" id="L15" title="All 2 branches covered.">		for(int i=0; i&lt;32; i++)</span>
+<span class="fc" id="L16">			squares[i] = new Square(i);</span>
+		
+<span class="fc" id="L18">		int topLNum=4;</span>
+<span class="fc" id="L19">		int topRNum=3;</span>
+<span class="fc" id="L20">		int bottomLNum=4;</span>
+<span class="fc" id="L21">		int bottomRNum = 5;</span>
+<span class="fc" id="L22">		boolean isEvenRow=false;</span>
+<span class="fc" id="L23">		int counter=0;</span>
+
+<span class="fc bfc" id="L25" title="All 2 branches covered.">		for(int i=0; i&lt;32; i++){</span>
+
+<span class="fc" id="L27">			Map&lt;Direction, Square&gt; tempMap = new HashMap&lt;Direction, Square&gt;();</span>
+
+			//topLeft link
+<span class="fc bfc" id="L30" title="All 6 branches covered.">			if((i-5)&gt;=0 &amp;&amp; (i%4!=0|| !isEvenRow))</span>
+<span class="fc" id="L31">				tempMap.put(Direction.UpLeft, squares[i-topLNum]);</span>
+			else
+<span class="fc" id="L33">				tempMap.put(Direction.UpLeft, null);</span>
+
+			//topRight link
+<span class="fc bfc" id="L36" title="All 6 branches covered.">			if((i-4)&gt;=0  &amp;&amp; ((i+1)%4!=0 || isEvenRow))</span>
+<span class="fc" id="L37">				tempMap.put(Direction.UpRight, squares[i-topRNum]);</span>
+			else
+<span class="fc" id="L39">				tempMap.put(Direction.UpRight, null);</span>
+
+			//bottomLeft link
+<span class="fc bfc" id="L42" title="All 6 branches covered.">			if((i+4)&lt;32 &amp;&amp; (i%4!=0 || !isEvenRow))</span>
+<span class="fc" id="L43">				tempMap.put(Direction.DownLeft, squares[i+bottomLNum]);</span>
+			else
+<span class="fc" id="L45">				tempMap.put(Direction.DownLeft, null);</span>
+
+			//bottomRight link
+<span class="fc bfc" id="L48" title="All 6 branches covered.">			if((i+5)&lt;32  &amp;&amp; ((i+1)%4!=0 || isEvenRow))</span>
+<span class="fc" id="L49">				tempMap.put(Direction.DownRight, squares[i+bottomRNum]);</span>
+			else
+<span class="fc" id="L51">				tempMap.put(Direction.DownRight, null);</span>
+
+<span class="fc" id="L53">			squares[i].setNeighbours(tempMap);</span>
+			
+<span class="fc bfc" id="L55" title="All 2 branches covered.">			if(counter==3){</span>
+<span class="fc" id="L56">				counter=-1;</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">				if(topLNum==4){</span>
+<span class="fc" id="L58">					topLNum=5;</span>
+<span class="fc" id="L59">					topRNum=4;</span>
+<span class="fc" id="L60">					bottomLNum=3;</span>
+<span class="fc" id="L61">					bottomRNum = 4;</span>
+<span class="fc" id="L62">					isEvenRow=true;</span>
+<span class="fc" id="L63">				}</span>
+				else{
+<span class="fc" id="L65">					topLNum=4;</span>
+<span class="fc" id="L66">					topRNum=3;</span>
+<span class="fc" id="L67">					bottomLNum=4;</span>
+<span class="fc" id="L68">					bottomRNum = 5;</span>
+<span class="fc" id="L69">					isEvenRow=false;</span>
+				}
+			}
+<span class="fc" id="L72">			counter++;</span>
+		}
+<span class="fc" id="L74">	}</span>
+	
+	//returns all the squares (used for linking with the GUI)
+	public Square[] getSquares(){
+<span class="fc" id="L78">		return squares;</span>
+	}
+	
+	//highlights all the pieces (Squares) that can currently move
+	public void showAllValidMoves(boolean i){
+<span class="fc" id="L83">		ArrayList&lt;Move&gt; list = new ArrayList&lt;Move&gt;();</span>
+
+		//true if a mandatory jump move exists.
+<span class="fc" id="L86">		boolean mandatoryMoveExists = false;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">		for (Square square : squares) {</span>
+<span class="fc bfc" id="L88" title="All 4 branches covered.">			if(square.getPiece()!=null &amp;&amp; square.getPiece().getTeam()==i){</span>
+<span class="fc" id="L89">				ArrayList&lt;Move&gt; moves = square.getMoves();</span>
+				
+<span class="fc bfc" id="L91" title="All 2 branches covered.">				for (Move move : moves) {</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">					if(move instanceof C_Move){</span>
+						//if there is a jump move break out start over only getting jump moves
+<span class="fc" id="L94">						mandatoryMoveExists=true;</span>
+<span class="fc" id="L95">						break;</span>
+					}
+<span class="fc" id="L97">					list.add(move);</span>
+				}
+<span class="fc bfc" id="L99" title="All 2 branches covered.">				if(mandatoryMoveExists)</span>
+<span class="fc" id="L100">					break;</span>
+			}
+		}
+
+		//if a jump move exists: remove all current moves and only get the jump moves
+<span class="fc bfc" id="L105" title="All 2 branches covered.">		if(mandatoryMoveExists){</span>
+<span class="fc" id="L106">			list.removeAll(list);</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">			for (Square square : squares) {</span>
+<span class="fc bfc" id="L108" title="All 4 branches covered.">				if(square.getPiece()!=null &amp;&amp; square.getPiece().getTeam()==i){</span>
+<span class="fc" id="L109">					ArrayList&lt;Move&gt; moves = square.getMoves();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">					for (Move move : moves) {</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">						if(move instanceof C_Move){</span>
+<span class="fc" id="L112">							list.add(move);</span>
+						}
+					}
+				}
+			}
+		}
+<span class="fc bfc" id="L118" title="All 2 branches covered.">		for (Move move : list) //highlight all valid pieces that can move.</span>
+<span class="fc" id="L119">			GUI.highlightSquare(squares[move.get_start_pos()]);</span>
+<span class="fc" id="L120">	}</span>
+	
+	
+	public void movePiece(Move m){
+<span class="fc" id="L124">		Piece piece = squares[m.get_start_pos()].getPiece();</span>
+<span class="fc" id="L125">		squares[m.get_end_pos()].setPiece(piece);</span>
+<span class="fc" id="L126">		squares[m.get_start_pos()].setPiece(null);</span>
+
+<span class="fc bfc" id="L128" title="All 2 branches covered.">		if(m.get_captured()&gt;=0)</span>
+<span class="fc" id="L129">			squares[m.get_captured()].setPiece(null);</span>
+<span class="fc" id="L130">	}</span>
+	
+	//returns and highlights all the spaces that a piece can move to 
+	public ArrayList&lt;Move&gt; getAvailableMoves(Square s){
+<span class="fc" id="L134">		boolean mandatoryMoveExists=false;</span>
+<span class="fc" id="L135">		ArrayList&lt;Move&gt; list = s.getMoves();</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">		for (Move move : list) {</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">			if(move instanceof C_Move){</span>
+<span class="fc" id="L138">				mandatoryMoveExists=true;</span>
+			}
+<span class="fc" id="L140">			GUI.highlightSquare(squares[move.get_end_pos()]);</span>
+		}
+<span class="fc bfc" id="L142" title="All 2 branches covered.">		if(mandatoryMoveExists){</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">			for (int x = list.size()-1; x &gt; -1; x--){</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">				if(!(list.get(x) instanceof C_Move)){</span>
+<span class="fc" id="L145">					GUI.unhighlightSquare(squares[list.get(x).get_end_pos()]);</span>
+<span class="fc" id="L146">					list.remove(x);</span>
+				}
+			}
+		}
+<span class="fc" id="L150">		return list;</span>
+	}
+	
+	//sets up the board for a new game  
+	public void setBoard(boolean isRed) {
+<span class="fc bfc" id="L155" title="All 2 branches covered.">		for(int i = 8; i&lt;12;i++)</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">			squares[i].setPiece( new Piece(!isRed) );</span>
+
+<span class="fc bfc" id="L158" title="All 2 branches covered.">		for(int i=20; i&lt;24;i++)</span>
+<span class="fc" id="L159">			squares[i].setPiece( new Piece(isRed) );</span>
+<span class="fc" id="L160">	}</span>
+	
+	//returns 1 for red won, 0 for white won, and -1 for no winner yet
+	public int isGameOver(boolean turn){ // input is whoever's turn it is to move (red = true, white = false)
+	
+<span class="fc" id="L165">		boolean redHasPieces=false, whiteHasPieces=false, redPiecesCanMove=false, whitePiecesCanMove=false;</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">		for (Square square : squares) {</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">			if(square.getPiece()!=null){</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">				if(square.getPiece().getTeam()==true){</span>
+<span class="fc" id="L169">					redHasPieces=true;</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">					if(square.getMoves().size()&gt;0)</span>
+<span class="fc" id="L171">						redPiecesCanMove=true;</span>
+<span class="fc" id="L172">				}</span>
+				else{
+<span class="fc" id="L174">					whiteHasPieces=true;</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">					if(square.getMoves().size()&gt;0)</span>
+<span class="fc" id="L176">						whitePiecesCanMove=true;</span>
+				}
+			}
+		}
+		
+<span class="pc bpc" id="L181" title="4 of 6 branches missed.">		if((!redHasPieces) || (!redPiecesCanMove &amp;&amp; turn) )//red has no pieces or can't move - WHITE WON</span>
+<span class="nc" id="L182">			return 0;</span>
+<span class="pc bpc" id="L183" title="4 of 6 branches missed.">		else if(!whiteHasPieces || (!whitePiecesCanMove &amp;&amp; !turn))//white has no pieces or can't move - RED WON</span>
+<span class="nc" id="L184">			return 1;</span>
+		
+<span class="fc" id="L186">		return -1;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>Checkers (Aug 21, 2016 5:22:01 PM)</div></body></html>

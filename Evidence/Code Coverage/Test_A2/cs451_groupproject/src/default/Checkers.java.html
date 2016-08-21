@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Checkers.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Checkers (Aug 21, 2016 5:22:01 PM)</a> &gt; <a href="../../index.html" class="el_group">cs451_groupproject</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Checkers.java</span></div><h1>Checkers.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">import java.awt.event.ActionEvent;</span>
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Random;
+
+import javax.swing.JOptionPane;
+
+public class Checkers implements ConnectionStatus{
+
+	private GUI gui;
+	private NetworkCreator network;
+	private Board board;
+	private boolean isRed;
+	boolean turn;
+
+	private ArrayList&lt;Move&gt; currentMoves;
+	//private String username;
+
+	@Override
+	public void connectionMade(int status) {
+		//Do something here, this only happens when TCP connection is made
+<span class="fc" id="L28">		System.out.println(&quot;Server connection recevied from player &quot; + status);</span>
+
+<span class="pc bpc" id="L30" title="2 of 3 branches missed.">		switch(status){</span>
+		case 1:
+<span class="fc" id="L32">			System.out.println(&quot;Player2: Player 2's turn&quot;);</span>
+<span class="fc" id="L33">			isRed=true;</span>
+<span class="fc" id="L34">			startGame();</span>
+<span class="fc" id="L35">			break;</span>
+		case 2:
+<span class="nc" id="L37">			System.out.println(&quot;Player2: Player 1's turn&quot;);</span>
+<span class="nc" id="L38">			isRed=false;</span>
+<span class="nc" id="L39">			startGame();</span>
+<span class="nc" id="L40">			startRecv();</span>
+<span class="nc" id="L41">			break;</span>
+		default:
+<span class="nc" id="L43">			System.out.println(&quot;Player2: Failed to connect&quot;);</span>
+			break;
+		}
+
+<span class="fc" id="L47">	}</span>
+
+<span class="fc" id="L49">	private Checkers(){</span>
+
+<span class="fc" id="L51">		startNetworking();</span>
+<span class="fc" id="L52">		board = new Board();</span>
+
+<span class="fc" id="L54">		gui = new GUI(board.getSquares());</span>
+<span class="fc" id="L55">		updatePlayersList.start();</span>
+
+<span class="fc" id="L57">		setButtonActions();</span>
+<span class="fc" id="L58">	}</span>
+
+	public static void main(String[] args) {
+<span class="fc" id="L61">		new Checkers();</span>
+<span class="fc" id="L62">	}</span>
+
+	@Deprecated
+	private int chooseWhoGoesFirst(){
+<span class="nc" id="L66">		Random random = new Random();</span>
+<span class="nc" id="L67">		return random.nextInt(2);</span>
+	}
+
+	private void startNetworking(){
+<span class="fc" id="L71">		network = new NetworkCreator(); </span>
+<span class="fc" id="L72">		network.addListener(this);</span>
+<span class="fc" id="L73">		network.StartNetworking();</span>
+<span class="fc" id="L74">	}</span>
+
+	//implements all the GUI buttons and the actions for when squares are clicked
+	private void setButtonActions(){
+
+		//Offer Draw Button
+<span class="fc" id="L80">		gui.setpBtnDrawAction(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="fc" id="L83">				System.out.println(&quot;Offer Draw.&quot;);</span>
+<span class="fc" id="L84">				network.SendMove(&quot;DRAW&quot;);</span>
+<span class="fc" id="L85">				startRecv();</span>
+<span class="fc" id="L86">			}</span>
+		});
+
+		//Resign Button
+<span class="fc" id="L90">		gui.setpBtnResignAction(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L93">				System.out.println(&quot;Resign.&quot;);</span>
+<span class="nc" id="L94">				network.SendMove(&quot;RESIGN&quot;);</span>
+<span class="nc" id="L95">				exitToPlayerSelectionScreen();</span>
+<span class="nc" id="L96">			}</span>
+		});
+
+		//Notation Button
+<span class="fc" id="L100">		gui.setpBtnNotationAction(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L103">				System.out.println(&quot;View Notation.&quot;);</span>
+<span class="nc" id="L104">			}</span>
+		});
+
+		//Manual Connect button
+<span class="fc" id="L108">		gui.setpBtnConnectAction(new ActionListener(){</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L111">				System.out.println(&quot;Manual connect to host.&quot;);</span>
+<span class="nc" id="L112">				challengePlayer(gui.getInputtedIp());</span>
+<span class="nc" id="L113">			}</span>
+		});
+
+		//play button
+<span class="fc" id="L117">		gui.setpBtnPlayAction(new ActionListener(){</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="fc" id="L120">				System.out.println(&quot;Play selected player.&quot;);</span>
+<span class="fc" id="L121">				challengePlayer(gui.getSelectedIp());</span>
+<span class="fc" id="L122">			}</span>
+		});
+
+		//refresh players found list button
+<span class="fc" id="L126">		gui.setpBtnRefreshAction(new ActionListener(){</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="fc" id="L129">				System.out.println(&quot;Refresh players found list.&quot;);</span>
+<span class="fc" id="L130">				gui.updatePlayersList( network.getAvailablePlayers() );</span>
+<span class="fc" id="L131">			}</span>
+		});
+
+		//is called when a square is clicked
+<span class="fc" id="L135">		gui.setSquareClickedAction(new MouseAdapter() {</span>
+			@Override
+			public void mouseClicked(MouseEvent e) {
+<span class="fc" id="L138">				Square square = null;</span>
+
+				//find out which square was clicked
+<span class="fc bfc" id="L141" title="All 2 branches covered.">				for (int i = 0; i &lt; 32; i++){</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">					if (e.getSource() == board.getSquares()[i]) {</span>
+<span class="fc" id="L143">						System.out.println(&quot;Square: &quot; + i + &quot; was clicked&quot;);</span>
+<span class="fc" id="L144">						square= board.getSquares()[i];</span>
+					}
+				}
+
+				//if we are selected a piece we can move
+<span class="fc bfc" id="L149" title="All 4 branches covered.">				if(square.getBackground() == GUI.clrEnabledGreen &amp;&amp; square.getPiece()!=null){</span>
+<span class="fc" id="L150">					gui.deselectAllsquares();</span>
+<span class="fc" id="L151">					currentMoves = board.getAvailableMoves(square);</span>
+<span class="fc" id="L152">				}</span>
+
+				//if we selected a space to move a piece to
+<span class="pc bpc" id="L155" title="1 of 4 branches missed.">				else if(square.getBackground() == GUI.clrEnabledGreen &amp;&amp; square.getPiece()==null){</span>
+<span class="fc" id="L156">					ArrayList&lt;Move&gt; nextMoves = null;</span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">					for (Move move : currentMoves) {</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">						if(move.get_end_pos()==square.getLabel()){</span>
+<span class="fc" id="L159">							turn=false;</span>
+<span class="fc" id="L160">							gui.deselectAllsquares();</span>
+
+							//if its a jump move
+<span class="fc bfc" id="L163" title="All 2 branches covered.">							if(move instanceof C_Move){</span>
+<span class="fc" id="L164">								((C_Move) move).apply();//just Applies move to local board</span>
+<span class="fc" id="L165">								checkForKing(move.end);</span>
+<span class="fc" id="L166">								nextMoves = board.getAvailableMoves(move.end);</span>
+
+<span class="fc" id="L168">								boolean doubleJump=false;</span>
+
+<span class="fc bfc" id="L170" title="All 2 branches covered.">								for (Move nextMove : nextMoves) {</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">									if(nextMove instanceof C_Move)</span>
+<span class="fc" id="L172">										doubleJump=true;</span>
+								}
+
+								//send the move to opponent
+<span class="fc" id="L176">								move.sendMove(network, doubleJump);</span>
+
+								//if its the last jump move
+<span class="fc bfc" id="L179" title="All 2 branches covered.">								if(!doubleJump){</span>
+<span class="fc" id="L180">									gui.enableDrawAndResign(false);</span>
+<span class="fc" id="L181">									gui.deselectAllsquares();</span>
+<span class="fc" id="L182">									startRecv();</span>
+								}
+<span class="fc" id="L184">							}</span>
+							else{//if a normal move
+<span class="fc" id="L186">								move.apply();//apply move</span>
+<span class="fc" id="L187">								boolean b = checkForKing(move.end);</span>
+<span class="fc" id="L188">								move.sendMove(network, b);</span>
+<span class="fc" id="L189">								gui.enableDrawAndResign(false);</span>
+<span class="fc" id="L190">								startRecv();</span>
+							}
+
+<span class="fc" id="L193">							gui.refreshScreen();</span>
+<span class="fc" id="L194">							break;</span>
+						}
+					}
+<span class="fc" id="L197">					currentMoves = nextMoves;</span>
+<span class="fc" id="L198">				}</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">				else if(turn){</span>
+<span class="fc" id="L200">					gui.deselectAllsquares();</span>
+<span class="fc" id="L201">					board.showAllValidMoves(isRed);</span>
+				}
+
+<span class="fc" id="L204">			}</span>
+
+		});
+<span class="fc" id="L207">	}</span>
+	private void startRecv(){
+<span class="fc" id="L209">		Thread recvThread = new Thread () {</span>
+			public void run () {
+<span class="fc" id="L211">				receivedFromNetwork(network.RecvMove());</span>
+<span class="fc" id="L212">			}</span>
+		};
+<span class="fc" id="L214">		recvThread.start();</span>
+<span class="fc" id="L215">	}</span>
+
+<span class="fc" id="L217">	Thread updatePlayersList = new Thread () {</span>
+		public void run () {
+<span class="nc" id="L219">			while(true){</span>
+<span class="fc" id="L220">				gui.updatePlayersList( network.getAvailablePlayers() );</span>
+<span class="pc" id="L221">				try { Thread.sleep(2000); } catch (InterruptedException e) { }</span>
+			}
+		}
+	};
+
+	public boolean checkForKing(Square s){
+<span class="fc bfc" id="L227" title="All 2 branches covered.">		if(s.getLabel() &lt; 4){</span>
+<span class="fc" id="L228">			s.setPiece(new King(isRed));</span>
+<span class="fc" id="L229">			return true;</span>
+		}
+<span class="fc" id="L231">		return false;</span>
+	}
+
+	public void receivedFromNetwork(String data){
+<span class="fc" id="L235">		int gameOver=-1;</span>
+<span class="fc bfc" id="L236" title="All 2 branches covered.">		if(data == null){</span>
+<span class="fc" id="L237">			exitToPlayerSelectionScreen();</span>
+<span class="fc" id="L238">			JOptionPane.showMessageDialog(null, &quot;Opponent Disconnected!&quot;);</span>
+<span class="fc" id="L239">		}</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">		else if(data.split(&quot; &quot;)[0].equals(&quot;MOVE&quot;)){</span>
+<span class="fc" id="L241">			Move move= makeMove(data);</span>
+<span class="fc" id="L242">			board.movePiece(move);</span>
+
+			//check if there is winner
+<span class="fc" id="L245">			gameOver = board.isGameOver(isRed);</span>
+<span class="fc" id="L246">			board.showAllValidMoves(isRed);</span>
+<span class="fc" id="L247">			gui.enableDrawAndResign(true);</span>
+<span class="fc" id="L248">			turn=true;</span>
+<span class="fc" id="L249">		}</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">		else if(data.split(&quot; &quot;)[0].equals(&quot;C_MOVE&quot;)){</span>
+<span class="fc" id="L251">			Move move= makeMove(data);</span>
+<span class="fc" id="L252">			board.movePiece(move);</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">			if(data.split(&quot; &quot;).length==5){//it is a double jump</span>
+<span class="fc" id="L254">				startRecv();</span>
+<span class="fc" id="L255">			}</span>
+			else{	
+				//check if there is winner			
+<span class="fc" id="L258">				gameOver = board.isGameOver(isRed);</span>
+<span class="fc" id="L259">				board.showAllValidMoves(isRed);</span>
+<span class="fc" id="L260">				gui.enableDrawAndResign(true);</span>
+<span class="fc" id="L261">				turn=true;</span>
+			}
+<span class="fc" id="L263">		}</span>
+<span class="fc bfc" id="L264" title="All 2 branches covered.">		else if(data.split(&quot; &quot;)[0].equals(&quot;IS_DRAW&quot;)){</span>
+<span class="fc" id="L265">			gui.setScreen(Screen.GAME_SCREEN);</span>
+<span class="fc" id="L266">			exitToPlayerSelectionScreen();</span>
+<span class="fc" id="L267">		}</span>
+<span class="pc bpc" id="L268" title="1 of 2 branches missed.">		else if(data.split(&quot; &quot;)[0].equals(&quot;DRAW&quot;)){</span>
+<span class="nc" id="L269">			int dialogResult = JOptionPane.showConfirmDialog(null, &quot;Your opponent is offering a draw.&quot;);</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">			if(dialogResult == JOptionPane.YES_OPTION){</span>
+<span class="nc" id="L271">				network.SendMove(&quot;IS_DRAW&quot;);</span>
+<span class="nc" id="L272">				exitToPlayerSelectionScreen();</span>
+<span class="nc" id="L273">			}</span>
+			else
+<span class="nc" id="L275">				startRecv();</span>
+<span class="nc" id="L276">		}</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">		else if(data.split(&quot; &quot;)[0].equals(&quot;GAMEOVER&quot;)){</span>
+<span class="fc" id="L278">			gui.displayWinner(Integer.parseInt(data.split(&quot; &quot;)[1]));</span>
+<span class="fc" id="L279">			exitToPlayerSelectionScreen();</span>
+<span class="fc" id="L280">		}</span>
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">		else if(data.split(&quot; &quot;)[0].equals(&quot;RESIGN&quot;)){</span>
+<span class="fc" id="L282">			JOptionPane.showMessageDialog(null, &quot;You Won! Other player resigned.&quot;);</span>
+<span class="fc" id="L283">			exitToPlayerSelectionScreen();</span>
+<span class="fc" id="L284">		}</span>
+		else
+<span class="nc" id="L286">			startRecv();</span>
+
+<span class="pc bpc" id="L288" title="1 of 2 branches missed.">		if(gameOver&gt;-1){</span>
+<span class="nc" id="L289">			network.SendMove(&quot;GAMEOVER &quot;+gameOver);</span>
+<span class="nc" id="L290">			gui.displayWinner(gameOver);</span>
+<span class="nc" id="L291">			exitToPlayerSelectionScreen();</span>
+		}
+<span class="fc" id="L293">	}</span>
+
+	public void exitToPlayerSelectionScreen(){
+<span class="fc" id="L296">		gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);</span>
+<span class="fc" id="L297">		network.CloseNetworking();</span>
+<span class="fc" id="L298">		startNetworking();</span>
+<span class="fc" id="L299">		gui.refreshScreen();</span>
+<span class="fc" id="L300">	}</span>
+
+	//connects to opponent and if connected successfully it will begin a game
+	public void challengePlayer(String player){
+
+		int t;
+
+<span class="pc bpc" id="L307" title="1 of 2 branches missed.">		if((t = network.Connect( player ))&gt;0){</span>
+<span class="fc bfc" id="L308" title="All 2 branches covered.">			if(t==1)</span>
+<span class="fc" id="L309">				isRed=true;</span>
+			else
+<span class="fc" id="L311">				isRed=false;</span>
+
+<span class="fc" id="L313">			startGame();</span>
+		}
+<span class="fc" id="L315">	}</span>
+
+	public void startGame(){
+		//sets the board
+<span class="fc" id="L319">		board.setBoard(isRed);</span>
+
+		//changes the screen
+<span class="fc" id="L322">		gui.setScreen(Screen.GAME_SCREEN);</span>
+
+<span class="fc bfc" id="L324" title="All 2 branches covered.">		if(isRed){</span>
+<span class="fc" id="L325">			turn=true;</span>
+<span class="fc" id="L326">			gui.enableDrawAndResign(true);</span>
+<span class="fc" id="L327">			board.showAllValidMoves(isRed);</span>
+<span class="fc" id="L328">		}</span>
+		else{
+<span class="fc" id="L330">			startRecv();</span>
+<span class="fc" id="L331">			gui.enableDrawAndResign(false);</span>
+<span class="fc" id="L332">			turn=false;</span>
+		}
+
+<span class="fc" id="L335">		gui.refreshScreen();</span>
+<span class="fc" id="L336">	}</span>
+
+	public Move makeMove(String moveStr){
+<span class="fc" id="L339">		String values[] = moveStr.split(Move.delim);</span>
+<span class="pc bpc" id="L340" title="1 of 2 branches missed.">		if(values.length&gt;=3){</span>
+<span class="fc" id="L341">			int startID = 31-Integer.parseInt(values[1]);</span>
+<span class="fc" id="L342">			int endID = 31-Integer.parseInt(values[2]);</span>
+
+<span class="fc bfc" id="L344" title="All 4 branches covered.">			if(values.length&gt;4 &amp;&amp; values[4].equals(&quot;king&quot;))</span>
+<span class="fc bfc" id="L345" title="All 2 branches covered.">				board.getSquares()[startID].setPiece(new King(!isRed));</span>
+			
+<span class="fc bfc" id="L347" title="All 2 branches covered.">			if(values[3].equals(&quot;null&quot;))</span>
+<span class="fc" id="L348">				return new Move(board.getSquares()[startID], board.getSquares()[endID]);</span>
+			else
+<span class="fc" id="L350">				return new C_Move(board.getSquares()[startID], board.getSquares()[endID], board.getSquares()[31-Integer.parseInt(values[3])]);</span>
+
+		}
+<span class="nc" id="L353">		return null;</span>
+	}
+
+	//will be replaced by method from NetworkCreator when implemented (it returns our ip address)
+	@Deprecated
+	public static ArrayList&lt;String&gt; getIps() throws SocketException{
+<span class="fc" id="L359">		ArrayList&lt;String&gt; arrayList = new ArrayList&lt;String&gt;();</span>
+		@SuppressWarnings(&quot;rawtypes&quot;)
+<span class="fc" id="L361">		Enumeration interfaces = NetworkInterface.getNetworkInterfaces();</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">		while (interfaces.hasMoreElements()) {</span>
+<span class="fc" id="L363">			NetworkInterface networkInterface = (NetworkInterface) interfaces.nextElement();</span>
+<span class="pc bpc" id="L364" title="1 of 4 branches missed.">			if(networkInterface.isLoopback() || !networkInterface.isUp())</span>
+<span class="nc" id="L365">				continue;</span>
+
+<span class="fc bfc" id="L367" title="All 2 branches covered.">			for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {</span>
+<span class="fc" id="L368">				String a = interfaceAddress.getAddress().getHostAddress();</span>
+<span class="fc bfc" id="L369" title="All 2 branches covered.">				if(!a.contains(&quot;:&quot;))</span>
+<span class="fc" id="L370">					arrayList.add(a);</span>
+<span class="fc" id="L371">				System.out.println(a);</span>
+			}
+		}
+<span class="fc" id="L374">		return arrayList;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>Checkers (Aug 21, 2016 5:22:01 PM)</div></body></html>

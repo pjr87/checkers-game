@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>PlayerSelectionScreen.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Checkers (Aug 21, 2016 5:22:01 PM)</a> &gt; <a href="../../index.html" class="el_group">cs451_groupproject</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">PlayerSelectionScreen.java</span></div><h1>PlayerSelectionScreen.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">import java.awt.Dimension;</span>
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.net.SocketException;
+import java.util.List;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+public class PlayerSelectionScreen extends JPanel{
+
+	private static final long serialVersionUID = 7893337942915288121L;
+	
+	//Manual connect to other player panel 
+	private JPanel pPnlManualConnect;
+	private JScrollPane pSclPnlPlayers;
+	private JLabel pLblOpponentIp;
+	private JButton pBtnConnect;
+	private JLabel pLblYourIp;
+	private JLabel pLblVersion;
+	private JTextField pTxtHostAddress;
+
+	//Auto find other players panel
+	private JPanel pPnlPlayerList;
+	private JList&lt;Object[]&gt; pLstPlayers;
+	private JButton pBtnPlay;
+	private JButton pBtnRefresh;
+	
+	//helper vars
+	private DefaultListModel&lt;String&gt; players;
+	private static final String versionText=&quot;Version: &quot;;
+	private static final String version=&quot;2.0&quot;;
+	
+	//Constructor - GUI Setup
+<span class="fc" id="L48">	public PlayerSelectionScreen() {</span>
+		
+<span class="fc" id="L50">		this.setLayout(null);</span>
+<span class="fc" id="L51">		players = new DefaultListModel&lt;String&gt;();</span>
+
+<span class="fc" id="L53">		pLblVersion = new JLabel(versionText+version);</span>
+		
+		//player Screen sub-panels
+<span class="fc" id="L56">		createManualConnectPanel();</span>
+<span class="fc" id="L57">		createPlayerListPanel();</span>
+		
+<span class="fc" id="L59">		updatePlayBtn();</span>
+<span class="fc" id="L60">		updateConnectBtn();</span>
+		
+		//add panels to screen
+		Dimension size;
+<span class="fc" id="L64">		Insets insets = this.getInsets();</span>
+		
+<span class="fc" id="L66">		size = pPnlManualConnect.getPreferredSize();</span>
+<span class="fc" id="L67">		pPnlManualConnect.setBounds(15+insets.left, 10+insets.top, size.width+30, size.height+30);</span>
+<span class="fc" id="L68">		pPnlManualConnect.setBorder(new TitledBorder(&quot;Manually Connect&quot;));</span>
+<span class="fc" id="L69">		this.add(pPnlManualConnect);</span>
+		
+<span class="fc" id="L71">		size = pPnlPlayerList.getPreferredSize();</span>
+<span class="fc" id="L72">		pPnlPlayerList.setBounds(86+insets.left, 80+insets.top, size.width+30, size.height+30);</span>
+<span class="fc" id="L73">		pPnlPlayerList.setBorder(new TitledBorder(&quot;Select Opponent From List&quot;));</span>
+<span class="fc" id="L74">		this.add(pPnlPlayerList);</span>
+		
+<span class="fc" id="L76">		size = pLblVersion.getPreferredSize();</span>
+<span class="fc" id="L77">		pLblVersion.setBounds(5+insets.left, 208+insets.top, size.width, size.height);</span>
+<span class="fc" id="L78">		this.add(pLblVersion);</span>
+	
+<span class="fc" id="L80">	}</span>
+	@SuppressWarnings({ &quot;unchecked&quot;, &quot;rawtypes&quot; })
+	private void createPlayerListPanel(){
+		
+<span class="fc" id="L84">		pPnlPlayerList = new JPanel();</span>
+<span class="fc" id="L85">		pPnlPlayerList.setToolTipText(&quot;sample text&quot;);</span>
+		 
+<span class="fc" id="L87">		pPnlPlayerList.setLayout(new GridBagLayout());</span>
+<span class="fc" id="L88">		GridBagConstraints layout = new GridBagConstraints();</span>
+		
+		//instantiate gui objects
+<span class="fc" id="L91">		pBtnPlay = new JButton(&quot;Challenge Selected Player&quot;);</span>
+<span class="fc" id="L92">		pBtnRefresh = new JButton(&quot;     Refresh Players List      &quot;);</span>
+<span class="fc" id="L93">		pLstPlayers = new JList(players);</span>
+<span class="fc" id="L94">		pSclPnlPlayers = new JScrollPane(pLstPlayers);</span>
+		
+		//jlist options
+<span class="fc" id="L97">		pLstPlayers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);</span>
+<span class="fc" id="L98">		pLstPlayers.setLayoutOrientation(JList.VERTICAL);</span>
+		
+<span class="fc" id="L100">		pLstPlayers.addListSelectionListener(new ListSelectionListener() {</span>
+			@Override
+			public void valueChanged(ListSelectionEvent arg) {
+<span class="fc" id="L103">				updatePlayBtn();</span>
+<span class="fc" id="L104">			}</span>
+		});
+		
+	//position all elements on panel
+<span class="fc" id="L108">		layout.gridx=2;</span>
+<span class="fc" id="L109">		layout.gridy=0;</span>
+<span class="fc" id="L110">		pPnlPlayerList.add(new JLabel(&quot;   &quot;),layout);</span>
+		
+<span class="fc" id="L112">		layout.gridx=2;</span>
+<span class="fc" id="L113">		layout.gridy=1;</span>
+<span class="fc" id="L114">		layout.gridheight=1;</span>
+<span class="fc" id="L115">		pPnlPlayerList.add(pBtnPlay,layout);</span>
+		
+<span class="fc" id="L117">		layout.gridx=1;</span>
+<span class="fc" id="L118">		layout.gridy=0;</span>
+<span class="fc" id="L119">		pPnlPlayerList.add(new JLabel(&quot;   &quot;),layout);</span>
+		
+<span class="fc" id="L121">		layout.gridx=2;</span>
+<span class="fc" id="L122">		layout.gridy=3;</span>
+<span class="fc" id="L123">		JLabel padding = new JLabel();</span>
+<span class="fc" id="L124">		padding.setPreferredSize(new Dimension(10,0));</span>
+<span class="fc" id="L125">		padding.setOpaque(true);</span>
+<span class="fc" id="L126">		pPnlPlayerList.add(padding,layout);</span>
+		
+<span class="fc" id="L128">		layout.gridx=2;</span>
+<span class="fc" id="L129">		layout.gridy=4;</span>
+<span class="fc" id="L130">		pPnlPlayerList.add(pBtnRefresh,layout);</span>
+		
+<span class="fc" id="L132">		layout.gridx=0;</span>
+<span class="fc" id="L133">		layout.gridy=0;</span>
+<span class="fc" id="L134">		layout.gridheight=5;</span>
+<span class="fc" id="L135">		pSclPnlPlayers.setPreferredSize(new Dimension(200, 102));</span>
+<span class="fc" id="L136">		pPnlPlayerList.add(pSclPnlPlayers,layout);</span>
+<span class="fc" id="L137">	}</span>
+	
+	private void createManualConnectPanel(){
+		
+		//gridbag setup
+<span class="fc" id="L142">		GridBagConstraints layout = new GridBagConstraints();</span>
+<span class="fc" id="L143">		layout.fill=GridBagConstraints.HORIZONTAL;</span>
+<span class="fc" id="L144">		layout.anchor=GridBagConstraints.WEST;</span>
+		
+		//instantiate Gui objects
+<span class="fc" id="L147">		pPnlManualConnect = new JPanel();</span>
+<span class="fc" id="L148">		pTxtHostAddress = new JTextField();</span>
+<span class="fc" id="L149">		pBtnConnect = new JButton(&quot;Challenge&quot;);</span>
+<span class="fc" id="L150">		pLblOpponentIp = new JLabel(&quot;Opponents IP address: &quot;);</span>
+		
+		//add listener for when text in pTxtHostAddress changes.
+<span class="fc" id="L153">		pTxtHostAddress.getDocument().addDocumentListener(new DocumentListener() {</span>
+			
+			@Override
+<span class="nc" id="L156">			public void removeUpdate(DocumentEvent e) { updateConnectBtn(); }</span>
+			
+			@Override
+<span class="nc" id="L159">			public void insertUpdate(DocumentEvent e) { updateConnectBtn(); }</span>
+			
+			@Override
+<span class="nc" id="L162">			public void changedUpdate(DocumentEvent e) { updateConnectBtn(); }</span>
+		});
+
+<span class="fc" id="L165">		pPnlManualConnect.setLayout(new GridBagLayout());</span>
+
+		//get IP address to display
+<span class="fc" id="L168">		String address = &quot;&quot;;</span>
+<span class="pc" id="L169">		try {  address = Checkers.getIps().get(0);  } catch (SocketException e){}</span>
+
+<span class="fc" id="L171">		pLblYourIp = new JLabel(&quot;Your IP address is: &quot;+address);</span>
+
+	//position all elements on panel
+<span class="fc" id="L174">		layout.gridx=0;</span>
+<span class="fc" id="L175">		layout.gridy=0;</span>
+<span class="fc" id="L176">		pPnlManualConnect.add(pLblOpponentIp,layout);</span>
+
+<span class="fc" id="L178">		layout.gridx=1;</span>
+<span class="fc" id="L179">		layout.gridy=0;</span>
+<span class="fc" id="L180">		pTxtHostAddress.setPreferredSize(new Dimension(100, 28));</span>
+<span class="fc" id="L181">		pPnlManualConnect.add(pTxtHostAddress,layout);</span>
+
+<span class="fc" id="L183">		layout.gridx=2;</span>
+<span class="fc" id="L184">		layout.gridy=0;</span>
+<span class="fc" id="L185">		pPnlManualConnect.add(new JLabel(&quot;   &quot;),layout);</span>
+
+<span class="fc" id="L187">		layout.gridx=3;</span>
+<span class="fc" id="L188">		layout.gridy=0;</span>
+<span class="fc" id="L189">		pPnlManualConnect.add(pBtnConnect,layout);</span>
+
+<span class="fc" id="L191">		layout.gridx=4;</span>
+<span class="fc" id="L192">		layout.gridy=0;</span>
+<span class="fc" id="L193">		pPnlManualConnect.add(new JLabel(&quot;   &quot;),layout);</span>
+
+<span class="fc" id="L195">		layout.gridx=5;</span>
+<span class="fc" id="L196">		layout.gridy=0;</span>
+<span class="fc" id="L197">		pPnlManualConnect.add(pLblYourIp,layout);</span>
+<span class="fc" id="L198">	}</span>
+	
+	//enables and disables the Challenge button
+	public void updateConnectBtn(){
+<span class="fc" id="L202">		String ipText = pTxtHostAddress.getText();</span>
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">		if(ipText.matches(&quot;^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$&quot;))</span>
+<span class="nc" id="L204">			pBtnConnect.setEnabled(true);</span>
+		else
+<span class="fc" id="L206">			pBtnConnect.setEnabled(false);</span>
+<span class="fc" id="L207">	}</span>
+	
+	//enables and disables the &quot;found players&quot; play button 
+	public void updatePlayBtn(){
+<span class="fc bfc" id="L211" title="All 2 branches covered.">		if (pLstPlayers.getSelectedIndex() == -1)</span>
+<span class="fc" id="L212">			pBtnPlay.setEnabled(false);</span>
+		else 
+<span class="fc" id="L214">			pBtnPlay.setEnabled(true);</span>
+<span class="fc" id="L215">	}</span>
+
+	//set action listerners
+<span class="fc" id="L218">	public void setpBtnPlayAction(ActionListener a) { pBtnPlay.addActionListener(a); }</span>
+<span class="fc" id="L219">	public void setpBtnRefreshAction(ActionListener a) { pBtnRefresh.addActionListener(a); }</span>
+<span class="fc" id="L220">	public void setpBtnConnectAction(ActionListener a) { pBtnConnect.addActionListener(a); }</span>
+
+	//returns opponents ip address
+<span class="fc" id="L223">	public String getSelectedIp(){ return (String) players.getElementAt(pLstPlayers.getSelectedIndex()); }</span>
+<span class="nc" id="L224">	public String getInputtedIp(){ return pTxtHostAddress.getText(); }</span>
+	
+	//update the found players list
+	public void updatePlayersList(List&lt;String&gt; newPlayers){
+<span class="fc" id="L228">		int ind = pLstPlayers.getSelectedIndex();</span>
+<span class="fc" id="L229">		players.removeAllElements();</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">		for(int i = 0;i&lt;newPlayers.size();i++){</span>
+<span class="fc" id="L231">			players.addElement(newPlayers.get(i));</span>
+<span class="fc" id="L232">			pLstPlayers.ensureIndexIsVisible(i);</span>
+<span class="fc" id="L233">			pLstPlayers.setSelectedIndex(ind);</span>
+		}
+<span class="fc" id="L235">		updatePlayBtn();</span>
+<span class="fc" id="L236">	}</span>
+
+
+
+
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>Checkers (Aug 21, 2016 5:22:01 PM)</div></body></html>
