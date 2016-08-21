@@ -15,8 +15,8 @@ public class TCPClient implements TCPNetwork {
 	@Override
 	public boolean socket(String ipAddress) {
 		try{
-			Socket = new Socket(ipAddress, 10007);
 			Socket.setReuseAddress(true);
+			Socket = new Socket(ipAddress, 10007);
 
 			return true;
 		}

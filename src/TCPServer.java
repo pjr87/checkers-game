@@ -18,8 +18,8 @@ public class TCPServer implements TCPNetwork {
 	@Override
 	public boolean socket(String ipAddress) {
 		try { 
-			serverSocket = new ServerSocket();
 			serverSocket.setReuseAddress(true);
+			serverSocket = new ServerSocket();
 			serverSocket.bind(new InetSocketAddress(10007));
 		} 
 		catch (IOException e) 
