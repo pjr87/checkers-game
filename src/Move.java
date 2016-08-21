@@ -1,7 +1,7 @@
 
 public class Move {
-	private Square start;
-	private Square end;
+	protected Square start;
+	protected Square end;
 	public static final String name = "MOVE";
 	public static final String startRep = "Start:";
 	public static final String endRep = "End:";

@@ -9,15 +9,18 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 public class Checkers implements ConnectionStatus{
 
 	private GUI gui;
 	private NetworkCreator network;
 	private Board board;
 	private boolean isRed;
+	boolean turn;
+
 	private ArrayList<Move> currentMoves;
 	//private String username;
-	//private Map<String,String> foundPlayers = new HashMap<String,String>();
 
 	@Override
 	public void connectionMade(int status) {
@@ -25,30 +28,22 @@ public class Checkers implements ConnectionStatus{
 		System.out.println("Server connection recevied from player " + status);
 
 		switch(status){
-		case 0:
-			System.out.println("Player2: Failed to connect");
-			break;
 		case 1:
 			System.out.println("Player2: Player 2's turn");
-			isRed=false;
+			isRed=true;
 			startGame();
-			try {
-				//Runs for 1 seconds
-				Thread.sleep(1000);
-				//This is used to represent the action of a player picking a game
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			this.network.SendMove("Hello");
 			break;
 		case 2:
 			System.out.println("Player2: Player 1's turn");
 			isRed=false;
 			startGame();
-			
 			startRecv();
 			break;
+		default:
+			System.out.println("Player2: Failed to connect");
+			break;
 		}
+	
 	}
 
 	private Checkers(){
@@ -58,11 +53,10 @@ public class Checkers implements ConnectionStatus{
 		network.addListener(this);
 		network.StartNetworking();
 
-		//username = JOptionPane.showInputDialog(null, "Please enter a unique username!");
 		board = new Board();
 
 		gui = new GUI(board.getSquares());
-		gui.updatePlayersList( network.getAvailablePlayers() );
+		updatePlayersList.start();
 
 		setButtonActions();
 	}
@@ -71,7 +65,7 @@ public class Checkers implements ConnectionStatus{
 		new Checkers();
 	}
 
-
+	@Deprecated
 	private int chooseWhoGoesFirst(){
 		Random random = new Random();
 		return random.nextInt(2);
@@ -85,6 +79,8 @@ public class Checkers implements ConnectionStatus{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Offer Draw.");
+				network.SendMove("DRAW");
+				startRecv();
 			}
 		});
 
@@ -137,6 +133,7 @@ public class Checkers implements ConnectionStatus{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Square square = null;
+
 				//find out which square was clicked
 				for (int i = 0; i < 32; i++){
 					if (e.getSource() == board.getSquares()[i]) {
@@ -153,18 +150,56 @@ public class Checkers implements ConnectionStatus{
 
 				//if we selected a space to move a piece to
 				else if(square.getBackground() == GUI.clrEnabledGreen && square.getPiece()==null){
+					ArrayList<Move> nextMoves = null;
 					for (Move move : currentMoves) {
 						if(move.get_end_pos()==square.getLabel()){
+							turn=false;
 							gui.deselectAllsquares();
-							move.apply(network);
+
+							//if its a jump move
+							if(move instanceof C_Move){
+								((C_Move) move).apply();//just Applies move to local board
+								checkForKing(move.end);
+								nextMoves = board.getAvailableMoves(move.end);
+
+								boolean doubleJump=false;
+
+								for (Move nextMove : nextMoves) {
+									if(nextMove instanceof C_Move)
+										doubleJump=true;
+								}
+
+								//send the move to opponent
+								((C_Move) move).sendMove(network,doubleJump);
+
+
+								//if its the last jump move
+								if(!doubleJump){
+									gui.enableDraw(false);
+									gui.deselectAllsquares();
+									startRecv();
+								}
+							}
+							else{//if a normal move
+								move.apply(network);//apply and send move
+								gui.enableDraw(false);
+								checkForKing(move.end);
+								startRecv();
+							}
+
 							gui.refreshScreen();
-							startRecv();
 							break;
 						}
 					}
+					currentMoves = nextMoves;
+				}
+				else if(turn){
+					gui.deselectAllsquares();
+					board.showAllValidMoves(isRed);
 				}
 
 			}
+
 		});
 	}
 	private void startRecv(){
@@ -175,35 +210,97 @@ public class Checkers implements ConnectionStatus{
 		};
 		recvThread.start();
 	}
-	
 
-	public void receivedFromNetwork(String rMove){
-		int gameOver;
-		if(rMove.split(" ")[0].equals("MOVE")){
-			Move move= makeMove(rMove);
+	Thread updatePlayersList = new Thread () {
+		public void run () {
+			while(true){
+				gui.updatePlayersList( network.getAvailablePlayers() );
+				try { Thread.sleep(2000); } catch (InterruptedException e) { }
+			}
+		}
+	};
+
+	public void checkForKing(Square s){
+		if(s.getLabel()< 4)
+			s.setPiece(new King(isRed));
+	}
+
+	public void receivedFromNetwork(String data){
+		int gameOver=-1;
+		if(data == null){
+			exitToPlayerSelectionScreen();
+			JOptionPane.showMessageDialog(null, "Opponent Disconnected!");
+		}
+		else if(data.split(" ")[0].equals("MOVE")){
+			Move move= makeMove(data);
 			board.movePiece(move);
-			//gameOver = board.isGameOver(isRed);
+			
+			//check if there is winner
+			gameOver = board.isGameOver(isRed);
 			board.showAllValidMoves(isRed);
 			gui.enableDraw(true);
+			turn=true;
 		}
-		//check to make sure it is valid ??
+		else if(data.split(" ")[0].equals("C_MOVE")){
+			Move move= makeMove(data);
+			board.movePiece(move);
+			if(data.split(" ").length==5){//it is a double jump
+				startRecv();
+			}
+			else{	
+				//check if there is winner			
+				gameOver = board.isGameOver(isRed);
+				board.showAllValidMoves(isRed);
+				gui.enableDraw(true);
+				turn=true;
+			}
+		}
+		else if(data.split(" ")[0].equals("IS_DRAW")){
+			gui.setScreen(Screen.GAME_SCREEN);
+			exitToPlayerSelectionScreen();
+		}
+		else if(data.split(" ")[0].equals("DRAW")){
+			int dialogResult = JOptionPane.showConfirmDialog(null, "Your opponent is offering a draw.");
+			if(dialogResult == JOptionPane.YES_OPTION){
+				network.SendMove("IS_DRAW");
+				exitToPlayerSelectionScreen();
+			}
+			else
+				startRecv();
+		}
+		else if(data.split(" ")[0].equals("GAMEOVER")){
+			//if(data.split(" ")[1].equals("1") )
+			gui.displayWinner(Integer.parseInt(data.split(" ")[1]));
+			exitToPlayerSelectionScreen();
+		}
+		else
+			startRecv();
 		
-		
-		//check if the is winner
-
-		//need to implement a draw here  
+		if(gameOver>-1){
+			network.SendMove("GAMEOVER "+gameOver);
+			gui.displayWinner(gameOver);
+			exitToPlayerSelectionScreen();
+		}
+	}
+	public void exitToPlayerSelectionScreen(){
+		gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);
+		network.CloseNetworking();
+		//network.StartNetworking();
+		gui.refreshScreen();
 	}
 
 	//connects to opponent and if connected successfully it will begin a game
 	public void challengePlayer(String player){
 		//System.out.println( chooseWhoGoesFirst() );
-		int turn;
-		if((turn = network.Connect( player ))>0){
-			if(turn==1)
+
+		int t;
+
+		if((t = network.Connect( player ))>0){
+			if(t==1)
 				isRed=true;
 			else
 				isRed=false;
-			
+
 			startGame();
 		}
 	}
@@ -217,8 +314,16 @@ public class Checkers implements ConnectionStatus{
 
 		//refreshes the GUI to display the changes
 
-		if(isRed)
+		if(isRed){
+			turn=true;
+			gui.enableDraw(true);
 			board.showAllValidMoves(isRed);
+		}
+		else{
+			startRecv();
+			gui.enableDraw(false);
+			turn=false;
+		}
 
 		gui.refreshScreen();
 	}
@@ -228,7 +333,7 @@ public class Checkers implements ConnectionStatus{
 		if(values.length>3){
 			int startID = 31-Integer.parseInt(values[1]);
 			int endID = 31-Integer.parseInt(values[2]);
-			
+
 			if(values[3].equals("null"))
 				return new Move(board.getSquares()[startID], board.getSquares()[endID]);
 			else 
