@@ -18,14 +18,14 @@ public class TCPServer implements TCPNetwork {
 	@Override
 	public boolean socket(String ipAddress) {
 		try { 
-			
-			serverSocket = new ServerSocket();
-			serverSocket.setReuseAddress(true);
-			serverSocket.bind(new InetSocketAddress(10007));
+			serverSocket = new ServerSocket(10007);
+			/*serverSocket.setReuseAddress(true);
+			serverSocket.bind(new InetSocketAddress(10007));*/
 		} 
 		catch (IOException e) 
 		{ 
-			System.err.println("Could not listen on port: 10007."); 
+			e.printStackTrace();
+			System.err.println("Could not listen on port: 10007: " + e.getMessage()); 
 			System.exit(1); 
 		}
 		return false;
@@ -75,8 +75,11 @@ public class TCPServer implements TCPNetwork {
 		try {
 			serverSocket.close();
 			clientSocket.close();
+			out.close();
+			in.close();
 		} 
 		catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
