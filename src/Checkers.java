@@ -46,7 +46,7 @@ public class Checkers implements ConnectionStatus{
 			isRed=false;
 			startGame();
 			
-			receiveFromNetwork();
+			recvThread.start();
 			break;
 		}
 	}
@@ -176,8 +176,7 @@ public class Checkers implements ConnectionStatus{
 	public void receivedFromNetwork(String rMove){
 		int gameOver;
 		if(rMove.split(" ")[0].equals("MOVE")){
-			Move move;
-			move = makeMove(rMove);
+			Move move= makeMove(rMove);
 			board.movePiece(move);
 			gameOver = board.isGameOver(isRed);
 			board.showAllValidMoves(isRed);
