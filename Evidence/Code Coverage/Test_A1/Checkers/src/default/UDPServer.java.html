@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>UDPServer.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Checkers (Aug 21, 2016 3:49:23 PM)</a> &gt; <a href="../../index.html" class="el_group">Checkers</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">UDPServer.java</span></div><h1>UDPServer.java</h1><pre class="source lang-java linenums">/**
+ * UDP Server, implements networking class used for Checkers game
+ * 
+ * @author phillipryan
+ */
+
+import java.io.*;
+import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="fc" id="L12">public class UDPServer implements UDPNetwork{</span>
+	
+	public static final int DEFAULT_PORT = 5001;
+<span class="fc" id="L15">	private DatagramSocket socket = null;</span>
+	private DatagramPacket packet;
+<span class="fc" id="L17">	List&lt;String&gt; ipAddresses = new ArrayList&lt;String&gt;();</span>
+
+	@Override
+	public void socket() {
+		try{
+            // creating a socket
+<span class="fc" id="L23">			socket = new DatagramSocket(DEFAULT_PORT);</span>
+<span class="fc" id="L24">			socket.setBroadcast(true);</span>
+<span class="fc" id="L25">        }</span>
+<span class="nc" id="L26">		catch(IOException e){</span>
+            //System.err.println(&quot;IOException &quot; + e);
+        }
+<span class="fc" id="L29">	}</span>
+	
+	@Override
+	public boolean recv() {
+<span class="fc" id="L33">		byte[] receiveData = new byte[255];</span>
+
+<span class="fc" id="L35">		packet = new DatagramPacket(receiveData, receiveData.length);</span>
+        try{
+<span class="fc" id="L37">        	socket.receive(packet);</span>
+<span class="fc" id="L38">            String sentence = new String( packet.getData(), 0,</span>
+<span class="fc" id="L39">            		packet.getLength() );</span>
+            
+<span class="fc" id="L41">            String address = packet.getAddress().toString();</span>
+<span class="fc" id="L42">            addAddress(address);</span>
+                        
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">            if(sentence.equals(&quot;Listen&quot;)){</span>
+<span class="nc" id="L45">            	return true;</span>
+            }
+        }
+<span class="nc" id="L48">        catch (IOException ie){</span>
+            //ie.printStackTrace();
+        }
+<span class="fc" id="L51">        return false;</span>
+	}
+	
+	public boolean addAddress(String address){
+<span class="fc" id="L55">		String addr = address.replace(&quot;/&quot;, &quot;&quot;);</span>
+<span class="pc bfc" id="L56" title="All 2 branches covered.">		for(int i =0; i &lt; ipAddresses.size(); i++)</span>
+	    {
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">	        if(addr.contains(ipAddresses.get(i)))</span>
+	        {
+<span class="fc" id="L60">	            return true;</span>
+	        }
+	    }
+<span class="fc" id="L63">		ipAddresses.add(addr);</span>
+<span class="fc" id="L64">		return false;</span>
+	}
+
+	@Override
+	public void send(String message) {
+		try{
+<span class="nc" id="L70">            socket.send (packet);</span>
+<span class="nc" id="L71">		} </span>
+<span class="nc" id="L72">		catch (IOException e){</span>
+			//e.printStackTrace();
+		}
+<span class="nc" id="L75">	}</span>
+
+	@Override
+	public void close() {
+<span class="nc" id="L79">		socket.close ();</span>
+<span class="nc" id="L80">	}</span>
+
+	@Override
+	public List&lt;String&gt; getAddresses() {
+<span class="fc" id="L84">		return ipAddresses;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>Checkers (Aug 21, 2016 3:49:23 PM)</div></body></html>

@@ -26,18 +26,23 @@ public class Move {
 		return -1;
 	}
 	
-	public void apply(NetworkCreator send){
+	public void apply(){
 		end.setPiece(start.getPiece());
 		start.removePiece();
-		
-		send.SendMove(make_send_string());
 	}
 	
-	public String make_send_string(){
+	public void sendMove(NetworkCreator send, boolean b){
+		send.SendMove(make_send_string(b));
+	}
+	
+	public String make_send_string(boolean b){
 		String s = name +delim;
 		s +=  String.valueOf(get_start_pos());
 		s += delim + String.valueOf(get_end_pos());
-		s += delim + "null\n";
+		if(b)
+			s += delim + "king\n";
+		else
+			s += "\n";
 		
 		return s;
 	}

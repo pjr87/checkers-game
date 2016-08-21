@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TCPClient.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Checkers (Aug 21, 2016 3:49:23 PM)</a> &gt; <a href="../../index.html" class="el_group">Checkers</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">TCPClient.java</span></div><h1>TCPClient.java</h1><pre class="source lang-java linenums">/**
+ * TCP Client, implements networking class used for Checkers game
+ * 
+ * @author phillipryan
+ */
+import java.io.*;
+import java.net.*;
+
+<span class="fc" id="L9">public class TCPClient implements TCPNetwork {</span>
+	
+<span class="fc" id="L11">    Socket Socket = null;</span>
+<span class="fc" id="L12">    PrintWriter out = null;</span>
+<span class="fc" id="L13">    BufferedReader in = null;</span>
+
+	@Override
+	public boolean socket(String ipAddress) {
+		try{
+<span class="nc" id="L18">			Socket = new Socket(ipAddress, 10007);</span>
+
+<span class="nc" id="L20">			return true;</span>
+		}
+<span class="nc" id="L22">		catch (IOException e) {</span>
+<span class="nc" id="L23">			System.err.println(&quot;Couldn't get I/O for &quot;</span>
+<span class="nc" id="L24">                            + &quot;the connection to: &quot; + ipAddress);</span>
+		}
+<span class="nc" id="L26">		return false;</span>
+	}
+
+	@Override
+	public boolean accept() {
+<span class="nc" id="L31">		return false;</span>
+	}
+
+	@Override
+	public String recv() {
+		try {
+<span class="nc" id="L37">			in = new BufferedReader(new InputStreamReader(Socket.getInputStream()));</span>
+<span class="nc" id="L38">			String str = in.readLine();</span>
+<span class="nc" id="L39">			System.out.println(&quot;NETWORK TCPClient recveived: &quot; + str);</span>
+<span class="nc" id="L40">			return str;</span>
+		} 
+<span class="nc" id="L42">		catch (IOException e) {</span>
+<span class="nc" id="L43">			e.printStackTrace();</span>
+<span class="nc" id="L44">			return null;</span>
+		}
+	}
+
+	@Override
+	public void send(String str) {
+		try {
+<span class="nc" id="L51">			out = new PrintWriter(Socket.getOutputStream(), true);</span>
+<span class="nc" id="L52">			out.println(str);</span>
+<span class="nc" id="L53">			System.out.println(&quot;NETWORK TCPClient Sent: &quot; + str);</span>
+<span class="nc" id="L54">		} </span>
+<span class="nc" id="L55">		catch (IOException e) {</span>
+<span class="nc" id="L56">			e.printStackTrace();</span>
+		}
+<span class="nc" id="L58">	}</span>
+
+	@Override
+	public void close() {
+		try {
+<span class="nc" id="L63">			Socket.close();</span>
+<span class="nc" id="L64">			out.close();</span>
+<span class="nc" id="L65">			in.close();</span>
+<span class="nc" id="L66">		} </span>
+<span class="nc" id="L67">		catch (IOException e) {</span>
+		}
+<span class="nc" id="L69">	}</span>
+
+	@Override
+	public boolean isConnected() {
+<span class="nc" id="L73">		return Socket.isConnected();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>Checkers (Aug 21, 2016 3:49:23 PM)</div></body></html>

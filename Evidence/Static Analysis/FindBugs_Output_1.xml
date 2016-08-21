@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BugCollection version="3.0.1-dev-20150306-5afe4d1" sequence="1" timestamp="1471806019830" analysisTimestamp="1471806008024" release="">
+    <Project projectName="Checkers">
+        <Jar>C:\Users\Daniel\Documents\Classwork\Summer_15-16\Software Engineering\repo\bin</Jar>
+        <AuxClasspathEntry>C:\Users\Daniel\Documents\Classwork\Summer_15-16\Software Engineering\repo\bin</AuxClasspathEntry>
+        <AuxClasspathEntry>C:\Program Files\Java\jre1.8.0_101\lib\rt.jar</AuxClasspathEntry>
+        <SrcDir>C:\Users\Daniel\Documents\Classwork\Summer_15-16\Software Engineering\repo\src</SrcDir>
+        <Cloud id="edu.umd.cs.findbugs.cloud.doNothingCloud" online="false"/>
+    </Project>
+    <BugInstance type="DMI_USING_REMOVEALL_TO_CLEAR_COLLECTION" priority="2" rank="16" abbrev="DMI" category="BAD_PRACTICE" first="1">
+        <Class classname="Board">
+            <SourceLine classname="Board" sourcefile="Board.java" sourcepath="Board.java"/>
+        </Class>
+        <Method classname="Board" name="showAllValidMoves" signature="(Z)V" isStatic="false">
+            <SourceLine classname="Board" start="83" end="120" startBytecode="0" endBytecode="127" sourcefile="Board.java" sourcepath="Board.java"/>
+        </Method>
+        <Method classname="java.util.ArrayList" name="removeAll" signature="(Ljava/util/Collection;)Z" isStatic="false" role="METHOD_CALLED">
+        <SourceLine classname="java.util.ArrayList"/>
+    </Method>
+    <LocalVariable name="list" register="2" pc="134" role="LOCAL_VARIABLE_INVOKED_ON"/>
+    <SourceLine classname="Board" start="106" end="106" startBytecode="135" endBytecode="135" sourcefile="Board.java" sourcepath="Board.java"/>
+    <SourceLine classname="Board" start="106" end="106" startBytecode="135" endBytecode="135" sourcefile="Board.java" sourcepath="Board.java"/>
+</BugInstance>
+<BugInstance type="EI_EXPOSE_REP" priority="2" rank="18" abbrev="EI" category="MALICIOUS_CODE" first="1">
+    <Class classname="Board">
+        <SourceLine classname="Board" sourcefile="Board.java" sourcepath="Board.java"/>
+    </Class>
+    <Method classname="Board" name="getSquares" signature="()[LSquare;" isStatic="false">
+        <SourceLine classname="Board" start="78" end="78" startBytecode="0" endBytecode="46" sourcefile="Board.java" sourcepath="Board.java"/>
+    </Method>
+    <Field classname="Board" name="squares" signature="[LSquare;" isStatic="false">
+        <SourceLine classname="Board" sourcefile="Board.java" sourcepath="Board.java"/>
+    </Field>
+    <SourceLine classname="Board" start="78" end="78" startBytecode="4" endBytecode="4" sourcefile="Board.java" sourcepath="Board.java"/>
+    <SourceLine classname="Board" start="78" end="78" startBytecode="4" endBytecode="4" sourcefile="Board.java" sourcepath="Board.java"/>
+</BugInstance>
+<BugInstance type="NP_NULL_PARAM_DEREF" priority="2" rank="8" abbrev="NP" category="CORRECTNESS" first="1">
+    <Class classname="King">
+        <SourceLine classname="King" sourcefile="King.java" sourcepath="King.java"/>
+    </Class>
+    <Method classname="King" name="setTeam" signature="(Z)V" isStatic="false">
+        <SourceLine classname="King" start="21" end="42" startBytecode="0" endBytecode="310" sourcefile="King.java" sourcepath="King.java"/>
+    </Method>
+    <Method classname="javax.swing.ImageIcon" name="setImage" signature="(Ljava/awt/Image;)V" isStatic="false" role="METHOD_CALLED">
+    <SourceLine classname="javax.swing.ImageIcon"/>
+</Method>
+<Int value="1" role="INT_MAYBE_NULL_ARG"/>
+<LocalVariable name="redImage" register="2" pc="26" role="LOCAL_VARIABLE_VALUE_OF"/>
+<SourceLine classname="King" start="30" end="30" startBytecode="36" endBytecode="36" sourcefile="King.java" sourcepath="King.java" role="SOURCE_LINE_INVOKED"/>
+<SourceLine classname="King" start="23" end="23" startBytecode="9" endBytecode="9" sourcefile="King.java" sourcepath="King.java" role="SOURCE_LINE_NULL_VALUE"/>
+<SourceLine classname="King" start="27" end="27" startBytecode="29" endBytecode="29" sourcefile="King.java" sourcepath="King.java" role="SOURCE_LINE_KNOWN_NULL"/>
+<SourceLine classname="King" start="28" end="28" startBytecode="31" endBytecode="31" sourcefile="King.java" sourcepath="King.java" role="SOURCE_LINE_KNOWN_NULL"/>
+<Property name="edu.umd.cs.findbugs.detect.NullDerefProperty.ALWAYS_ON_EXCEPTION_PATH" value="true"/>
+</BugInstance>
+<BugInstance type="NP_NULL_PARAM_DEREF" priority="2" rank="8" abbrev="NP" category="CORRECTNESS" first="1">
+    <Class classname="King">
+        <SourceLine classname="King" sourcefile="King.java" sourcepath="King.java"/>
+    </Class>
+    <Method classname="King" name="setTeam" signature="(Z)V" isStatic="false">
+        <SourceLine classname="King" start="21" end="42" startBytecode="0" endBytecode="310" sourcefile="King.java" sourcepath="King.java"/>
+    </Method>
+    <Method classname="javax.swing.ImageIcon" name="setImage" signature="(Ljava/awt/Image;)V" isStatic="false" role="METHOD_CALLED">
+    <SourceLine classname="javax.swing.ImageIcon"/>
+</Method>
+<Int value="1" role="INT_MAYBE_NULL_ARG"/>
+<LocalVariable name="whiteImage" register="2" pc="59" role="LOCAL_VARIABLE_VALUE_OF"/>
+<SourceLine classname="King" start="40" end="40" startBytecode="69" endBytecode="69" sourcefile="King.java" sourcepath="King.java" role="SOURCE_LINE_INVOKED"/>
+<SourceLine classname="King" start="33" end="33" startBytecode="42" endBytecode="42" sourcefile="King.java" sourcepath="King.java" role="SOURCE_LINE_NULL_VALUE"/>
+<SourceLine classname="King" start="37" end="37" startBytecode="62" endBytecode="62" sourcefile="King.java" sourcepath="King.java" role="SOURCE_LINE_KNOWN_NULL"/>
+<SourceLine classname="King" start="38" end="38" startBytecode="64" endBytecode="64" sourcefile="King.java" sourcepath="King.java" role="SOURCE_LINE_KNOWN_NULL"/>
+<Property name="edu.umd.cs.findbugs.detect.NullDerefProperty.ALWAYS_ON_EXCEPTION_PATH" value="true"/>
+</BugInstance>
+<BugInstance type="SA_FIELD_SELF_COMPARISON" priority="2" rank="3" abbrev="SA" category="CORRECTNESS" first="1">
+    <Class classname="MainProgram">
+        <SourceLine classname="MainProgram" sourcefile="MainProgram.java" sourcepath="MainProgram.java"/>
+    </Class>
+    <Method classname="MainProgram" name="main" signature="([Ljava/lang/String;)V" isStatic="true">
+    <SourceLine classname="MainProgram" start="5" end="10" startBytecode="0" endBytecode="97" sourcefile="MainProgram.java" sourcepath="MainProgram.java"/>
+</Method>
+<Field classname="Direction" name="UpRight" signature="LDirection;" isStatic="true">
+    <SourceLine classname="Direction" sourcefile="Direction.java" sourcepath="Direction.java"/>
+</Field>
+<SourceLine classname="MainProgram" start="6" end="6" startBytecode="8" endBytecode="8" sourcefile="MainProgram.java" sourcepath="MainProgram.java"/>
+<SourceLine classname="MainProgram" start="6" end="6" startBytecode="8" endBytecode="8" sourcefile="MainProgram.java" sourcepath="MainProgram.java"/>
+</BugInstance>
+<BugInstance type="NP_NULL_PARAM_DEREF" priority="2" rank="8" abbrev="NP" category="CORRECTNESS" first="1">
+    <Class classname="Piece">
+        <SourceLine classname="Piece" sourcefile="Piece.java" sourcepath="Piece.java"/>
+    </Class>
+    <Method classname="Piece" name="&lt;init&gt;" signature="(Z)V" isStatic="false">
+        <SourceLine classname="Piece" start="14" end="39" startBytecode="0" endBytecode="372" sourcefile="Piece.java" sourcepath="Piece.java"/>
+    </Method>
+    <Method classname="javax.swing.ImageIcon" name="setImage" signature="(Ljava/awt/Image;)V" isStatic="false" role="METHOD_CALLED">
+    <SourceLine classname="javax.swing.ImageIcon"/>
+</Method>
+<Int value="1" role="INT_MAYBE_NULL_ARG"/>
+<LocalVariable name="redImage" register="3" pc="54" role="LOCAL_VARIABLE_VALUE_OF"/>
+<SourceLine classname="Piece" start="27" end="27" startBytecode="66" endBytecode="66" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_INVOKED"/>
+<SourceLine classname="Piece" start="20" end="20" startBytecode="35" endBytecode="35" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_NULL_VALUE"/>
+<SourceLine classname="Piece" start="24" end="24" startBytecode="57" endBytecode="57" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_KNOWN_NULL"/>
+<SourceLine classname="Piece" start="25" end="25" startBytecode="61" endBytecode="61" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_KNOWN_NULL"/>
+<Property name="edu.umd.cs.findbugs.detect.NullDerefProperty.ALWAYS_ON_EXCEPTION_PATH" value="true"/>
+</BugInstance>
+<BugInstance type="NP_NULL_PARAM_DEREF" priority="2" rank="8" abbrev="NP" category="CORRECTNESS" first="1">
+    <Class classname="Piece">
+        <SourceLine classname="Piece" sourcefile="Piece.java" sourcepath="Piece.java"/>
+    </Class>
+    <Method classname="Piece" name="&lt;init&gt;" signature="(Z)V" isStatic="false">
+        <SourceLine classname="Piece" start="14" end="39" startBytecode="0" endBytecode="372" sourcefile="Piece.java" sourcepath="Piece.java"/>
+    </Method>
+    <Method classname="javax.swing.ImageIcon" name="setImage" signature="(Ljava/awt/Image;)V" isStatic="false" role="METHOD_CALLED">
+    <SourceLine classname="javax.swing.ImageIcon"/>
+</Method>
+<Int value="1" role="INT_MAYBE_NULL_ARG"/>
+<LocalVariable name="whiteImage" register="3" pc="91" role="LOCAL_VARIABLE_VALUE_OF"/>
+<SourceLine classname="Piece" start="37" end="37" startBytecode="103" endBytecode="103" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_INVOKED"/>
+<SourceLine classname="Piece" start="30" end="30" startBytecode="72" endBytecode="72" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_NULL_VALUE"/>
+<SourceLine classname="Piece" start="34" end="34" startBytecode="94" endBytecode="94" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_KNOWN_NULL"/>
+<SourceLine classname="Piece" start="35" end="35" startBytecode="98" endBytecode="98" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_KNOWN_NULL"/>
+<Property name="edu.umd.cs.findbugs.detect.NullDerefProperty.ALWAYS_ON_EXCEPTION_PATH" value="true"/>
+</BugInstance>
+<BugInstance type="NP_NULL_PARAM_DEREF" priority="2" rank="8" abbrev="NP" category="CORRECTNESS" first="1">
+    <Class classname="Piece">
+        <SourceLine classname="Piece" sourcefile="Piece.java" sourcepath="Piece.java"/>
+    </Class>
+    <Method classname="Piece" name="setTeam" signature="(Z)V" isStatic="false">
+        <SourceLine classname="Piece" start="54" end="75" startBytecode="0" endBytecode="310" sourcefile="Piece.java" sourcepath="Piece.java"/>
+    </Method>
+    <Method classname="javax.swing.ImageIcon" name="setImage" signature="(Ljava/awt/Image;)V" isStatic="false" role="METHOD_CALLED">
+    <SourceLine classname="javax.swing.ImageIcon"/>
+</Method>
+<Int value="1" role="INT_MAYBE_NULL_ARG"/>
+<LocalVariable name="redImage" register="2" pc="26" role="LOCAL_VARIABLE_VALUE_OF"/>
+<SourceLine classname="Piece" start="63" end="63" startBytecode="36" endBytecode="36" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_INVOKED"/>
+<SourceLine classname="Piece" start="56" end="56" startBytecode="9" endBytecode="9" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_NULL_VALUE"/>
+<SourceLine classname="Piece" start="60" end="60" startBytecode="29" endBytecode="29" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_KNOWN_NULL"/>
+<SourceLine classname="Piece" start="61" end="61" startBytecode="31" endBytecode="31" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_KNOWN_NULL"/>
+<Property name="edu.umd.cs.findbugs.detect.NullDerefProperty.ALWAYS_ON_EXCEPTION_PATH" value="true"/>
+</BugInstance>
+<BugInstance type="NP_NULL_PARAM_DEREF" priority="2" rank="8" abbrev="NP" category="CORRECTNESS" first="1">
+    <Class classname="Piece">
+        <SourceLine classname="Piece" sourcefile="Piece.java" sourcepath="Piece.java"/>
+    </Class>
+    <Method classname="Piece" name="setTeam" signature="(Z)V" isStatic="false">
+        <SourceLine classname="Piece" start="54" end="75" startBytecode="0" endBytecode="310" sourcefile="Piece.java" sourcepath="Piece.java"/>
+    </Method>
+    <Method classname="javax.swing.ImageIcon" name="setImage" signature="(Ljava/awt/Image;)V" isStatic="false" role="METHOD_CALLED">
+    <SourceLine classname="javax.swing.ImageIcon"/>
+</Method>
+<Int value="1" role="INT_MAYBE_NULL_ARG"/>
+<LocalVariable name="whiteImage" register="2" pc="59" role="LOCAL_VARIABLE_VALUE_OF"/>
+<SourceLine classname="Piece" start="73" end="73" startBytecode="69" endBytecode="69" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_INVOKED"/>
+<SourceLine classname="Piece" start="66" end="66" startBytecode="42" endBytecode="42" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_NULL_VALUE"/>
+<SourceLine classname="Piece" start="70" end="70" startBytecode="62" endBytecode="62" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_KNOWN_NULL"/>
+<SourceLine classname="Piece" start="71" end="71" startBytecode="64" endBytecode="64" sourcefile="Piece.java" sourcepath="Piece.java" role="SOURCE_LINE_KNOWN_NULL"/>
+<Property name="edu.umd.cs.findbugs.detect.NullDerefProperty.ALWAYS_ON_EXCEPTION_PATH" value="true"/>
+</BugInstance>
+<BugInstance type="NM_METHOD_NAMING_CONVENTION" priority="2" rank="16" abbrev="Nm" category="BAD_PRACTICE" first="1">
+    <Class classname="Player">
+        <SourceLine classname="Player" sourcefile="Player.java" sourcepath="Player.java"/>
+    </Class>
+    <Method classname="Player" name="Player1thread" signature="()V" isStatic="true">
+        <SourceLine classname="Player" start="50" end="110" startBytecode="0" endBytecode="481" sourcefile="Player.java" sourcepath="Player.java"/>
+    </Method>
+</BugInstance>
+<BugInstance type="NM_METHOD_NAMING_CONVENTION" priority="2" rank="16" abbrev="Nm" category="BAD_PRACTICE" first="1">
+    <Class classname="Player">
+        <SourceLine classname="Player" sourcefile="Player.java" sourcepath="Player.java"/>
+    </Class>
+    <Method classname="Player" name="Player2thread" signature="()V" isStatic="true">
+        <SourceLine classname="Player" start="113" end="150" startBytecode="0" endBytecode="227" sourcefile="Player.java" sourcepath="Player.java"/>
+    </Method>
+</BugInstance>
+<BugInstance type="SF_SWITCH_NO_DEFAULT" priority="2" rank="19" abbrev="SF" category="STYLE" first="1">
+    <Class classname="Player">
+        <SourceLine classname="Player" sourcefile="Player.java" sourcepath="Player.java"/>
+    </Class>
+    <Method classname="Player" name="Player1thread" signature="()V" isStatic="true">
+        <SourceLine classname="Player" start="50" end="110" startBytecode="0" endBytecode="481" sourcefile="Player.java" sourcepath="Player.java"/>
+    </Method>
+    <SourceLine classname="Player" start="87" end="105" startBytecode="98" endBytecode="204" sourcefile="Player.java" sourcepath="Player.java"/>
+    <SourceLine classname="Player" start="87" end="105" startBytecode="98" endBytecode="204" sourcefile="Player.java" sourcepath="Player.java"/>
+</BugInstance>
+<BugInstance type="SF_SWITCH_NO_DEFAULT" priority="2" rank="19" abbrev="SF" category="STYLE" first="1">
+    <Class classname="Player">
+        <SourceLine classname="Player" sourcefile="Player.java" sourcepath="Player.java"/>
+    </Class>
+    <Method classname="Player" name="connectionMade" signature="(I)V" isStatic="false">
+        <SourceLine classname="Player" start="16" end="39" startBytecode="0" endBytecode="280" sourcefile="Player.java" sourcepath="Player.java"/>
+    </Method>
+    <SourceLine classname="Player" start="18" end="36" startBytecode="23" endBytecode="130" sourcefile="Player.java" sourcepath="Player.java"/>
+    <SourceLine classname="Player" start="18" end="36" startBytecode="23" endBytecode="130" sourcefile="Player.java" sourcepath="Player.java"/>
+</BugInstance>
+<BugInstance type="DM_DEFAULT_ENCODING" priority="1" rank="19" abbrev="Dm" category="I18N" first="1">
+    <Class classname="TCPClient">
+        <SourceLine classname="TCPClient" sourcefile="TCPClient.java" sourcepath="TCPClient.java"/>
+    </Class>
+    <Method classname="TCPClient" name="recv" signature="()Ljava/lang/String;" isStatic="false">
+    <SourceLine classname="TCPClient" start="37" end="44" startBytecode="0" endBytecode="169" sourcefile="TCPClient.java" sourcepath="TCPClient.java"/>
+</Method>
+<Method classname="java.io.InputStreamReader" name="&lt;init&gt;" signature="(Ljava/io/InputStream;)V" isStatic="false" role="METHOD_CALLED">
+<SourceLine classname="java.io.InputStreamReader"/>
+</Method>
+<SourceLine classname="TCPClient" start="37" end="37" startBytecode="16" endBytecode="16" sourcefile="TCPClient.java" sourcepath="TCPClient.java"/>
+<SourceLine classname="TCPClient" start="37" end="37" startBytecode="16" endBytecode="16" sourcefile="TCPClient.java" sourcepath="TCPClient.java"/>
+</BugInstance>
+<BugInstance type="DM_DEFAULT_ENCODING" priority="1" rank="19" abbrev="Dm" category="I18N" first="1">
+    <Class classname="TCPClient">
+        <SourceLine classname="TCPClient" sourcefile="TCPClient.java" sourcepath="TCPClient.java"/>
+    </Class>
+    <Method classname="TCPClient" name="send" signature="(Ljava/lang/String;)V" isStatic="false">
+    <SourceLine classname="TCPClient" start="51" end="58" startBytecode="0" endBytecode="164" sourcefile="TCPClient.java" sourcepath="TCPClient.java"/>
+</Method>
+<Method classname="java.io.PrintWriter" name="&lt;init&gt;" signature="(Ljava/io/OutputStream;Z)V" isStatic="false" role="METHOD_CALLED">
+<SourceLine classname="java.io.PrintWriter"/>
+</Method>
+<SourceLine classname="TCPClient" start="51" end="51" startBytecode="13" endBytecode="13" sourcefile="TCPClient.java" sourcepath="TCPClient.java"/>
+<SourceLine classname="TCPClient" start="51" end="51" startBytecode="13" endBytecode="13" sourcefile="TCPClient.java" sourcepath="TCPClient.java"/>
+</BugInstance>
+<BugInstance type="DM_DEFAULT_ENCODING" priority="1" rank="19" abbrev="Dm" category="I18N" first="1">
+    <Class classname="TCPServer">
+        <SourceLine classname="TCPServer" sourcefile="TCPServer.java" sourcepath="TCPServer.java"/>
+    </Class>
+    <Method classname="TCPServer" name="recv" signature="()Ljava/lang/String;" isStatic="false">
+    <SourceLine classname="TCPServer" start="47" end="54" startBytecode="0" endBytecode="169" sourcefile="TCPServer.java" sourcepath="TCPServer.java"/>
+</Method>
+<Method classname="java.io.InputStreamReader" name="&lt;init&gt;" signature="(Ljava/io/InputStream;)V" isStatic="false" role="METHOD_CALLED">
+<SourceLine classname="java.io.InputStreamReader"/>
+</Method>
+<SourceLine classname="TCPServer" start="47" end="47" startBytecode="16" endBytecode="16" sourcefile="TCPServer.java" sourcepath="TCPServer.java"/>
+<SourceLine classname="TCPServer" start="47" end="47" startBytecode="16" endBytecode="16" sourcefile="TCPServer.java" sourcepath="TCPServer.java"/>
+</BugInstance>
+<BugInstance type="DM_DEFAULT_ENCODING" priority="1" rank="19" abbrev="Dm" category="I18N" first="1">
+    <Class classname="TCPServer">
+        <SourceLine classname="TCPServer" sourcefile="TCPServer.java" sourcepath="TCPServer.java"/>
+    </Class>
+    <Method classname="TCPServer" name="send" signature="(Ljava/lang/String;)V" isStatic="false">
+    <SourceLine classname="TCPServer" start="61" end="68" startBytecode="0" endBytecode="164" sourcefile="TCPServer.java" sourcepath="TCPServer.java"/>
+</Method>
+<Method classname="java.io.PrintWriter" name="&lt;init&gt;" signature="(Ljava/io/OutputStream;Z)V" isStatic="false" role="METHOD_CALLED">
+<SourceLine classname="java.io.PrintWriter"/>
+</Method>
+<SourceLine classname="TCPServer" start="61" end="61" startBytecode="13" endBytecode="13" sourcefile="TCPServer.java" sourcepath="TCPServer.java"/>
+<SourceLine classname="TCPServer" start="61" end="61" startBytecode="13" endBytecode="13" sourcefile="TCPServer.java" sourcepath="TCPServer.java"/>
+</BugInstance>
+<BugInstance type="DM_EXIT" priority="2" rank="16" abbrev="Dm" category="BAD_PRACTICE" first="1">
+    <Class classname="TCPServer">
+        <SourceLine classname="TCPServer" sourcefile="TCPServer.java" sourcepath="TCPServer.java"/>
+    </Class>
+    <Method classname="TCPServer" name="socket" signature="(Ljava/lang/String;)Z" isStatic="false">
+    <SourceLine classname="TCPServer" start="21" end="28" startBytecode="0" endBytecode="134" sourcefile="TCPServer.java" sourcepath="TCPServer.java"/>
+</Method>
+<SourceLine classname="TCPServer" start="26" end="26" startBytecode="27" endBytecode="27" sourcefile="TCPServer.java" sourcepath="TCPServer.java"/>
+<SourceLine classname="TCPServer" start="26" end="26" startBytecode="27" endBytecode="27" sourcefile="TCPServer.java" sourcepath="TCPServer.java"/>
+</BugInstance>
+<BugInstance type="DM_DEFAULT_ENCODING" priority="1" rank="19" abbrev="Dm" category="I18N" first="1">
+    <Class classname="UDPServer">
+        <SourceLine classname="UDPServer" sourcefile="UDPServer.java" sourcepath="UDPServer.java"/>
+    </Class>
+    <Method classname="UDPServer" name="recv" signature="()Z" isStatic="false">
+        <SourceLine classname="UDPServer" start="33" end="51" startBytecode="0" endBytecode="233" sourcefile="UDPServer.java" sourcepath="UDPServer.java"/>
+    </Method>
+    <Method classname="java.lang.String" name="&lt;init&gt;" signature="([BII)V" isStatic="false" role="METHOD_CALLED">
+        <SourceLine classname="java.lang.String"/>
+    </Method>
+    <SourceLine classname="UDPServer" start="38" end="38" startBytecode="50" endBytecode="50" sourcefile="UDPServer.java" sourcepath="UDPServer.java"/>
+    <SourceLine classname="UDPServer" start="38" end="38" startBytecode="50" endBytecode="50" sourcefile="UDPServer.java" sourcepath="UDPServer.java"/>
+</BugInstance>
+<Errors errors="0" missingClasses="0"/>
+<FindBugsSummary timestamp="Sun, 21 Aug 2016 14:58:44 -0400" total_classes="38" referenced_classes="432" total_bugs="19" total_size="1406" num_packages="1" java_version="1.8.0_101" vm_version="25.101-b13" cpu_seconds="37.64" clock_seconds="82.57" peak_mbytes="504.63" alloc_mbytes="910.50" gc_seconds="0.72" priority_2="14" priority_1="5">
+    <PackageStats package="" total_bugs="19" total_types="38" total_size="1406" priority_2="14" priority_1="5">
+        <ClassStats class="Board" sourceFile="Board.java" interface="false" size="113" bugs="2" priority_2="2"/>
+        <ClassStats class="C_Move" sourceFile="C_Move.java" interface="false" size="26" bugs="0"/>
+        <ClassStats class="Checkers" sourceFile="Checkers.java" interface="false" size="163" bugs="0"/>
+        <ClassStats class="Checkers$1" sourceFile="Checkers.java" interface="false" size="9" bugs="0"/>
+        <ClassStats class="Checkers$2" sourceFile="Checkers.java" interface="false" size="10" bugs="0"/>
+        <ClassStats class="Checkers$3" sourceFile="Checkers.java" interface="false" size="9" bugs="0"/>
+        <ClassStats class="Checkers$4" sourceFile="Checkers.java" interface="false" size="8" bugs="0"/>
+        <ClassStats class="Checkers$5" sourceFile="Checkers.java" interface="false" size="9" bugs="0"/>
+        <ClassStats class="Checkers$6" sourceFile="Checkers.java" interface="false" size="9" bugs="0"/>
+        <ClassStats class="Checkers$7" sourceFile="Checkers.java" interface="false" size="9" bugs="0"/>
+        <ClassStats class="Checkers$8" sourceFile="Checkers.java" interface="false" size="47" bugs="0"/>
+        <ClassStats class="Checkers$9" sourceFile="Checkers.java" interface="false" size="8" bugs="0"/>
+        <ClassStats class="ConnectionStatus" sourceFile="NetworkCreator.java" interface="true" size="2" bugs="0"/>
+        <ClassStats class="Direction" sourceFile="Direction.java" interface="false" size="12" bugs="0"/>
+        <ClassStats class="GUI" sourceFile="GUI.java" interface="false" size="94" bugs="0"/>
+        <ClassStats class="GameScreen" sourceFile="GameScreen.java" interface="false" size="87" bugs="0"/>
+        <ClassStats class="King" sourceFile="King.java" interface="false" size="25" bugs="2" priority_2="2"/>
+        <ClassStats class="KingTest" sourceFile="KingTest.java" interface="false" size="5" bugs="0"/>
+        <ClassStats class="MainProgram" sourceFile="MainProgram.java" interface="false" size="8" bugs="1" priority_2="1"/>
+        <ClassStats class="Move" sourceFile="Move.java" interface="false" size="31" bugs="0"/>
+        <ClassStats class="NetworkCreator" sourceFile="NetworkCreator.java" interface="false" size="117" bugs="0"/>
+        <ClassStats class="NetworkCreator$1" sourceFile="NetworkCreator.java" interface="false" size="13" bugs="0"/>
+        <ClassStats class="NetworkCreator$2" sourceFile="NetworkCreator.java" interface="false" size="12" bugs="0"/>
+        <ClassStats class="Piece" sourceFile="Piece.java" interface="false" size="45" bugs="4" priority_2="4"/>
+        <ClassStats class="PieceTest" sourceFile="PieceTest.java" interface="false" size="9" bugs="0"/>
+        <ClassStats class="Player" sourceFile="Player.java" interface="false" size="63" bugs="4" priority_2="4"/>
+        <ClassStats class="PlayerSelectionScreen" sourceFile="PlayerSelectionScreen.java" interface="false" size="138" bugs="0"/>
+        <ClassStats class="PlayerSelectionScreen$1" sourceFile="PlayerSelectionScreen.java" interface="false" size="8" bugs="0"/>
+        <ClassStats class="PlayerSelectionScreen$2" sourceFile="PlayerSelectionScreen.java" interface="false" size="11" bugs="0"/>
+        <ClassStats class="Screen" sourceFile="Screen.java" interface="false" size="14" bugs="0"/>
+        <ClassStats class="Square" sourceFile="Square.java" interface="false" size="89" bugs="0"/>
+        <ClassStats class="SquareTest" sourceFile="SquareTest.java" interface="false" size="21" bugs="0"/>
+        <ClassStats class="TCPClient" sourceFile="TCPClient.java" interface="false" size="43" bugs="2" priority_1="2"/>
+        <ClassStats class="TCPNetwork" sourceFile="TCPNetwork.java" interface="true" size="7" bugs="0"/>
+        <ClassStats class="TCPServer" sourceFile="TCPServer.java" interface="false" size="50" bugs="3" priority_2="1" priority_1="2"/>
+        <ClassStats class="UDPClient" sourceFile="UDPClient.java" interface="false" size="32" bugs="0"/>
+        <ClassStats class="UDPNetwork" sourceFile="UDPNetwork.java" interface="true" size="6" bugs="0"/>
+        <ClassStats class="UDPServer" sourceFile="UDPServer.java" interface="false" size="44" bugs="1" priority_1="1"/>
+    </PackageStats>
+    <FindBugsProfile>
+        <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="692" invocations="1824" avgMicrosecondsPerInvocation="379" maxMicrosecondsPerInvocation="43707" standardDeviationMircosecondsPerInvocation="1666"/>
+        <ClassProfile name="de.tobject.findbugs.builder.FindBugs2Eclipse" totalMilliseconds="481" invocations="2" avgMicrosecondsPerInvocation="240868" maxMicrosecondsPerInvocation="255610" standardDeviationMircosecondsPerInvocation="14742"/>
+        <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="457" invocations="1820" avgMicrosecondsPerInvocation="251" maxMicrosecondsPerInvocation="32679" standardDeviationMircosecondsPerInvocation="997"/>
+        <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="364" invocations="432" avgMicrosecondsPerInvocation="843" maxMicrosecondsPerInvocation="15825" standardDeviationMircosecondsPerInvocation="1631"/>
+        <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="343" invocations="432" avgMicrosecondsPerInvocation="794" maxMicrosecondsPerInvocation="12696" standardDeviationMircosecondsPerInvocation="1495"/>
+        <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="248" invocations="1073" avgMicrosecondsPerInvocation="231" maxMicrosecondsPerInvocation="7794" standardDeviationMircosecondsPerInvocation="405"/>
+        <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.IsNullValueDataflowFactory" totalMilliseconds="111" invocations="192" avgMicrosecondsPerInvocation="582" maxMicrosecondsPerInvocation="11486" standardDeviationMircosecondsPerInvocation="1463"/>
+        <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="103" invocations="432" avgMicrosecondsPerInvocation="239" maxMicrosecondsPerInvocation="4692" standardDeviationMircosecondsPerInvocation="465"/>
+        <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.ValueNumberDataflowFactory" totalMilliseconds="101" invocations="210" avgMicrosecondsPerInvocation="482" maxMicrosecondsPerInvocation="13526" standardDeviationMircosecondsPerInvocation="1351"/>
+        <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory" totalMilliseconds="88" invocations="207" avgMicrosecondsPerInvocation="426" maxMicrosecondsPerInvocation="8929" standardDeviationMircosecondsPerInvocation="990"/>
+        <ClassProfile name="edu.umd.cs.findbugs.ba.npe.NullDerefAndRedundantComparisonFinder" totalMilliseconds="86" invocations="192" avgMicrosecondsPerInvocation="451" maxMicrosecondsPerInvocation="8319" standardDeviationMircosecondsPerInvocation="896"/>
+        <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.MethodGenFactory" totalMilliseconds="85" invocations="204" avgMicrosecondsPerInvocation="416" maxMicrosecondsPerInvocation="65532" standardDeviationMircosecondsPerInvocation="4572"/>
+        <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.UnconditionalValueDerefDataflowFactory" totalMilliseconds="78" invocations="192" avgMicrosecondsPerInvocation="410" maxMicrosecondsPerInvocation="10716" standardDeviationMircosecondsPerInvocation="1087"/>
+        <ClassProfile name="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase" totalMilliseconds="76" invocations="432" avgMicrosecondsPerInvocation="176" maxMicrosecondsPerInvocation="4954" standardDeviationMircosecondsPerInvocation="336"/>
+        <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine" totalMilliseconds="74" invocations="502" avgMicrosecondsPerInvocation="148" maxMicrosecondsPerInvocation="15517" standardDeviationMircosecondsPerInvocation="715"/>
+        <ClassProfile name="edu.umd.cs.findbugs.detect.OverridingEqualsNotSymmetrical" totalMilliseconds="69" invocations="432" avgMicrosecondsPerInvocation="160" maxMicrosecondsPerInvocation="11004" standardDeviationMircosecondsPerInvocation="574"/>
+        <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.CFGFactory" totalMilliseconds="68" invocations="192" avgMicrosecondsPerInvocation="355" maxMicrosecondsPerInvocation="11256" standardDeviationMircosecondsPerInvocation="860"/>
+        <ClassProfile name="edu.umd.cs.findbugs.detect.FindSelfComparison" totalMilliseconds="67" invocations="38" avgMicrosecondsPerInvocation="1774" maxMicrosecondsPerInvocation="60449" standardDeviationMircosecondsPerInvocation="9648"/>
+    </FindBugsProfile>
+</FindBugsSummary>
+<ClassFeatures/>
+<History>
+    <AppVersion sequence="0" timestamp="1471806019826" release="" codeSize="0" numClasses="0"/>
+</History>
+</BugCollection>

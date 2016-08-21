@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GameScreen.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Checkers (Aug 21, 2016 3:49:23 PM)</a> &gt; <a href="../../index.html" class="el_group">Checkers</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">GameScreen.java</span></div><h1>GameScreen.java</h1><pre class="source lang-java linenums">import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class GameScreen extends JPanel{
+
+	private static final long serialVersionUID = 1687185123900856843L;
+
+	private JPanel gPnlGameBoard;
+	private JButton gBtnResign;
+	private JButton gBtnNotation;
+	private JButton gBtnDraw;
+	private JLabel[] gLblSquares;
+
+	//Constructor - GUI Setup
+<span class="fc" id="L25">	public GameScreen(JLabel[] squares){</span>
+
+<span class="fc" id="L27">		gLblSquares = new JLabel[64];</span>
+<span class="fc" id="L28">		int indx=0;</span>
+<span class="fc" id="L29">		int grn =0;</span>
+<span class="fc" id="L30">		int wht =1;</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">		for(int i = 0; i&lt; squares.length; i++){</span>
+
+<span class="fc" id="L33">			gLblSquares[indx+grn]=new JLabel();</span>
+<span class="fc" id="L34">			gLblSquares[indx+grn].setPreferredSize(new Dimension(65, 65));</span>
+<span class="fc" id="L35">			gLblSquares[indx+grn].setOpaque(true);</span>
+<span class="fc" id="L36">			gLblSquares[indx+grn].setBackground(GUI.clrOffTiles);</span>
+<span class="fc" id="L37">			gLblSquares[indx+grn].setBorder(BorderFactory.createLineBorder(GUI.clrDisabledBorders));</span>
+
+<span class="fc" id="L39">			gLblSquares[indx+wht]=squares[i];</span>
+<span class="fc" id="L40">			gLblSquares[indx+wht].setPreferredSize(new Dimension(65, 65));</span>
+<span class="fc" id="L41">			gLblSquares[indx+wht].setOpaque(true);</span>
+<span class="fc" id="L42">			GUI.unhighlightSquare(gLblSquares[indx+wht]);</span>
+<span class="fc" id="L43">			indx+=2;</span>
+
+<span class="fc bfc" id="L45" title="All 2 branches covered.">			if((i+1)%4==0){</span>
+<span class="fc" id="L46">				int tmp=grn;</span>
+<span class="fc" id="L47">				grn=wht;</span>
+<span class="fc" id="L48">				wht=tmp;</span>
+			}
+		}
+
+		//set layout
+<span class="fc" id="L53">		this.setLayout(new GridBagLayout());</span>
+
+		//Instantiate variables
+<span class="fc" id="L56">		gBtnResign = new JButton(&quot;   Resign   &quot;);</span>
+<span class="fc" id="L57">		gBtnNotation = new JButton(&quot;View Notation&quot;);</span>
+<span class="fc" id="L58">		gBtnDraw = new JButton(&quot;Offer Draw&quot;);</span>
+
+<span class="fc" id="L60">		GridBagConstraints layout = new GridBagConstraints();</span>
+		//layout.fill=GridBagConstraints.HORIZONTAL;
+		//layout.anchor=GridBagConstraints.WEST;
+<span class="fc" id="L63">		layout.gridx=0;</span>
+<span class="fc" id="L64">		layout.gridy=0;</span>
+<span class="fc" id="L65">		this.add(gBtnNotation,layout);</span>
+
+<span class="fc" id="L67">		layout.gridx=1;</span>
+<span class="fc" id="L68">		layout.gridy=1;</span>
+<span class="fc" id="L69">		this.add(new JLabel(&quot;   &quot;), layout);</span>
+
+<span class="fc" id="L71">		layout.gridx=6;</span>
+<span class="fc" id="L72">		layout.gridy=11;</span>
+<span class="fc" id="L73">		layout.gridwidth=3;</span>
+<span class="fc" id="L74">		this.add(gBtnResign, layout);</span>
+
+<span class="fc" id="L76">		layout.gridx=3;</span>
+<span class="fc" id="L77">		layout.gridy=11;</span>
+<span class="fc" id="L78">		layout.gridwidth=3;</span>
+<span class="fc" id="L79">		this.add(gBtnDraw, layout);</span>
+
+<span class="fc" id="L81">		layout.gridx=6;</span>
+<span class="fc" id="L82">		layout.gridy=10;</span>
+<span class="fc" id="L83">		layout.gridwidth=1;</span>
+<span class="fc" id="L84">		this.add(new JLabel(&quot;   &quot;), layout);</span>
+
+<span class="fc" id="L86">		layout.gridwidth=1;</span>
+<span class="fc" id="L87">		layout.gridy=2;</span>
+<span class="fc" id="L88">		int yCounter=-1;</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">		for(int i = 0;i&lt;gLblSquares.length;i++){</span>
+<span class="fc" id="L90">			layout.gridx=i%8+2;</span>
+<span class="fc" id="L91">			yCounter++;</span>
+
+<span class="fc" id="L93">			this.add(gLblSquares[i], layout);</span>
+
+<span class="fc bfc" id="L95" title="All 2 branches covered.">			if(yCounter==7){</span>
+<span class="fc" id="L96">				yCounter=-1;</span>
+<span class="fc" id="L97">				layout.gridy++;</span>
+			}
+		}
+<span class="fc" id="L100">	}</span>
+<span class="fc" id="L101">	public void setpBtnResignAction(ActionListener a) { gBtnResign.addActionListener(a); }</span>
+
+<span class="fc" id="L103">	public void setpBtnDrawAction(ActionListener a) { gBtnDraw.addActionListener(a); }</span>
+
+<span class="fc" id="L105">	public void setpBtnNotationAction(ActionListener a) { gBtnNotation.addActionListener(a); }</span>
+	
+	public void setBtnDrawEnabled(boolean b){
+<span class="nc" id="L108">		gBtnDraw.setEnabled(b);</span>
+<span class="nc" id="L109">	}</span>
+
+	public void setAllSquaresMouseListener(MouseAdapter mouseA) {
+<span class="fc" id="L112">		boolean isEven = false;</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">		for (int i =0; i&lt;64;i++){</span>
+<span class="fc bfc" id="L114" title="All 4 branches covered.">			if(isEven &amp;&amp; (i+1)%2!=0)</span>
+<span class="fc" id="L115">				gLblSquares[i].addMouseListener(mouseA);</span>
+<span class="fc bfc" id="L116" title="All 4 branches covered.">			else if(!isEven &amp;&amp; i%2!=0)</span>
+<span class="fc" id="L117">				gLblSquares[i].addMouseListener(mouseA);</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">			if((i+1)%8==0)</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">				isEven=!isEven;</span>
+		}
+<span class="fc" id="L121">	}</span>
+
+	public void deselectAllSquares() {
+<span class="nc bnc" id="L124" title="All 2 branches missed.">		for(int i =0;i&lt;gLblSquares.length;i++){</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">			if(gLblSquares[i].getBackground()==GUI.clrEnabledGreen){</span>
+<span class="nc" id="L126">				gLblSquares[i].setBackground(GUI.clrDisabledGreen);</span>
+<span class="nc" id="L127">				gLblSquares[i].setBorder(BorderFactory.createLineBorder(GUI.clrDisabledBorders));</span>
+			}
+		}
+<span class="nc" id="L130">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>Checkers (Aug 21, 2016 3:49:23 PM)</div></body></html>
