@@ -17,6 +17,7 @@ public class Square extends JLabel {
 		this.setPiece(here);
 		this.setLabel(label); 
 		this.setNeighbours(neighbours);
+		this.setIcon(here);
 		
 	}
 	public Square(int label)
@@ -107,7 +108,7 @@ public class Square extends JLabel {
 		    	{
 		    		for(Square n: emptyNeighbours)
 		    		{
-		    			moves.add(new C_Move(this, neighbour, n));
+		    			moves.add(new C_Move(this, n, neighbour));
 		    		}
 		    	}
 		    }
