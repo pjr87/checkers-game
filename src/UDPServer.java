@@ -42,6 +42,7 @@ public class UDPServer implements UDPNetwork{
             addAddress(address);
                         
             if(sentence.equals("Listen")){
+            	System.out.println("received listen");
             	return true;
             }
         }
