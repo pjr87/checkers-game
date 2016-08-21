@@ -92,7 +92,8 @@ public class NetworkCreator{
 		if(connect){
 			isServer = true;
 			//Determine who goes first randomly
-			int tmp = (int) ( Math.random() * 2 + 1);
+			//int tmp = (int) ( Math.random() * 2 + 1);
+			int tmp = 1;
 			if(tmp == 1){
 				clientTurn = 1;
 				serverTurn = 2;
