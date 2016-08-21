@@ -33,9 +33,11 @@ public class Checkers implements ConnectionStatus{
 			break;
 		case 1:
 			System.out.println("Player2: Player 2's turn");
-			isRed=false;
-			gui.enableDraw(false);
+			isRed=true;
+			gui.enableDraw(true);
 			startGame();
+			turn=true;
+			
 			try {
 				//Runs for 1 seconds
 				Thread.sleep(1000);
@@ -48,6 +50,7 @@ public class Checkers implements ConnectionStatus{
 		case 2:
 			System.out.println("Player2: Player 1's turn");
 			isRed=false;
+			gui.enableDraw(false);
 			startGame();
 			turn=false;
 			startRecv();
@@ -89,6 +92,7 @@ public class Checkers implements ConnectionStatus{
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Offer Draw.");
 				network.SendMove("DRAW");
+				startRecv();
 			}
 		});
 
@@ -235,7 +239,11 @@ public class Checkers implements ConnectionStatus{
 
 	public void receivedFromNetwork(String data){
 		int gameOver;
-		if(data.split(" ")[0].equals("MOVE")){
+		if(data == null){
+			gui.setScreen(Screen.GAME_SCREEN);
+			JOptionPane.showMessageDialog(null, "Opponent Disconnected!");
+		}
+		else if(data.split(" ")[0].equals("MOVE")){
 			Move move= makeMove(data);
 			board.movePiece(move);
 			//gameOver = board.isGameOver(isRed);
@@ -258,12 +266,23 @@ public class Checkers implements ConnectionStatus{
 				turn=true;
 			}
 		}
+		else if(data.split(" ")[0].equals("IS_DRAW")){
+			gui.setScreen(Screen.GAME_SCREEN);
+			exitToPlayerSelectionScreen();
+		}
 		else if(data.split(" ")[0].equals("DRAW")){
 			int dialogResult = JOptionPane.showConfirmDialog(null, "Your opponent is offering a draw.");
 			if(dialogResult == JOptionPane.YES_OPTION){
-				network.CloseNetworking();
+				network.SendMove("IS_DRAW");
+				exitToPlayerSelectionScreen();
 			}
+			else
+				startRecv();
 		}
+	}
+	public void exitToPlayerSelectionScreen(){
+		gui.setScreen(Screen.GAME_SCREEN);
+		network.CloseNetworking();
 	}
 
 	//connects to opponent and if connected successfully it will begin a game
