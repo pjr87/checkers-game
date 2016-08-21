@@ -341,7 +341,7 @@ public class Checkers implements ConnectionStatus{
 			int startID = 31-Integer.parseInt(values[1]);
 			int endID = 31-Integer.parseInt(values[2]);
 
-			if(values.length>4 && values[3].equals("king"))
+			if(values.length>4 && values[4].equals("king"))
 				board.getSquares()[startID].setPiece(new King(!isRed));
 			
 			if(values[3].equals("null"))
