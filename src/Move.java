@@ -39,6 +39,7 @@ public class Move {
 		String s = name +delim;
 		s +=  String.valueOf(get_start_pos());
 		s += delim + String.valueOf(get_end_pos());
+		s +=  delim + "null";
 		if(b)
 			s += delim + "king\n";
 		else

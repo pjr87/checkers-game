@@ -43,9 +43,9 @@ public class Checkers implements ConnectionStatus{
 			System.out.println("Player2: Failed to connect");
 			break;
 		}
-	
+
 	}
-	
+
 	private Checkers(){
 
 		startNetworking();
@@ -66,7 +66,7 @@ public class Checkers implements ConnectionStatus{
 		Random random = new Random();
 		return random.nextInt(2);
 	}
-	
+
 	private void startNetworking(){
 		network = new NetworkCreator(); 
 		network.addListener(this);
@@ -240,7 +240,7 @@ public class Checkers implements ConnectionStatus{
 		else if(data.split(" ")[0].equals("MOVE")){
 			Move move= makeMove(data);
 			board.movePiece(move);
-			
+
 			//check if there is winner
 			gameOver = board.isGameOver(isRed);
 			board.showAllValidMoves(isRed);
@@ -284,14 +284,14 @@ public class Checkers implements ConnectionStatus{
 		}
 		else
 			startRecv();
-		
+
 		if(gameOver>-1){
 			network.SendMove("GAMEOVER "+gameOver);
 			gui.displayWinner(gameOver);
 			exitToPlayerSelectionScreen();
 		}
 	}
-	
+
 	public void exitToPlayerSelectionScreen(){
 		gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);
 		network.CloseNetworking();
@@ -341,11 +341,14 @@ public class Checkers implements ConnectionStatus{
 			int startID = 31-Integer.parseInt(values[1]);
 			int endID = 31-Integer.parseInt(values[2]);
 
-			if(values.length>3 && values[3].equals("king"))
+			if(values.length>4 && values[4].equals("king"))
 				board.getSquares()[startID].setPiece(new King(!isRed));
 			
-			return new Move(board.getSquares()[startID], board.getSquares()[endID]);
-			
+			if(values[3].equals("null"))
+				return new Move(board.getSquares()[startID], board.getSquares()[endID]);
+			else
+				return new C_Move(board.getSquares()[startID], board.getSquares()[endID], board.getSquares()[31-Integer.parseInt(values[3])]);
+
 		}
 		return null;
 	}
