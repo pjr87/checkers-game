@@ -68,7 +68,7 @@ public class PlayerSelectionScreen extends JPanel{
 		Insets insets = this.getInsets();
 		
 		size = pPnlManualConnect.getPreferredSize();
-		pPnlManualConnect.setBounds(15+insets.left, 10+insets.top, size.width+105, size.height+30);
+		pPnlManualConnect.setBounds(15+insets.left, 10+insets.top, size.width+120, size.height+30);
 		pPnlManualConnect.setBorder(new TitledBorder("Manually Connect"));
 		this.add(pPnlManualConnect);
 		
