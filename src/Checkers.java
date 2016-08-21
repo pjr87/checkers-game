@@ -296,6 +296,7 @@ public class Checkers implements ConnectionStatus{
 		gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);
 		network.CloseNetworking();
 		startNetworking();
+		gui.removeAllPiecesFromBoard();
 		gui.refreshScreen();
 	}
 

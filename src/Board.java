@@ -121,12 +121,12 @@ public class Board {
 	
 	
 	public void movePiece(Move m){
-		Piece piece = squares[m.get_start_pos()].getPiece();
-		squares[m.get_end_pos()].setPiece(piece);
-		squares[m.get_start_pos()].setPiece(null);
+		
+		m.end.setPiece(m.start.getPiece());
+		m.start.removePiece();
 
 		if(m.get_captured()>=0)
-			squares[m.get_captured()].setPiece(null);
+			squares[m.get_captured()].removePiece();
 	}
 	
 	//returns and highlights all the spaces that a piece can move to 
