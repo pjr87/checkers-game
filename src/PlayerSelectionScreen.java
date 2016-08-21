@@ -30,6 +30,7 @@ public class PlayerSelectionScreen extends JPanel{
 	private JLabel pLblOpponentIp;
 	private JButton pBtnConnect;
 	private JLabel pLblYourIp;
+	private JLabel pLblVersion;
 	private JTextField pTxtHostAddress;
 
 	//Auto find other players panel
@@ -40,12 +41,16 @@ public class PlayerSelectionScreen extends JPanel{
 	
 	//helper vars
 	private DefaultListModel<String> players;
+	private static final String versionText="Version: ";
+	private static final String version="2.0";
 	
 	//Constructor - GUI Setup
 	public PlayerSelectionScreen() {
 		
 		this.setLayout(null);
 		players = new DefaultListModel<String>();
+
+		pLblVersion = new JLabel(versionText+version);
 		
 		//player Screen sub-panels
 		createManualConnectPanel();
@@ -67,6 +72,10 @@ public class PlayerSelectionScreen extends JPanel{
 		pPnlPlayerList.setBounds(86+insets.left, 80+insets.top, size.width+30, size.height+30);
 		pPnlPlayerList.setBorder(new TitledBorder("Select Opponent From List"));
 		this.add(pPnlPlayerList);
+		
+		size = pLblVersion.getPreferredSize();
+		pLblVersion.setBounds(5+insets.left, 208+insets.top, size.width, size.height);
+		this.add(pLblVersion);
 	
 	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })

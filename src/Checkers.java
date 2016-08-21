@@ -277,15 +277,15 @@ public class Checkers implements ConnectionStatus{
 			startRecv();
 		
 		if(gameOver>-1){
-			gui.displayWinner(gameOver);
 			network.SendMove("GAMEOVER "+gameOver);
+			gui.displayWinner(gameOver);
 			exitToPlayerSelectionScreen();
 		}
 	}
 	public void exitToPlayerSelectionScreen(){
 		gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);
 		network.CloseNetworking();
-		network.StartNetworking();
+		//network.StartNetworking();
 		gui.refreshScreen();
 	}
 
