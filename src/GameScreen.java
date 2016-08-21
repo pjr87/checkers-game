@@ -62,7 +62,7 @@ public class GameScreen extends JPanel{
 		//layout.anchor=GridBagConstraints.WEST;
 		layout.gridx=0;
 		layout.gridy=0;
-		this.add(gBtnNotation,layout);
+	//	this.add(gBtnNotation,layout);
 
 		layout.gridx=1;
 		layout.gridy=1;
