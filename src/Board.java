@@ -14,6 +14,12 @@ public class Board {
 
 		for(int i=0; i<32; i++)
 			squares[i] = new Square(i);
+		
+		int topLNum=4;
+		int topRNum=3;
+		int bottomLNum=4;
+		int bottomRNum = 5;
+		int counter=0;
 
 		for(int i=0; i<32; i++){
 
@@ -21,29 +27,46 @@ public class Board {
 
 			//topLeft link
 			if((i-5)>=0 && i%4!=0)
-				tempMap.put(Direction.UpLeft, squares[i-5]);
+				tempMap.put(Direction.UpLeft, squares[i-topLNum]);
 			else
-				tempMap.put(Direction.UpLeft,null);
+				tempMap.put(Direction.UpLeft, null);
 
 			//topRight link
 			if((i-4)>=0  && (i+1)%4!=0)
-				tempMap.put(Direction.UpRight, squares[i-4]);
+				tempMap.put(Direction.UpRight, squares[i-topRNum]);
 			else
 				tempMap.put(Direction.UpRight, null);
 
 			//bottomLeft link
 			if((i+4)<32  && i%4!=0)
-				tempMap.put(Direction.DownLeft, squares[i+4]);
+				tempMap.put(Direction.DownLeft, squares[i+bottomLNum]);
 			else
 				tempMap.put(Direction.DownLeft, null);
 
 			//bottomRight link
 			if((i+5)<32  && (i+1)%4!=0)
-				tempMap.put(Direction.DownRight, squares[i+5]);
+				tempMap.put(Direction.DownRight, squares[i+bottomRNum]);
 			else
 				tempMap.put(Direction.DownRight, null);
 
 			squares[i].setNeighbours(tempMap);
+			
+			if(counter==3){
+				counter=-1;
+				if(topLNum==4){
+					topLNum=5;
+					topRNum=4;
+					bottomLNum=3;
+					bottomRNum = 4;
+				}
+				else{
+					topLNum=4;
+					topRNum=3;
+					bottomLNum=4;
+					bottomRNum = 5;
+				}
+			}
+			counter++;
 		}
 	}
 	
