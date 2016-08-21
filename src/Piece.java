@@ -1,6 +1,8 @@
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -16,25 +18,29 @@ public class Piece extends ImageIcon{
 		Direction[] directions = {Direction.UpRight, Direction.UpLeft};
 		this.directions = directions;
 		this.team = team;
+		URL url;
 		if(team){
-			Image redImage = null;
-			try {
-			    File pathToFile = new File("images/red-piece.png");
-			    redImage = ImageIO.read(pathToFile);
-			} catch (IOException ex) {
-			    ex.printStackTrace();
-			}
-			this.setImage(redImage);
+//			Image redImage = null;
+//			try {
+//			    File pathToFile = new File("/images/red-piece.png");
+//			    redImage = ImageIO.read(pathToFile);
+//			} catch (IOException ex) {
+//			    ex.printStackTrace();
+//			}
+//			this.setImage(redImage);
+			this.setImage(Toolkit.getDefaultToolkit().getImage(Piece.class.getResource("/resources/red-piece.png")));
 		}
 		else{
-			Image whiteImage = null;
-			try {
-			    File pathToFile = new File("images/black-piece.png");
-			    whiteImage = ImageIO.read(pathToFile);
-			} catch (IOException ex) {
-			    ex.printStackTrace();
-			}
-			this.setImage(whiteImage);
+//			Image whiteImage = null;
+//			try {
+//			
+//			    url = Piece.class.getResource("/resource/black-piece.png");
+//                        
+//			    whiteImage = ImageIO.read(pathToFile);
+//			} catch (IOException ex) {
+//			    ex.printStackTrace();
+//			}
+			this.setImage(Toolkit.getDefaultToolkit().getImage(Piece.class.getResource("/resources/black-piece.png")));
 		}
 	}
 
@@ -55,7 +61,7 @@ public class Piece extends ImageIcon{
 		if(team){
 			Image redImage = null;
 			try {
-			    File pathToFile = new File("images/red-piece.png");
+			    File pathToFile = new File("/images/red-piece.png");
 			    redImage = ImageIO.read(pathToFile);
 			} catch (IOException ex) {
 			    ex.printStackTrace();
@@ -65,7 +71,7 @@ public class Piece extends ImageIcon{
 		else{
 			Image whiteImage = null;
 			try {
-			    File pathToFile = new File("images/white-piece.png");
+			    File pathToFile = new File("/images/white-piece.png");
 			    whiteImage = ImageIO.read(pathToFile);
 			} catch (IOException ex) {
 			    ex.printStackTrace();
