@@ -226,7 +226,7 @@ public class Checkers implements ConnectionStatus{
 	}
 
 	public void receivedFromNetwork(String data){
-		int gameOver;
+		int gameOver=-1;
 		if(data == null){
 			exitToPlayerSelectionScreen();
 			JOptionPane.showMessageDialog(null, "Opponent Disconnected!");
@@ -234,8 +234,9 @@ public class Checkers implements ConnectionStatus{
 		else if(data.split(" ")[0].equals("MOVE")){
 			Move move= makeMove(data);
 			board.movePiece(move);
-			//gameOver = board.isGameOver(isRed);
+			
 			//check if there is winner
+			gameOver = board.isGameOver(isRed);
 			board.showAllValidMoves(isRed);
 			gui.enableDraw(true);
 			turn=true;
@@ -246,9 +247,9 @@ public class Checkers implements ConnectionStatus{
 			if(data.split(" ").length==5){//it is a double jump
 				startRecv();
 			}
-			else{				
-				//gameOver = board.isGameOver(isRed);
-				//check if there is winner
+			else{	
+				//check if there is winner			
+				gameOver = board.isGameOver(isRed);
 				board.showAllValidMoves(isRed);
 				gui.enableDraw(true);
 				turn=true;
@@ -269,6 +270,11 @@ public class Checkers implements ConnectionStatus{
 		}
 		else
 			startRecv();
+		
+		if(gameOver>-1){
+			gui.displayWinner(gameOver);
+			exitToPlayerSelectionScreen();
+		}
 	}
 	public void exitToPlayerSelectionScreen(){
 		gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);

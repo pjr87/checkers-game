@@ -42,42 +42,43 @@ public class NetworkCreator{
 		UDPclient.socket();
 
 		//Client send thread
-		startSendThread();
+		sendThread.start();
 
 		//Server recv
-		startRecvThread();
-	}
-	public void startSendThread(){
-		Thread sendThread = new Thread (){
-			public void run () {
-				while(running){
-					try {
-						UDPclient.send("");
-						Thread.sleep(1000);
-					}
-					catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		};
-		sendThread.start();
+		recvThread.start();
+
 	}
 
-	public void startRecvThread(){
-		Thread recvThread = new Thread () {
-			public void run () {
-				while(running){
-					boolean open = UDPserver.recv();
-					if(open){
-						StartTCPServer();
-						break;
-					}
+	Thread sendThread = new Thread (){
+		public void run () {
+			while(running){
+				try {
+					UDPclient.send("");
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
-		};
-		recvThread.start();
-	}
+		}
+	};
+
+
+
+
+	Thread recvThread = new Thread () {
+		public void run () {
+			while(running){
+				boolean open = UDPserver.recv();
+				if(open){
+					StartTCPServer();
+					break;
+				}
+			}
+		}
+	};
+
+
 
 	public void terminate() {
 		running = false;
@@ -97,8 +98,8 @@ public class NetworkCreator{
 		if(connect){
 			isServer = true;
 			//Determine who goes first randomly
-			//int tmp = (int) ( Math.random() * 2 + 1);
-			int tmp = 2;
+			int tmp = (int) ( Math.random() * 2 + 1);
+			//int tmp = 2;
 			if(tmp == 1){
 				clientTurn = 1;
 				serverTurn = 2;
