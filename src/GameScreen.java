@@ -129,10 +129,4 @@ public class GameScreen extends JPanel{
 			}
 		}
 	}
-	public void removeAllPiecesFromBoard() {
-		for(int i =0;i<gLblSquares.length;i++){
-			((Square)gLblSquares[i]).removePiece();
-		}
-		
-	}
 }
