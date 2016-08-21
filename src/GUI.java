@@ -105,6 +105,7 @@ public class GUI extends JFrame{
 	}
 	public void deselectAllsquares(){
 		gameScreen.deselectAllSquares();
+		refreshScreen();
 	}
 	
 	public static void unhighlightSquare(JLabel s){
