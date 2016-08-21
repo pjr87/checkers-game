@@ -43,21 +43,23 @@ public class Player implements ConnectionStatus{
 		Player1thread();
 		
 		//Start Player2
-		Player2thread();
+		//Player2thread();
 		
 		//Start Player1
 		Player1thread();
 				
 		//Start Player2
-		Player2thread();
+		//Player2thread();
 	}
 	
 	public static void Player1thread(){
+		System.out.println("Player1: Open");
 		NetworkCreator network = new NetworkCreator();
 		Player player1 = new Player(network);
 		
 		network.addListener(player1);
 		
+		System.out.println("Player1: StartNetworking");
 		network.StartNetworking();
 		
 		/*try {
@@ -83,11 +85,12 @@ public class Player implements ConnectionStatus{
 			n = reader.nextInt();
 		}
 		
+		System.out.println("Connect " + n);
+		
 		int turn = network.Connect(players.get(n));
-		//int turn = network.Connect(players.get(0));
 		
 		System.out.println("turn " + turn);
-				
+		
 		switch(turn){
 		case 0:
 			System.out.println("Player1: Failed to connect");
@@ -112,6 +115,14 @@ public class Player implements ConnectionStatus{
 		}
 		
 		network.CloseNetworking();
+		
+		try {
+			//Runs for 1 seconds
+			Thread.sleep(2000);
+			//This is used to represent the action of a player picking a game
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void Player2thread(){
@@ -124,7 +135,7 @@ public class Player implements ConnectionStatus{
 		
 		try {
 			//Runs for 3 seconds
-			Thread.sleep(3000);
+			Thread.sleep(10000);
 			//This is used to represent the action of a player picking a game
 		} catch (InterruptedException e) {
 			e.printStackTrace();
