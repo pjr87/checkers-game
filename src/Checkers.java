@@ -45,14 +45,12 @@ public class Checkers implements ConnectionStatus{
 		}
 	
 	}
+	
+	
 
 	private Checkers(){
 
-		network = new NetworkCreator(); 
-		//Player player = new Player(network);
-		network.addListener(this);
-		network.StartNetworking();
-
+		startNetworking();
 		board = new Board();
 
 		gui = new GUI(board.getSquares());
@@ -69,6 +67,12 @@ public class Checkers implements ConnectionStatus{
 	private int chooseWhoGoesFirst(){
 		Random random = new Random();
 		return random.nextInt(2);
+	}
+	
+	private void startNetworking(){
+		network = new NetworkCreator(); 
+		network.addListener(this);
+		network.StartNetworking();
 	}
 
 	//implements all the GUI buttons and the actions for when squares are clicked
@@ -89,7 +93,8 @@ public class Checkers implements ConnectionStatus{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Resign.");
-				gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);
+				network.SendMove("RESIGN");
+				exitToPlayerSelectionScreen();
 			}
 		});
 
@@ -175,14 +180,14 @@ public class Checkers implements ConnectionStatus{
 
 								//if its the last jump move
 								if(!doubleJump){
-									gui.enableDraw(false);
+									gui.enableDrawAndResign(false);
 									gui.deselectAllsquares();
 									startRecv();
 								}
 							}
 							else{//if a normal move
 								move.apply(network);//apply and send move
-								gui.enableDraw(false);
+								gui.enableDrawAndResign(false);
 								checkForKing(move.end);
 								startRecv();
 							}
@@ -238,7 +243,7 @@ public class Checkers implements ConnectionStatus{
 			//check if there is winner
 			gameOver = board.isGameOver(isRed);
 			board.showAllValidMoves(isRed);
-			gui.enableDraw(true);
+			gui.enableDrawAndResign(true);
 			turn=true;
 		}
 		else if(data.split(" ")[0].equals("C_MOVE")){
@@ -251,7 +256,7 @@ public class Checkers implements ConnectionStatus{
 				//check if there is winner			
 				gameOver = board.isGameOver(isRed);
 				board.showAllValidMoves(isRed);
-				gui.enableDraw(true);
+				gui.enableDrawAndResign(true);
 				turn=true;
 			}
 		}
@@ -269,8 +274,11 @@ public class Checkers implements ConnectionStatus{
 				startRecv();
 		}
 		else if(data.split(" ")[0].equals("GAMEOVER")){
-			//if(data.split(" ")[1].equals("1") )
 			gui.displayWinner(Integer.parseInt(data.split(" ")[1]));
+			exitToPlayerSelectionScreen();
+		}
+		else if(data.split(" ")[0].equals("RESIGN")){
+			JOptionPane.showMessageDialog(null, "You Won! Other player resigned.");
 			exitToPlayerSelectionScreen();
 		}
 		else
@@ -282,10 +290,12 @@ public class Checkers implements ConnectionStatus{
 			exitToPlayerSelectionScreen();
 		}
 	}
+	
+	
 	public void exitToPlayerSelectionScreen(){
 		gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);
 		network.CloseNetworking();
-		//network.StartNetworking();
+		startNetworking();
 		gui.refreshScreen();
 	}
 
@@ -316,12 +326,12 @@ public class Checkers implements ConnectionStatus{
 
 		if(isRed){
 			turn=true;
-			gui.enableDraw(true);
+			gui.enableDrawAndResign(true);
 			board.showAllValidMoves(isRed);
 		}
 		else{
 			startRecv();
-			gui.enableDraw(false);
+			gui.enableDrawAndResign(false);
 			turn=false;
 		}
 
