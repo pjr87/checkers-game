@@ -157,7 +157,7 @@ public class Checkers implements ConnectionStatus{
 						if(move.get_end_pos()==square.getLabel()){
 							gui.deselectAllsquares();
 							move.apply(network);
-							receiveFromNetwork();
+							recvThread.start();
 
 							break;
 						}
@@ -167,17 +167,25 @@ public class Checkers implements ConnectionStatus{
 			}
 		});
 	}
+	Thread recvThread = new Thread () {
+		public void run () {
+			receivedFromNetwork(network.RecvMove());
+		}
+	};
 
-	public void receiveFromNetwork(){
-		try { Thread.sleep(1000); } catch (InterruptedException e) {}
-		gui.enableDraw(false);
-		String rMove = network.RecvMove();
-		Move move = makeMove(rMove);
+	public void receivedFromNetwork(String rMove){
+		int gameOver;
+		if(rMove.split(" ")[0].equals("MOVE")){
+			Move move;
+			move = makeMove(rMove);
+			board.movePiece(move);
+			gameOver = board.isGameOver(isRed);
+			board.showAllValidMoves(isRed);
+			gui.enableDraw(true);
+		}
 		//check to make sure it is valid ??
-		board.movePiece(move);
-		int gameOver = board.isGameOver(isRed);
-		board.showAllValidMoves(isRed);
-		gui.enableDraw(true);
+		
+		
 		//check if the is winner
 
 		//need to implement a draw here  
