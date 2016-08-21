@@ -178,9 +178,9 @@ public class NetworkCreator{
 
 		UDPserver.close();
 		UDPclient.close();
-		if(isClient)
+		//if(isClient)
 			TCPclient.close();
-		if(isServer)
+		//if(isServer)
 			TCPserver.close();
 		
 	}
