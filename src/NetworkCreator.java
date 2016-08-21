@@ -84,34 +84,36 @@ public class NetworkCreator{
 	}
 
 	private void StartTCPServer(){
-		System.out.println("START SERVER");
-		terminate();
-		UDPclient.close();
-		UDPserver.close();
-
-		TCPserver.socket("");
-		boolean connect = TCPserver.accept();
-		if(connect){
-			isServer = true;
-			//Determine who goes first randomly
-			int tmp = (int) ( Math.random() * 2 + 1);
-			if(tmp == 1){
-				clientTurn = 1;
-				serverTurn = 2;
+		if(!isClient){
+			System.out.println("START SERVER");
+			terminate();
+			UDPclient.close();
+			UDPserver.close();
+	
+			TCPserver.socket("");
+			boolean connect = TCPserver.accept();
+			if(connect){
+				isServer = true;
+				//Determine who goes first randomly
+				int tmp = (int) ( Math.random() * 2 + 1);
+				if(tmp == 1){
+					clientTurn = 1;
+					serverTurn = 2;
+				}
+				else if(tmp == 2){
+					clientTurn = 2;
+					serverTurn = 1;
+				}
+	
+				String turn = Integer.toString(serverTurn);
+				TCPserver.send(turn);
+	
+				System.out.println("NETWORK TCP Server connected");
+				//alert all the listeners that the tcp server has been connected
+				//for each listener thats registered: call listener function
+				for(ConnectionStatus cs : listeners)
+					cs.connectionMade(serverTurn);
 			}
-			else if(tmp == 2){
-				clientTurn = 2;
-				serverTurn = 1;
-			}
-
-			String turn = Integer.toString(serverTurn);
-			TCPserver.send(turn);
-
-			System.out.println("NETWORK TCP Server connected");
-			//alert all the listeners that the tcp server has been connected
-			//for each listener thats registered: call listener function
-			for(ConnectionStatus cs : listeners)
-				cs.connectionMade(serverTurn);
 		}
 	}
 
@@ -132,14 +134,13 @@ public class NetworkCreator{
 				serverTurn = 2;
 				clientTurn = 1;
 			}
-
-			isClient = true;
 		}
 
 		return clientTurn;
 	}
 
 	protected int Connect(String ipAddress){
+		isClient = true;
 		UDPclient.send("Listen");
 
 		//Sleep for 1 Second to make sure server is listening
@@ -177,9 +178,9 @@ public class NetworkCreator{
 
 		UDPserver.close();
 		UDPclient.close();
-		//if(isClient)
+		if(isClient)
 			TCPclient.close();
-		//if(isServer)
+		if(isServer)
 			TCPserver.close();
 		
 	}
