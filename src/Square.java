@@ -116,22 +116,22 @@ public class Square extends JLabel {
 			else if(neighbour.getPiece().getTeam() != this.getPiece().getTeam())
 			{
 				if((this.neighbours.get(Direction.UpLeft)!=null) && this.neighbours.get(Direction.UpLeft)==neighbour){
-					if( neighbour.neighbours.get(Direction.UpLeft).getPiece()==null){
+					if(neighbour.neighbours.get(Direction.UpLeft)!=null && neighbour.neighbours.get(Direction.UpLeft).getPiece()==null){
 						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.UpLeft), neighbour));
 					}
 				}
 				else if((this.neighbours.get(Direction.UpRight)!=null) && this.neighbours.get(Direction.UpRight)==neighbour){
-					if(neighbour.neighbours.get(Direction.UpRight).getPiece()==null){
+					if(neighbour.neighbours.get(Direction.UpRight)!=null && neighbour.neighbours.get(Direction.UpRight).getPiece()==null){
 						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.UpRight), neighbour));
 					}
 				}
 				else if((this.neighbours.get(Direction.DownLeft)!=null) && this.neighbours.get(Direction.DownLeft)==neighbour){
-					if(neighbour.neighbours.get(Direction.DownLeft).getPiece()==null){
+					if(neighbour.neighbours.get(Direction.DownLeft)!=null && neighbour.neighbours.get(Direction.DownLeft).getPiece()==null){
 						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.DownLeft), neighbour));
 					}
 				}
 				else if((this.neighbours.get(Direction.DownRight)!=null) && this.neighbours.get(Direction.DownRight)==neighbour){
-					if(neighbour.neighbours.get(Direction.DownRight).getPiece()==null){
+					if(neighbour.neighbours.get(Direction.DownRight)!=null && neighbour.neighbours.get(Direction.DownRight).getPiece()==null){
 						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.DownRight), neighbour));
 					}
 				}

@@ -216,11 +216,12 @@ public class PlayerSelectionScreen extends JPanel{
 	
 	//update the found players list
 	public void updatePlayersList(List<String> newPlayers){
+		int ind = pLstPlayers.getSelectedIndex();
 		players.removeAllElements();
 		for(int i = 0;i<newPlayers.size();i++){
 			players.addElement(newPlayers.get(i));
 			pLstPlayers.ensureIndexIsVisible(i);
-			pLstPlayers.setSelectedIndex(0);
+			pLstPlayers.setSelectedIndex(ind);
 		}
 		updatePlayBtn();
 	}

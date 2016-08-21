@@ -196,15 +196,28 @@ public class Checkers implements ConnectionStatus{
 	};
 	
 
-	public void receivedFromNetwork(String rMove){
+	public void receivedFromNetwork(String data){
 		int gameOver;
-		if(rMove.split(" ")[0].equals("MOVE")){
-			Move move= makeMove(rMove);
+		if(data.split(" ")[0].equals("MOVE")){
+			Move move= makeMove(data);
 			board.movePiece(move);
 			//gameOver = board.isGameOver(isRed);
 			board.showAllValidMoves(isRed);
 			gui.enableDraw(true);
 			turn=true;
+		}
+		else if(data.split(" ")[0].equals("C_MOVE")){
+			Move move= makeMove(data);
+			board.movePiece(move);
+			if(data.split(" ").length==5){//it is a double jump
+				startRecv();
+			}
+			else{				
+				//gameOver = board.isGameOver(isRed);
+				board.showAllValidMoves(isRed);
+				gui.enableDraw(true);
+				turn=true;
+			}
 		}
 		//check to make sure it is valid ??
 		
