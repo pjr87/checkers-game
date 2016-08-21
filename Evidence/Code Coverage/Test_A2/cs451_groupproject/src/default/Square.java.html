@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Square.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Checkers (Aug 21, 2016 5:22:01 PM)</a> &gt; <a href="../../index.html" class="el_group">cs451_groupproject</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Square.java</span></div><h1>Square.java</h1><pre class="source lang-java linenums">import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JLabel;
+
+public class Square extends JLabel {
+
+	private static final long serialVersionUID = -7358340280413951025L;	
+<span class="pc" id="L10">	private Piece here = null;</span>
+
+	private Map&lt;Direction, Square&gt; neighbours;
+
+	private int label;
+<span class="nc" id="L15">	public Square(int label, Piece here, Map&lt;Direction, Square&gt; neighbours )</span>
+	{
+<span class="nc" id="L17">		this.setPiece(here);</span>
+<span class="nc" id="L18">		this.setLabel(label); </span>
+<span class="nc" id="L19">		this.setNeighbours(neighbours);</span>
+<span class="nc" id="L20">		this.setIcon(here);</span>
+
+<span class="nc" id="L22">	}</span>
+<span class="fc" id="L23">	public Square(int label)</span>
+	{
+<span class="fc" id="L25">		this.setPiece(null);</span>
+<span class="fc" id="L26">		this.setLabel(label);</span>
+<span class="fc" id="L27">		Map&lt;Direction, Square&gt; neighbours = new HashMap&lt;Direction, Square&gt;();</span>
+<span class="fc" id="L28">		neighbours.put(Direction.UpLeft, null);</span>
+<span class="fc" id="L29">		neighbours.put(Direction.UpRight, null);</span>
+<span class="fc" id="L30">		neighbours.put(Direction.DownLeft, null);</span>
+<span class="fc" id="L31">		neighbours.put(Direction.DownRight, null);</span>
+<span class="fc" id="L32">		this.setNeighbours(neighbours);</span>
+<span class="fc" id="L33">	}</span>
+
+	public void setNeighbours(Map&lt;Direction, Square&gt; neighbours)
+	{
+<span class="fc" id="L37">		this.neighbours = neighbours;</span>
+<span class="fc" id="L38">	}</span>
+	public int getLabel() {
+<span class="fc" id="L40">		return label;</span>
+	}
+	public void setLabel(int label) {
+<span class="fc" id="L43">		this.label = label;</span>
+<span class="fc" id="L44">	}</span>
+
+	public Piece getPiece() {
+<span class="fc" id="L47">		return here;</span>
+	}
+	/**
+	 * Returns the piece that is currently occupying the block
+	 * @param here
+	 */
+	public void setPiece(Piece here) {
+<span class="fc" id="L54">		this.here = here;</span>
+<span class="fc" id="L55">		this.setIcon(here);</span>
+<span class="fc" id="L56">	}</span>
+
+	/*
+	 * Removes piece from the square by setting it to null
+	 */
+	public void removePiece()
+	{
+<span class="fc" id="L63">		this.here = null;</span>
+<span class="fc" id="L64">		this.setIcon(null);</span>
+<span class="fc" id="L65">	}</span>
+
+	private ArrayList&lt;Square&gt; emptyNeighbours()
+	{
+<span class="nc" id="L69">		ArrayList&lt;Square&gt; emptyneighbours = new ArrayList&lt;Square&gt;();</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">		for (Square neighbour : neighbours.values()){</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">			if(neighbour == null)</span>
+			{
+<span class="nc" id="L73">				continue;</span>
+			}
+<span class="nc bnc" id="L75" title="All 2 branches missed.">			if(neighbour.getPiece() == null)</span>
+			{
+<span class="nc" id="L77">				emptyneighbours.add(neighbour);</span>
+			}
+		}
+<span class="nc" id="L80">		return emptyneighbours;</span>
+	}
+
+	/*
+	 * Returns all possible moves that can be done 
+	 */
+	public ArrayList&lt;Move&gt; getMoves()
+	{
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">		if(this.here == null){</span>
+<span class="nc" id="L89">			return null;</span>
+		}
+<span class="fc" id="L91">		ArrayList&lt;Move&gt; moves = new ArrayList&lt;Move&gt;();</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">		for (Square neighbour : neighbours.values()) {</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">			if(neighbour == null)</span>
+			{
+<span class="fc" id="L95">				continue;</span>
+			}
+<span class="fc bfc" id="L97" title="All 2 branches covered.">			if(neighbour.getPiece() == null )</span>
+			{
+<span class="fc bfc" id="L99" title="All 4 branches covered.">				if((this.neighbours.get(Direction.UpLeft)!=null) &amp;&amp; this.neighbours.get(Direction.UpLeft)==neighbour){</span>
+<span class="fc" id="L100">					moves.add(new Move(this, neighbour));</span>
+<span class="fc" id="L101">				}</span>
+<span class="fc bfc" id="L102" title="All 4 branches covered.">				else if((this.neighbours.get(Direction.UpRight)!=null) &amp;&amp; this.neighbours.get(Direction.UpRight)==neighbour){</span>
+<span class="fc" id="L103">					moves.add(new Move(this, neighbour));</span>
+<span class="fc" id="L104">				}</span>
+<span class="fc bfc" id="L105" title="All 4 branches covered.">				else if((this.neighbours.get(Direction.DownLeft)!=null) &amp;&amp; this.neighbours.get(Direction.DownLeft)==neighbour){</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">					if(this.getPiece() instanceof King){</span>
+<span class="fc" id="L107">						moves.add(new Move(this, neighbour));</span>
+					}
+<span class="fc" id="L109">				}</span>
+<span class="pc bpc" id="L110" title="2 of 4 branches missed.">				else if((this.neighbours.get(Direction.DownRight)!=null) &amp;&amp; this.neighbours.get(Direction.DownRight)==neighbour){</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">					if(this.getPiece() instanceof King){</span>
+<span class="fc" id="L112">						moves.add(new Move(this, neighbour));</span>
+					}
+				}
+<span class="fc" id="L115">			}</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">			else if(neighbour.getPiece().getTeam() != this.getPiece().getTeam())</span>
+			{
+<span class="fc bfc" id="L118" title="All 4 branches covered.">				if((this.neighbours.get(Direction.UpLeft)!=null) &amp;&amp; this.neighbours.get(Direction.UpLeft)==neighbour){</span>
+<span class="fc bfc" id="L119" title="All 4 branches covered.">					if(neighbour.neighbours.get(Direction.UpLeft)!=null &amp;&amp; neighbour.neighbours.get(Direction.UpLeft).getPiece()==null){</span>
+<span class="fc" id="L120">						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.UpLeft), neighbour));</span>
+					}
+<span class="fc" id="L122">				}</span>
+<span class="pc bpc" id="L123" title="1 of 4 branches missed.">				else if((this.neighbours.get(Direction.UpRight)!=null) &amp;&amp; this.neighbours.get(Direction.UpRight)==neighbour){</span>
+<span class="pc bpc" id="L124" title="1 of 4 branches missed.">					if(neighbour.neighbours.get(Direction.UpRight)!=null &amp;&amp; neighbour.neighbours.get(Direction.UpRight).getPiece()==null){</span>
+<span class="fc" id="L125">						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.UpRight), neighbour));</span>
+					}
+<span class="fc" id="L127">				}</span>
+<span class="fc bfc" id="L128" title="All 6 branches covered.">				else if((this.neighbours.get(Direction.DownLeft)!=null) &amp;&amp; this.neighbours.get(Direction.DownLeft)==neighbour &amp;&amp; this.getPiece() instanceof King){</span>
+<span class="pc bpc" id="L129" title="1 of 4 branches missed.">					if(neighbour.neighbours.get(Direction.DownLeft)!=null &amp;&amp; neighbour.neighbours.get(Direction.DownLeft).getPiece()==null ){</span>
+<span class="fc" id="L130">						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.DownLeft), neighbour));</span>
+					}
+<span class="fc" id="L132">				}</span>
+<span class="pc bpc" id="L133" title="1 of 6 branches missed.">				else if((this.neighbours.get(Direction.DownRight)!=null) &amp;&amp; this.neighbours.get(Direction.DownRight)==neighbour &amp;&amp; this.getPiece() instanceof King){</span>
+<span class="pc bpc" id="L134" title="1 of 4 branches missed.">					if(neighbour.neighbours.get(Direction.DownRight)!=null &amp;&amp; neighbour.neighbours.get(Direction.DownRight).getPiece()==null){</span>
+<span class="fc" id="L135">						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.DownRight), neighbour));</span>
+					}
+				}
+			}
+		}
+<span class="fc" id="L140">		return moves;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>Checkers (Aug 21, 2016 5:22:01 PM)</div></body></html>

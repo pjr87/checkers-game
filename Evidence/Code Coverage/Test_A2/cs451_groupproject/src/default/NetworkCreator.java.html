@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>NetworkCreator.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Checkers (Aug 21, 2016 5:22:01 PM)</a> &gt; <a href="../../index.html" class="el_group">cs451_groupproject</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">NetworkCreator.java</span></div><h1>NetworkCreator.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">import java.lang.*;</span>
+import java.util.ArrayList;
+import java.util.List;
+
+interface ConnectionStatus {
+	void connectionMade(int status);
+}
+
+public class NetworkCreator{
+	private UDPNetwork UDPserver;
+	private UDPNetwork UDPclient;
+	private TCPNetwork TCPserver;
+	private TCPNetwork TCPclient;
+
+<span class="fc" id="L15">	private boolean isClient = false;</span>
+<span class="fc" id="L16">	private boolean isServer = false;</span>
+
+<span class="fc" id="L18">	public int clientTurn = 0;</span>
+<span class="fc" id="L19">	public int serverTurn = 0;</span>
+
+<span class="fc" id="L21">	private List&lt;ConnectionStatus&gt; listeners = new ArrayList&lt;ConnectionStatus&gt;();</span>
+
+<span class="fc" id="L23">	private volatile boolean running = true;</span>
+
+	public void addListener(ConnectionStatus toAdd){
+<span class="fc" id="L26">		listeners.add(toAdd);</span>
+<span class="fc" id="L27">	}</span>
+
+<span class="fc" id="L29">	public NetworkCreator(){</span>
+<span class="fc" id="L30">		UDPserver = new UDPServer();</span>
+<span class="fc" id="L31">		UDPclient = new UDPClient();</span>
+
+<span class="fc" id="L33">		TCPserver = new TCPServer();</span>
+<span class="fc" id="L34">		TCPclient = new TCPClient();</span>
+<span class="fc" id="L35">	}</span>
+
+	protected void StartNetworking(){
+		//Start Server
+<span class="fc" id="L39">		UDPserver.socket();</span>
+
+		//Start client
+<span class="fc" id="L42">		UDPclient.socket();</span>
+
+		//Client send thread
+<span class="fc" id="L45">		sendThread.start();</span>
+
+		//Server recv
+<span class="fc" id="L48">		recvThread.start();</span>
+
+<span class="fc" id="L50">	}</span>
+
+<span class="fc" id="L52">	Thread sendThread = new Thread (){</span>
+		public void run () {
+<span class="fc bfc" id="L54" title="All 2 branches covered.">			while(running){</span>
+				try {
+<span class="fc" id="L56">					UDPclient.send(&quot;&quot;);</span>
+<span class="fc" id="L57">					Thread.sleep(1000);</span>
+<span class="fc" id="L58">				}</span>
+<span class="nc" id="L59">				catch (InterruptedException e) {</span>
+<span class="nc" id="L60">					e.printStackTrace();</span>
+				}
+			}
+<span class="fc" id="L63">		}</span>
+	};
+
+<span class="fc" id="L66">	Thread recvThread = new Thread () {</span>
+		public void run () {
+<span class="fc bfc" id="L68" title="All 2 branches covered.">			while(running){</span>
+<span class="fc" id="L69">				boolean open = UDPserver.recv();</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">				if(open){</span>
+<span class="fc" id="L71">					StartTCPServer();</span>
+<span class="fc" id="L72">					break;</span>
+				}
+			}
+<span class="fc" id="L75">		}</span>
+	};
+
+	public void terminate() {
+<span class="fc" id="L79">		running = false;</span>
+<span class="fc" id="L80">	}</span>
+
+	protected List&lt;String&gt; getAvailablePlayers(){
+<span class="fc" id="L83">		return UDPserver.getAddresses();</span>
+	}
+
+	private void StartTCPServer(){
+<span class="fc bfc" id="L87" title="All 2 branches covered.">		if(!isClient){</span>
+<span class="fc" id="L88">			System.out.println(&quot;START SERVER&quot;);</span>
+<span class="fc" id="L89">			terminate();</span>
+<span class="fc" id="L90">			UDPclient.close();</span>
+<span class="fc" id="L91">			UDPserver.close();</span>
+	
+<span class="fc" id="L93">			TCPserver.socket(&quot;&quot;);</span>
+<span class="fc" id="L94">			boolean connect = TCPserver.accept();</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">			if(connect){</span>
+<span class="fc" id="L96">				isServer = true;</span>
+				//Determine who goes first randomly
+<span class="fc" id="L98">				int tmp = (int) ( Math.random() * 2 + 1);</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">				if(tmp == 1){</span>
+<span class="nc" id="L100">					clientTurn = 1;</span>
+<span class="nc" id="L101">					serverTurn = 2;</span>
+<span class="nc" id="L102">				}</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">				else if(tmp == 2){</span>
+<span class="fc" id="L104">					clientTurn = 2;</span>
+<span class="fc" id="L105">					serverTurn = 1;</span>
+				}
+	
+<span class="fc" id="L108">				String turn = Integer.toString(serverTurn);</span>
+<span class="fc" id="L109">				TCPserver.send(turn);</span>
+	
+<span class="fc" id="L111">				System.out.println(&quot;NETWORK TCP Server connected&quot;);</span>
+				//alert all the listeners that the tcp server has been connected
+				//for each listener thats registered: call listener function
+<span class="fc bfc" id="L114" title="All 2 branches covered.">				for(ConnectionStatus cs : listeners)</span>
+<span class="fc" id="L115">					cs.connectionMade(serverTurn);</span>
+			}
+		}
+<span class="fc" id="L118">	}</span>
+
+	private int StartTCPClient(String ipAddress){
+<span class="fc" id="L121">		terminate();</span>
+<span class="fc" id="L122">		UDPclient.close();</span>
+<span class="fc" id="L123">		UDPserver.close();</span>
+
+<span class="fc" id="L125">		boolean connect = TCPclient.socket(ipAddress);</span>
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">		if(connect){</span>
+<span class="fc" id="L127">			System.out.println(&quot;NETWORK TCP Client connected&quot;);</span>
+<span class="fc" id="L128">			String Serverturn = TCPclient.recv();</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">			if(Serverturn.equals(&quot;1&quot;)){</span>
+<span class="fc" id="L130">				serverTurn = 1;</span>
+<span class="fc" id="L131">				clientTurn = 2;</span>
+<span class="fc" id="L132">			}</span>
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">			else if(Serverturn.equals(&quot;2&quot;)){</span>
+<span class="fc" id="L134">				serverTurn = 2;</span>
+<span class="fc" id="L135">				clientTurn = 1;</span>
+			}
+		}
+
+<span class="fc" id="L139">		return clientTurn;</span>
+	}
+
+	protected int Connect(String ipAddress){
+<span class="fc" id="L143">		isClient = true;</span>
+<span class="fc" id="L144">		UDPclient.send(&quot;Listen&quot;);</span>
+
+		//Sleep for 1 Second to make sure server is listening
+		try {
+<span class="fc" id="L148">			Thread.sleep(1000);</span>
+<span class="pc" id="L149">		} catch(InterruptedException ex) {</span>
+<span class="nc" id="L150">			Thread.currentThread().interrupt();</span>
+		}
+
+		//Start TCP client
+<span class="fc" id="L154">		int turn = StartTCPClient(ipAddress);</span>
+
+<span class="fc" id="L156">		return turn;</span>
+	}
+
+	protected void SendMove(String str){
+<span class="fc bfc" id="L160" title="All 2 branches covered.">		if(isServer)</span>
+<span class="fc" id="L161">			TCPserver.send(str);</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">		else if(isClient)</span>
+<span class="fc" id="L163">			TCPclient.send(str);</span>
+<span class="fc" id="L164">	}</span>
+
+	protected String RecvMove(){
+<span class="fc" id="L167">		String str = null;</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">		if(isServer)</span>
+<span class="fc" id="L169">			str = TCPserver.recv();</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">		else if(isClient)</span>
+<span class="fc" id="L171">			str = TCPclient.recv();</span>
+
+<span class="fc" id="L173">		return str;</span>
+	}
+
+	protected void CloseNetworking(){
+<span class="fc" id="L177">		terminate();</span>
+
+<span class="fc" id="L179">		UDPserver.close();</span>
+<span class="fc" id="L180">		UDPclient.close();</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">		if(isClient)</span>
+<span class="fc" id="L182">			TCPclient.close();</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">		if(isServer)</span>
+<span class="fc" id="L184">			TCPserver.close();</span>
+		
+<span class="fc" id="L186">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>Checkers (Aug 21, 2016 5:22:01 PM)</div></body></html>
