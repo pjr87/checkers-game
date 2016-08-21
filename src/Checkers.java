@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 public class Checkers implements ConnectionStatus{
 
 	private GUI gui;
@@ -16,9 +18,9 @@ public class Checkers implements ConnectionStatus{
 	private Board board;
 	private boolean isRed;
 	boolean turn;
+
 	private ArrayList<Move> currentMoves;
 	//private String username;
-	//private Map<String,String> foundPlayers = new HashMap<String,String>();
 
 	@Override
 	public void connectionMade(int status) {
@@ -60,12 +62,10 @@ public class Checkers implements ConnectionStatus{
 		network.addListener(this);
 		network.StartNetworking();
 
-		//username = JOptionPane.showInputDialog(null, "Please enter a unique username!");
 		board = new Board();
 
 		gui = new GUI(board.getSquares());
 		updatePlayersList.start();
-		
 
 		setButtonActions();
 	}
@@ -73,7 +73,7 @@ public class Checkers implements ConnectionStatus{
 	public static void main(String[] args) {
 		new Checkers();
 	}
-	
+
 	@Deprecated
 	private int chooseWhoGoesFirst(){
 		Random random = new Random();
@@ -88,6 +88,7 @@ public class Checkers implements ConnectionStatus{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Offer Draw.");
+				network.SendMove("DRAW");
 			}
 		});
 
@@ -140,6 +141,7 @@ public class Checkers implements ConnectionStatus{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Square square = null;
+
 				//find out which square was clicked
 				for (int i = 0; i < 32; i++){
 					if (e.getSource() == board.getSquares()[i]) {
@@ -161,24 +163,24 @@ public class Checkers implements ConnectionStatus{
 						if(move.get_end_pos()==square.getLabel()){
 							turn=false;
 							gui.deselectAllsquares();
-							
+
 							//if its a jump move
 							if(move instanceof C_Move){
 								((C_Move) move).apply();//just Applies move to local board
 								checkForKing(move.end);
 								nextMoves = board.getAvailableMoves(move.end);
-								
+
 								boolean doubleJump=false;
-								
+
 								for (Move nextMove : nextMoves) {
 									if(nextMove instanceof C_Move)
 										doubleJump=true;
 								}
-								
+
 								//send the move to opponent
 								((C_Move) move).sendMove(network,doubleJump);
-								
-								
+
+
 								//if its the last jump move
 								if(!doubleJump){
 									gui.enableDraw(false);
@@ -192,7 +194,7 @@ public class Checkers implements ConnectionStatus{
 								checkForKing(move.end);
 								startRecv();
 							}
-							
+
 							gui.refreshScreen();
 							break;
 						}
@@ -205,6 +207,7 @@ public class Checkers implements ConnectionStatus{
 				}
 
 			}
+
 		});
 	}
 	private void startRecv(){
@@ -215,7 +218,7 @@ public class Checkers implements ConnectionStatus{
 		};
 		recvThread.start();
 	}
-	
+
 	Thread updatePlayersList = new Thread () {
 		public void run () {
 			while(true){
@@ -224,7 +227,7 @@ public class Checkers implements ConnectionStatus{
 			}
 		}
 	};
-	
+
 	public void checkForKing(Square s){
 		if(s.getLabel()< 4)
 			s.setPiece(new King(isRed));
@@ -236,6 +239,7 @@ public class Checkers implements ConnectionStatus{
 			Move move= makeMove(data);
 			board.movePiece(move);
 			//gameOver = board.isGameOver(isRed);
+			//check if there is winner
 			board.showAllValidMoves(isRed);
 			gui.enableDraw(true);
 			turn=true;
@@ -248,30 +252,32 @@ public class Checkers implements ConnectionStatus{
 			}
 			else{				
 				//gameOver = board.isGameOver(isRed);
+				//check if there is winner
 				board.showAllValidMoves(isRed);
 				gui.enableDraw(true);
 				turn=true;
 			}
 		}
-		//check to make sure it is valid ??
-		
-		//check if there is winner
-
-		//need to implement a draw here  
+		else if(data.split(" ")[0].equals("DRAW")){
+			int dialogResult = JOptionPane.showConfirmDialog(null, "Your opponent is offering a draw.");
+			if(dialogResult == JOptionPane.YES_OPTION){
+				network.CloseNetworking();
+			}
+		}
 	}
 
 	//connects to opponent and if connected successfully it will begin a game
 	public void challengePlayer(String player){
 		//System.out.println( chooseWhoGoesFirst() );
-		
+
 		int t;
-		
+
 		if((t = network.Connect( player ))>0){
 			if(t==1)
 				isRed=true;
 			else
 				isRed=false;
-			
+
 			startGame();
 		}
 	}
@@ -299,7 +305,7 @@ public class Checkers implements ConnectionStatus{
 		if(values.length>3){
 			int startID = 31-Integer.parseInt(values[1]);
 			int endID = 31-Integer.parseInt(values[2]);
-			
+
 			if(values[3].equals("null"))
 				return new Move(board.getSquares()[startID], board.getSquares()[endID]);
 			else 
