@@ -46,8 +46,6 @@ public class Checkers implements ConnectionStatus{
 	
 	}
 	
-	
-
 	private Checkers(){
 
 		startNetworking();
@@ -175,8 +173,7 @@ public class Checkers implements ConnectionStatus{
 								}
 
 								//send the move to opponent
-								((C_Move) move).sendMove(network,doubleJump);
-
+								move.sendMove(network, doubleJump);
 
 								//if its the last jump move
 								if(!doubleJump){
@@ -186,9 +183,10 @@ public class Checkers implements ConnectionStatus{
 								}
 							}
 							else{//if a normal move
-								move.apply(network);//apply and send move
+								move.apply();//apply move
+								boolean b = checkForKing(move.end);
+								move.sendMove(network, b);
 								gui.enableDrawAndResign(false);
-								checkForKing(move.end);
 								startRecv();
 							}
 
@@ -225,9 +223,12 @@ public class Checkers implements ConnectionStatus{
 		}
 	};
 
-	public void checkForKing(Square s){
-		if(s.getLabel()< 4)
+	public boolean checkForKing(Square s){
+		if(s.getLabel() < 4){
 			s.setPiece(new King(isRed));
+			return true;
+		}
+		return false;
 	}
 
 	public void receivedFromNetwork(String data){
@@ -291,7 +292,6 @@ public class Checkers implements ConnectionStatus{
 		}
 	}
 	
-	
 	public void exitToPlayerSelectionScreen(){
 		gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);
 		network.CloseNetworking();
@@ -301,7 +301,6 @@ public class Checkers implements ConnectionStatus{
 
 	//connects to opponent and if connected successfully it will begin a game
 	public void challengePlayer(String player){
-		//System.out.println( chooseWhoGoesFirst() );
 
 		int t;
 
@@ -322,8 +321,6 @@ public class Checkers implements ConnectionStatus{
 		//changes the screen
 		gui.setScreen(Screen.GAME_SCREEN);
 
-		//refreshes the GUI to display the changes
-
 		if(isRed){
 			turn=true;
 			gui.enableDrawAndResign(true);
@@ -340,14 +337,15 @@ public class Checkers implements ConnectionStatus{
 
 	public Move makeMove(String moveStr){
 		String values[] = moveStr.split(Move.delim);
-		if(values.length>3){
+		if(values.length>=3){
 			int startID = 31-Integer.parseInt(values[1]);
 			int endID = 31-Integer.parseInt(values[2]);
 
-			if(values[3].equals("null"))
-				return new Move(board.getSquares()[startID], board.getSquares()[endID]);
-			else 
-				return new C_Move(board.getSquares()[startID], board.getSquares()[endID], board.getSquares()[31-Integer.parseInt(values[3])]);
+			if(values[4].equals("king"))
+				board.getSquares()[startID].setPiece(new King(!isRed));
+			
+			return new Move(board.getSquares()[startID], board.getSquares()[endID]);
+			
 		}
 		return null;
 	}
