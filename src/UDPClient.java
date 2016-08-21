@@ -44,13 +44,10 @@ public class UDPClient implements UDPNetwork{
 
 	@Override
 	public void send(String message) {
-		//System.out.println("UDPclient Have " + message);
 		try 
 		{
             byte[] sendData = message.getBytes("UTF-8");
 			packet = new DatagramPacket (sendData, sendData.length, host, DEFAULT_PORT);
-			//System.out.println("UDPClient sent from: " + packet.getAddress () + ":" +
-            //         packet.getPort () + " " + packet.getData());
 			socket.send (packet);
 		} 
 		catch (IOException e) 

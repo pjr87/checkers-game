@@ -31,7 +31,6 @@ public class TCPServer implements TCPNetwork {
 	@Override
 	public boolean accept() {
 		try { 
-			System.out.println ("Waiting for Client");
 			clientSocket = serverSocket.accept(); 
 			
 			return true;
@@ -45,10 +44,9 @@ public class TCPServer implements TCPNetwork {
 	@Override
 	public String recv() {
 		try {
-			System.out.println("TCPServer recv");
 			in = new BufferedReader(new InputStreamReader( clientSocket.getInputStream())); 
-			System.out.println("TCPServer recv");
 			String str = in.readLine();
+			System.out.println("NETWORK TCPServer recveived: " + str);
 			return str;
 		} 
 		catch (IOException e) {
@@ -60,10 +58,9 @@ public class TCPServer implements TCPNetwork {
 	@Override
 	public void send(String str) {
 		try { 
-			System.out.println("TCPServer Sending " + str);
 			out = new PrintWriter(clientSocket.getOutputStream(), true); 
 			out.println(str);
-			System.out.println("TCPServer send");
+			System.out.println("NETWORK TCPServer Sent: " + str);
 		} 
 		catch (IOException e) {
 			e.printStackTrace();

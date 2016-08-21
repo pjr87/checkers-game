@@ -15,7 +15,6 @@ public class TCPClient implements TCPNetwork {
 	@Override
 	public boolean socket(String ipAddress) {
 		try{
-			System.out.println("Start TCP client");
 			Socket = new Socket(ipAddress, 10007);
 
 			return true;
@@ -29,17 +28,15 @@ public class TCPClient implements TCPNetwork {
 
 	@Override
 	public boolean accept() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public String recv() {
 		try {
-			System.out.println("TCPClient recv");
 			in = new BufferedReader(new InputStreamReader(Socket.getInputStream()));
-			System.out.println("TCPClient recv");
 			String str = in.readLine();
+			System.out.println("NETWORK TCPClient recveived: " + str);
 			return str;
 		} 
 		catch (IOException e) {
@@ -51,10 +48,9 @@ public class TCPClient implements TCPNetwork {
 	@Override
 	public void send(String str) {
 		try {
-			System.out.println("TCPClient Sending " + str);
 			out = new PrintWriter(Socket.getOutputStream(), true);
 			out.println(str);
-			System.out.println("TCPClient send");
+			System.out.println("NETWORK TCPClient Sent: " + str);
 		} 
 		catch (IOException e) {
 			e.printStackTrace();

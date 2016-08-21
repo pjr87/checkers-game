@@ -37,14 +37,10 @@ public class UDPServer implements UDPNetwork{
         	socket.receive(packet);
             String sentence = new String( packet.getData(), 0,
             		packet.getLength() );
-            //System.out.println("RECEIVED: " + sentence);
             
             String address = packet.getAddress().toString();
             addAddress(address);
-            
-           // System.out.println("UDPServer Received from: " + address + ":" +
-           //         packet.getPort() + " " + sentence);
-            
+                        
             if(sentence.equals("Listen")){
             	return true;
             }

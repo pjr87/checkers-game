@@ -92,9 +92,7 @@ public class NetworkCreator{
 		if(connect){
 			isServer = true;
 			//Determine who goes first randomly
-			//int tmp = (int) ( Math.random() * 2 + 1);
-			int tmp=1;
-			System.out.println("Random Generated number: " + tmp);
+			int tmp = (int) ( Math.random() * 2 + 1);
 			if(tmp == 1){
 				clientTurn = 1;
 				serverTurn = 2;
@@ -107,7 +105,7 @@ public class NetworkCreator{
 			String turn = Integer.toString(serverTurn);
 			TCPserver.send(turn);
 			
-			System.out.println("TCP Server connected");
+			System.out.println("NETWORK TCP Server connected");
 			//alert all the listeners that the tcp server has been connected
 			//for each listener thats registered: call listener function
 			for(ConnectionStatus cs : listeners)
@@ -122,9 +120,8 @@ public class NetworkCreator{
 		
 		boolean connect = TCPclient.socket(ipAddress);
 		if(connect){
-			System.out.println("Client connected");
+			System.out.println("NETWORK TCP Client connected");
 			String Serverturn = TCPclient.recv();
-			System.out.println("Recv server turn " + Serverturn);
 			if(Serverturn.equals("1")){
 				serverTurn = 1;
 				clientTurn = 2;
@@ -137,17 +134,11 @@ public class NetworkCreator{
 			isClient = true;
 		}
 		
-		System.out.println("clientTurn " + clientTurn);
-		
 		return clientTurn;
 	}
 	
 	protected int Connect(String ipAddress){
-		System.out.println("Sending Listen to connect");
-		
 		UDPclient.send("Listen");
-		
-		System.out.println("Attempting to connect to " + ipAddress);
 		
 		//Sleep for 1 Second to make sure server is listening
 		try {
@@ -158,35 +149,24 @@ public class NetworkCreator{
 		
 		//Start TCP client
 		int turn = StartTCPClient(ipAddress);
-		
-		System.out.println("turn " + turn);
-		
+
 		return turn;
 	}
 	
 	protected void SendMove(String str){
-		System.out.println("SendMove as: " + isServer);
-		System.out.println("SendMove as: " + isClient);
 		if(isServer)
 			TCPserver.send(str);
 		else if(isClient)
 			TCPclient.send(str);
-		
-		System.out.println("Sent " + str);
 	}
 	
 	protected String RecvMove(){
-		System.out.println("RecvMove as: " + isServer);
-		System.out.println("RecvMove as: " + isClient);
 		String str = null;
 		if(isServer)
 			str = TCPserver.recv();
 		else if(isClient)
 			str = TCPclient.recv();
-		//str = TCPserver.recv();
 
-		System.out.println("Received " + str);
-		
 		return str;
 	}
 	
