@@ -164,8 +164,6 @@ public class PlayerSelectionScreen extends JPanel{
 		});
 
 		pPnlManualConnect.setLayout(new GridBagLayout());
-
-		//get IP address to display
 		
 		ourIp = "";
 
