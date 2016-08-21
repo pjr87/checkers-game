@@ -138,4 +138,5 @@ public class GUI extends JFrame{
 		}
 		JOptionPane.showMessageDialog(null, strWinner);
 	}
+	
 }
