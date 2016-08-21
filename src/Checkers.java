@@ -155,30 +155,45 @@ public class Checkers implements ConnectionStatus{
 
 				//if we selected a space to move a piece to
 				else if(square.getBackground() == GUI.clrEnabledGreen && square.getPiece()==null){
+					ArrayList<Move> nextMoves = null;
 					for (Move move : currentMoves) {
 						if(move.get_end_pos()==square.getLabel()){
 							turn=false;
 							gui.deselectAllsquares();
+							
+							//if its a jump move
 							if(move instanceof C_Move){
-								ArrayList<Move> nextMoves = board.getAvailableMoves(move.end);
+								((C_Move) move).apply();//just Applies move to local board
+								checkForKing(move.end);
+								nextMoves = board.getAvailableMoves(move.end);
+								
 								boolean doubleJump=false;
+								
 								for (Move nextMove : nextMoves) {
 									if(nextMove instanceof C_Move)
 										doubleJump=true;
 								}
-								((C_Move) move).apply(network,doubleJump);
-								if(!doubleJump)
+								
+								//send the move to opponent
+								((C_Move) move).sendMove(network,doubleJump);
+								
+								//if its the last jump move
+								if(!doubleJump){
 									gui.deselectAllsquares();
+									startRecv();
+								}
 							}
-							else{
-								move.apply(network);
+							else{//if a normal move
+								move.apply(network);//apply and send move
+								checkForKing(move.end);
+								startRecv();
 							}
 							
 							gui.refreshScreen();
-							startRecv();
 							break;
 						}
 					}
+					currentMoves = nextMoves;
 				}
 				else if(turn){
 					gui.deselectAllsquares();
@@ -196,6 +211,7 @@ public class Checkers implements ConnectionStatus{
 		};
 		recvThread.start();
 	}
+	
 	Thread updatePlayersList = new Thread () {
 		public void run () {
 			while(true){
@@ -209,7 +225,10 @@ public class Checkers implements ConnectionStatus{
 			}
 		}
 	};
-	
+	public void checkForKing(Square s){
+		if(s.getLabel()< 4)
+			s.setPiece(new King(isRed));
+	}
 
 	public void receivedFromNetwork(String data){
 		int gameOver;

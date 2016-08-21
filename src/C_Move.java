@@ -12,11 +12,14 @@ public class C_Move extends Move {
 		return captured.getLabel();
 	}
 	
-	public void apply(NetworkCreator send, boolean b){
+	public void apply(){
 		end.setPiece(start.getPiece());
 		start.removePiece();
 		captured.removePiece();
 		
+
+	}
+	public void sendMove(NetworkCreator send, boolean b){
 		send.SendMove(make_send_string(b));
 	}
 	

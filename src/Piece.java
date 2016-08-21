@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
 public class Piece extends ImageIcon{
 
 	private static final long serialVersionUID = 6206359718427232597L;
-	private boolean team;
+	protected boolean team;
 	protected Direction[] directions;
 	
 	public Piece(boolean team)
