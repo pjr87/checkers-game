@@ -94,14 +94,29 @@ public class Square extends JLabel {
 			{
 				continue;
 			}
-			if(neighbour.getPiece() == null )//could be issue it adds backwards moves
+			if(neighbour.getPiece() == null )
 			{
-				moves.add(new Move(this, neighbour));
+				if((neighbour.neighbours.get(Direction.UpLeft)!=null) && this.neighbours.get(Direction.UpLeft)==neighbour){
+					moves.add(new Move(this, neighbour));
+				}
+				else if((neighbour.neighbours.get(Direction.UpRight)!=null) && this.neighbours.get(Direction.UpRight)==neighbour){
+					moves.add(new Move(this, neighbour));
+				}
+				else if((neighbour.neighbours.get(Direction.DownLeft)!=null) && this.neighbours.get(Direction.DownLeft)==neighbour){
+					if(this.getPiece() instanceof King){
+						moves.add(new Move(this, neighbour));
+					}
+				}
+				else if((neighbour.neighbours.get(Direction.DownRight)!=null) && this.neighbours.get(Direction.DownRight)==neighbour){
+					if(this.getPiece() instanceof King){
+						moves.add(new Move(this, neighbour));
+					}
+				}
 			}
 			else if(neighbour.getPiece().getTeam() != this.getPiece().getTeam())
 			{
-				if(this.neighbours.get(Direction.UpLeft)==neighbour){
-					if((neighbour.neighbours.get(Direction.UpLeft)!=null) && neighbour.neighbours.get(Direction.UpLeft).getPiece()==null){
+				if((neighbour.neighbours.get(Direction.UpLeft)!=null) && this.neighbours.get(Direction.UpLeft)==neighbour){
+					if( neighbour.neighbours.get(Direction.UpLeft).getPiece()==null){
 						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.UpLeft), neighbour));
 					}
 				}
