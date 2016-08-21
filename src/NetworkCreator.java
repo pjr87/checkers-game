@@ -63,9 +63,6 @@ public class NetworkCreator{
 		}
 	};
 
-
-
-
 	Thread recvThread = new Thread () {
 		public void run () {
 			while(running){
@@ -99,7 +96,6 @@ public class NetworkCreator{
 			isServer = true;
 			//Determine who goes first randomly
 			int tmp = (int) ( Math.random() * 2 + 1);
-			//int tmp = 2;
 			if(tmp == 1){
 				clientTurn = 1;
 				serverTurn = 2;
@@ -182,5 +178,7 @@ public class NetworkCreator{
 
 		UDPserver.close();
 		UDPclient.close();
+		TCPserver.close();
+		TCPclient.close();
 	}
 }
