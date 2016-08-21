@@ -28,34 +28,22 @@ public class Checkers implements ConnectionStatus{
 		System.out.println("Server connection recevied from player " + status);
 
 		switch(status){
-		case 0:
-			System.out.println("Player2: Failed to connect");
-			break;
 		case 1:
 			System.out.println("Player2: Player 2's turn");
 			isRed=true;
-			gui.enableDraw(true);
 			startGame();
-			turn=true;
-			
-			try {
-				//Runs for 1 seconds
-				Thread.sleep(1000);
-				//This is used to represent the action of a player picking a game
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			this.network.SendMove("Hello");
 			break;
 		case 2:
 			System.out.println("Player2: Player 1's turn");
 			isRed=false;
-			gui.enableDraw(false);
 			startGame();
-			turn=false;
 			startRecv();
 			break;
+		default:
+			System.out.println("Player2: Failed to connect");
+			break;
 		}
+	
 	}
 
 	private Checkers(){
@@ -279,10 +267,13 @@ public class Checkers implements ConnectionStatus{
 			else
 				startRecv();
 		}
+		else
+			startRecv();
 	}
 	public void exitToPlayerSelectionScreen(){
 		gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);
 		network.CloseNetworking();
+		network.StartNetworking();
 		gui.refreshScreen();
 	}
 
@@ -315,6 +306,11 @@ public class Checkers implements ConnectionStatus{
 			turn=true;
 			gui.enableDraw(true);
 			board.showAllValidMoves(isRed);
+		}
+		else{
+			startRecv();
+			gui.enableDraw(false);
+			turn=false;
 		}
 
 		gui.refreshScreen();
