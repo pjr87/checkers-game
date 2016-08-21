@@ -5,12 +5,12 @@ import java.util.Map;
 import javax.swing.JLabel;
 
 public class Square extends JLabel {
-	
+
 	private static final long serialVersionUID = -7358340280413951025L;	
 	private Piece here = null;
-	
+
 	private Map<Direction, Square> neighbours;
-	
+
 	private int label;
 	public Square(int label, Piece here, Map<Direction, Square> neighbours )
 	{
@@ -18,7 +18,7 @@ public class Square extends JLabel {
 		this.setLabel(label); 
 		this.setNeighbours(neighbours);
 		this.setIcon(here);
-		
+
 	}
 	public Square(int label)
 	{
@@ -31,7 +31,7 @@ public class Square extends JLabel {
 		neighbours.put(Direction.DownRight, null);
 		this.setNeighbours(neighbours);
 	}
-	
+
 	public void setNeighbours(Map<Direction, Square> neighbours)
 	{
 		this.neighbours = neighbours;
@@ -42,7 +42,7 @@ public class Square extends JLabel {
 	public void setLabel(int label) {
 		this.label = label;
 	}
-	
+
 	public Piece getPiece() {
 		return here;
 	}
@@ -54,7 +54,7 @@ public class Square extends JLabel {
 		this.here = here;
 		this.setIcon(here);
 	}
-	
+
 	/*
 	 * Removes piece from the square by setting it to null
 	 */
@@ -63,7 +63,7 @@ public class Square extends JLabel {
 		this.here = null;
 		this.setIcon(null);
 	}
-	
+
 	private ArrayList<Square> emptyNeighbours()
 	{
 		ArrayList<Square> emptyneighbours = new ArrayList<Square>();
@@ -79,7 +79,7 @@ public class Square extends JLabel {
 		}
 		return emptyneighbours;
 	}
-	
+
 	/*
 	 * Returns all possible moves that can be done 
 	 */
@@ -94,25 +94,34 @@ public class Square extends JLabel {
 			{
 				continue;
 			}
-		    if(neighbour.getPiece() == null )
-		    {
-		    	moves.add(new Move(this, neighbour));
-		    }
-		    else if(neighbour.getPiece().getTeam() != this.getPiece().getTeam())
-		    {
-		    	ArrayList<Square> emptyNeighbours = neighbour.emptyNeighbours();
-		    	if(emptyNeighbours.isEmpty())
-		    	{
-		    		return null;
-		    	}
-		    	else
-		    	{
-		    		for(Square n: emptyNeighbours)
-		    		{
-		    			moves.add(new C_Move(this, n, neighbour));
-		    		}
-		    	}
-		    }
+			if(neighbour.getPiece() == null )//could be issue it adds backwards moves
+			{
+				moves.add(new Move(this, neighbour));
+			}
+			else if(neighbour.getPiece().getTeam() != this.getPiece().getTeam())
+			{
+				if(this.neighbours.get(Direction.UpLeft)==neighbour){
+					if(neighbour.neighbours.get(Direction.UpLeft).getPiece()==null){
+						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.UpLeft), neighbour));
+					}
+				}
+				else if(this.neighbours.get(Direction.UpRight)==neighbour){
+					if(neighbour.neighbours.get(Direction.UpRight).getPiece()==null){
+						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.UpRight), neighbour));
+					}
+				}
+				else if(this.neighbours.get(Direction.DownLeft)==neighbour){
+					if(neighbour.neighbours.get(Direction.DownLeft).getPiece()==null){
+						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.DownLeft), neighbour));
+					}
+				}
+				else if(this.neighbours.get(Direction.DownRight)==neighbour){
+					if(neighbour.neighbours.get(Direction.DownRight).getPiece()==null){
+						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.DownRight), neighbour));
+					}
+				}
+
+			}
 		}
 		return moves;
 	}

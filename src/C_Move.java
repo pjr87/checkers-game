@@ -1,7 +1,7 @@
 
 public class C_Move extends Move {
 	private Square captured;
-	public static final String name = "C_MOVE";
+	public static final String name = "MOVE";
 	
 	public C_Move(Square start, Square end, Square captured){
 		super(start, end);

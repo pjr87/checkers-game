@@ -182,7 +182,7 @@ public class Checkers implements ConnectionStatus{
 		if(rMove.split(" ")[0].equals("MOVE")){
 			Move move= makeMove(rMove);
 			board.movePiece(move);
-			gameOver = board.isGameOver(isRed);
+			//gameOver = board.isGameOver(isRed);
 			board.showAllValidMoves(isRed);
 			gui.enableDraw(true);
 		}
