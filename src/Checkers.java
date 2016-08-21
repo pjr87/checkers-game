@@ -72,7 +72,8 @@ public class Checkers implements ConnectionStatus{
 	public static void main(String[] args) {
 		new Checkers();
 	}
-
+	
+	@Deprecated
 	private int chooseWhoGoesFirst(){
 		Random random = new Random();
 		return random.nextInt(2);
@@ -158,7 +159,21 @@ public class Checkers implements ConnectionStatus{
 						if(move.get_end_pos()==square.getLabel()){
 							turn=false;
 							gui.deselectAllsquares();
-							move.apply(network);
+							if(move instanceof C_Move){
+								ArrayList<Move> nextMoves = board.getAvailableMoves(move.end);
+								boolean doubleJump=false;
+								for (Move nextMove : nextMoves) {
+									if(nextMove instanceof C_Move)
+										doubleJump=true;
+								}
+								((C_Move) move).apply(network,doubleJump);
+								if(!doubleJump)
+									gui.deselectAllsquares();
+							}
+							else{
+								move.apply(network);
+							}
+							
 							gui.refreshScreen();
 							startRecv();
 							break;
