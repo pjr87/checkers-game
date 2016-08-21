@@ -15,6 +15,7 @@ public class Checkers implements ConnectionStatus{
 	private NetworkCreator network;
 	private Board board;
 	private boolean isRed;
+	boolean turn;
 	private ArrayList<Move> currentMoves;
 	//private String username;
 	//private Map<String,String> foundPlayers = new HashMap<String,String>();
@@ -45,7 +46,7 @@ public class Checkers implements ConnectionStatus{
 			System.out.println("Player2: Player 1's turn");
 			isRed=false;
 			startGame();
-			
+			turn=false;
 			startRecv();
 			break;
 		}
@@ -70,7 +71,6 @@ public class Checkers implements ConnectionStatus{
 	public static void main(String[] args) {
 		new Checkers();
 	}
-
 
 	private int chooseWhoGoesFirst(){
 		Random random = new Random();
@@ -155,6 +155,7 @@ public class Checkers implements ConnectionStatus{
 				else if(square.getBackground() == GUI.clrEnabledGreen && square.getPiece()==null){
 					for (Move move : currentMoves) {
 						if(move.get_end_pos()==square.getLabel()){
+							turn=false;
 							gui.deselectAllsquares();
 							move.apply(network);
 							gui.refreshScreen();
@@ -162,6 +163,10 @@ public class Checkers implements ConnectionStatus{
 							break;
 						}
 					}
+				}
+				else if(turn){
+					gui.deselectAllsquares();
+					board.showAllValidMoves(isRed);
 				}
 
 			}
@@ -185,11 +190,11 @@ public class Checkers implements ConnectionStatus{
 			//gameOver = board.isGameOver(isRed);
 			board.showAllValidMoves(isRed);
 			gui.enableDraw(true);
+			turn=true;
 		}
 		//check to make sure it is valid ??
 		
-		
-		//check if the is winner
+		//check if there is winner
 
 		//need to implement a draw here  
 	}
@@ -197,9 +202,11 @@ public class Checkers implements ConnectionStatus{
 	//connects to opponent and if connected successfully it will begin a game
 	public void challengePlayer(String player){
 		//System.out.println( chooseWhoGoesFirst() );
-		int turn;
-		if((turn = network.Connect( player ))>0){
-			if(turn==1)
+		turn=true;
+		int t;
+	
+		if((t = network.Connect( player ))>0){
+			if(t==1)
 				isRed=true;
 			else
 				isRed=false;
