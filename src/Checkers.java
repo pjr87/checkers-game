@@ -63,7 +63,8 @@ public class Checkers implements ConnectionStatus{
 		board = new Board();
 
 		gui = new GUI(board.getSquares());
-		gui.updatePlayersList( network.getAvailablePlayers() );
+		updatePlayersList.start();
+		
 
 		setButtonActions();
 	}
@@ -180,6 +181,19 @@ public class Checkers implements ConnectionStatus{
 		};
 		recvThread.start();
 	}
+	Thread updatePlayersList = new Thread () {
+		public void run () {
+			while(true){
+				gui.updatePlayersList( network.getAvailablePlayers() );
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	};
 	
 
 	public void receivedFromNetwork(String rMove){
