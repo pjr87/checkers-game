@@ -60,6 +60,7 @@ public class Square extends JLabel {
 	public void removePiece()
 	{
 		this.here = null;
+		this.setIcon(null);
 	}
 	
 	private ArrayList<Square> emptyNeighbours()

@@ -46,7 +46,7 @@ public class Checkers implements ConnectionStatus{
 			isRed=false;
 			startGame();
 			
-			recvThread.start();
+			startRecv();
 			break;
 		}
 	}
@@ -157,8 +157,8 @@ public class Checkers implements ConnectionStatus{
 						if(move.get_end_pos()==square.getLabel()){
 							gui.deselectAllsquares();
 							move.apply(network);
-							recvThread.start();
-
+							gui.refreshScreen();
+							startRecv();
 							break;
 						}
 					}
@@ -167,11 +167,15 @@ public class Checkers implements ConnectionStatus{
 			}
 		});
 	}
-	Thread recvThread = new Thread () {
-		public void run () {
-			receivedFromNetwork(network.RecvMove());
-		}
-	};
+	private void startRecv(){
+		Thread recvThread = new Thread () {
+			public void run () {
+				receivedFromNetwork(network.RecvMove());
+			}
+		};
+		recvThread.start();
+	}
+	
 
 	public void receivedFromNetwork(String rMove){
 		int gameOver;
