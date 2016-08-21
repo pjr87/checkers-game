@@ -75,8 +75,6 @@ public class NetworkCreator{
 		}
 	};
 
-
-
 	public void terminate() {
 		running = false;
 	}
