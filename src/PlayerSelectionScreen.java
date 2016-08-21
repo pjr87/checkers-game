@@ -46,7 +46,7 @@ public class PlayerSelectionScreen extends JPanel{
 	private String ourIp;
 	private boolean alreadySet;
 	private static final String versionText="Version: ";
-	private static final String version="2.0";
+	private static final String version="2.6";
 	
 	//Constructor - GUI Setup
 	public PlayerSelectionScreen() {
@@ -68,7 +68,7 @@ public class PlayerSelectionScreen extends JPanel{
 		Insets insets = this.getInsets();
 		
 		size = pPnlManualConnect.getPreferredSize();
-		pPnlManualConnect.setBounds(15+insets.left, 10+insets.top, size.width+30, size.height+30);
+		pPnlManualConnect.setBounds(15+insets.left, 10+insets.top, size.width+105, size.height+30);
 		pPnlManualConnect.setBorder(new TitledBorder("Manually Connect"));
 		this.add(pPnlManualConnect);
 		
@@ -230,6 +230,7 @@ public class PlayerSelectionScreen extends JPanel{
 		if(!alreadySet){
 			ourIp = newPlayers.remove(0);
 			pLblYourIp.setText("Your IP address is: "+ourIp);
+			alreadySet=true;
 		}
 		else{
 			for(int i=newPlayers.size()-1; i>-1; i--){

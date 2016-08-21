@@ -125,7 +125,7 @@ public class GUI extends JFrame{
 		String strWinner = "Something bad happened... winner could not be found.";
 		switch(winner){
 			case 0:
-				strWinner="White Won!";
+				strWinner="Black Won!";
 				break;
 			case 1:
 				strWinner="Red Won!";
