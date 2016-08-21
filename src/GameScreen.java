@@ -19,24 +19,24 @@ public class GameScreen extends JPanel{
 	private JButton gBtnResign;
 	private JButton gBtnNotation;
 	private JButton gBtnDraw;
-	private Square[] gLblSquares;
+	private JLabel[] gLblSquares;
 
 	//Constructor - GUI Setup
 	public GameScreen(JLabel[] squares){
 
-		gLblSquares = (Square[]) new JLabel[64];
+		gLblSquares = new JLabel[64];
 		int indx=0;
 		int grn =0;
 		int wht =1;
 		for(int i = 0; i< squares.length; i++){
 
-			gLblSquares[indx+grn]=(Square) new JLabel();
+			gLblSquares[indx+grn]=new JLabel();
 			gLblSquares[indx+grn].setPreferredSize(new Dimension(65, 65));
 			gLblSquares[indx+grn].setOpaque(true);
 			gLblSquares[indx+grn].setBackground(GUI.clrOffTiles);
 			gLblSquares[indx+grn].setBorder(BorderFactory.createLineBorder(GUI.clrDisabledBorders));
 
-			gLblSquares[indx+wht]=(Square) squares[i];
+			gLblSquares[indx+wht]=squares[i];
 			gLblSquares[indx+wht].setPreferredSize(new Dimension(65, 65));
 			gLblSquares[indx+wht].setOpaque(true);
 			GUI.unhighlightSquare(gLblSquares[indx+wht]);
@@ -131,7 +131,7 @@ public class GameScreen extends JPanel{
 	}
 	public void removeAllPiecesFromBoard() {
 		for(int i =0;i<gLblSquares.length;i++){
-		 gLblSquares[i].removePiece();
+			((Square)gLblSquares[i]).removePiece();
 		}
 		
 	}
