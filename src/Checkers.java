@@ -32,6 +32,7 @@ public class Checkers implements ConnectionStatus{
 		case 1:
 			System.out.println("Player2: Player 2's turn");
 			isRed=false;
+			gui.enableDraw(false);
 			startGame();
 			try {
 				//Runs for 1 seconds
@@ -177,14 +178,17 @@ public class Checkers implements ConnectionStatus{
 								//send the move to opponent
 								((C_Move) move).sendMove(network,doubleJump);
 								
+								
 								//if its the last jump move
 								if(!doubleJump){
+									gui.enableDraw(false);
 									gui.deselectAllsquares();
 									startRecv();
 								}
 							}
 							else{//if a normal move
 								move.apply(network);//apply and send move
+								gui.enableDraw(false);
 								checkForKing(move.end);
 								startRecv();
 							}
@@ -216,15 +220,11 @@ public class Checkers implements ConnectionStatus{
 		public void run () {
 			while(true){
 				gui.updatePlayersList( network.getAvailablePlayers() );
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				try { Thread.sleep(2000); } catch (InterruptedException e) { }
 			}
 		}
 	};
+	
 	public void checkForKing(Square s){
 		if(s.getLabel()< 4)
 			s.setPiece(new King(isRed));
@@ -263,9 +263,9 @@ public class Checkers implements ConnectionStatus{
 	//connects to opponent and if connected successfully it will begin a game
 	public void challengePlayer(String player){
 		//System.out.println( chooseWhoGoesFirst() );
-		turn=true;
+		
 		int t;
-	
+		
 		if((t = network.Connect( player ))>0){
 			if(t==1)
 				isRed=true;
@@ -285,8 +285,11 @@ public class Checkers implements ConnectionStatus{
 
 		//refreshes the GUI to display the changes
 
-		if(isRed)
+		if(isRed){
+			turn=true;
+			gui.enableDraw(true);
 			board.showAllValidMoves(isRed);
+		}
 
 		gui.refreshScreen();
 	}

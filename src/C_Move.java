@@ -16,9 +16,8 @@ public class C_Move extends Move {
 		end.setPiece(start.getPiece());
 		start.removePiece();
 		captured.removePiece();
-		
-
 	}
+	
 	public void sendMove(NetworkCreator send, boolean b){
 		send.SendMove(make_send_string(b));
 	}
