@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>UDPClient.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Checkers (Aug 21, 2016 3:49:23 PM)</a> &gt; <a href="../../index.html" class="el_group">Checkers</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">UDPClient.java</span></div><h1>UDPClient.java</h1><pre class="source lang-java linenums">/**
+ * Client, implements networking class used for Checkers game
+ * 
+ * @author phillipryan
+ */
+
+import java.io.*;
+import java.net.*;
+import java.util.List;
+
+<span class="fc" id="L11">public class UDPClient implements UDPNetwork{</span>
+	
+	public static final int DEFAULT_PORT = 5001;
+<span class="fc" id="L14">	private DatagramSocket socket = null;</span>
+	private DatagramPacket packet;
+    private InetAddress host;
+
+	@Override
+	public void socket() {
+		try 
+		{
+<span class="fc" id="L22">			host = InetAddress.getByName(&quot;255.255.255.255&quot;);</span>
+<span class="fc" id="L23">			socket = new DatagramSocket ();</span>
+<span class="fc" id="L24">		} </span>
+<span class="nc" id="L25">		catch (Exception e) </span>
+		{
+			//e.printStackTrace();
+		}
+<span class="fc" id="L29">	}</span>
+
+	@Override
+	public boolean recv() {
+		try 
+		{
+<span class="nc" id="L35">			 packet.setLength(100);</span>
+<span class="nc" id="L36">			 socket.receive (packet);</span>
+<span class="nc" id="L37">		} </span>
+<span class="nc" id="L38">		catch (IOException e) </span>
+		{
+			//e.printStackTrace();
+		}
+<span class="nc" id="L42">		return false;</span>
+	}
+
+	@Override
+	public void send(String message) {
+		try 
+		{
+<span class="fc" id="L49">            byte[] sendData = message.getBytes(&quot;UTF-8&quot;);</span>
+<span class="fc" id="L50">			packet = new DatagramPacket (sendData, sendData.length, host, DEFAULT_PORT);</span>
+<span class="fc" id="L51">			socket.send (packet);</span>
+<span class="fc" id="L52">		} </span>
+<span class="nc" id="L53">		catch (IOException e) </span>
+		{
+			//e.printStackTrace();
+		}
+<span class="fc" id="L57">	}</span>
+
+	@Override
+	public void close() {
+<span class="nc" id="L61">		socket.close ();</span>
+<span class="nc" id="L62">	}</span>
+
+	@Override
+	public List&lt;String&gt; getAddresses() {
+<span class="nc" id="L66">		return null;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>Checkers (Aug 21, 2016 3:49:23 PM)</div></body></html>

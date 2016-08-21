@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Piece.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Checkers (Aug 21, 2016 3:49:23 PM)</a> &gt; <a href="../../index.html" class="el_group">Checkers</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Piece.java</span></div><h1>Piece.java</h1><pre class="source lang-java linenums">import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
+public class Piece extends ImageIcon{
+
+	private static final long serialVersionUID = 6206359718427232597L;
+	protected boolean team;
+	protected Direction[] directions;
+	
+<span class="nc" id="L14">	public Piece(boolean team)</span>
+	{
+<span class="nc" id="L16">		Direction[] directions = {Direction.UpRight, Direction.UpLeft};</span>
+<span class="nc" id="L17">		this.directions = directions;</span>
+<span class="nc" id="L18">		this.team = team;</span>
+<span class="nc bnc" id="L19" title="All 2 branches missed.">		if(team){</span>
+<span class="nc" id="L20">			Image redImage = null;</span>
+			try {
+<span class="nc" id="L22">			    File pathToFile = new File(&quot;images/red-piece.png&quot;);</span>
+<span class="nc" id="L23">			    redImage = ImageIO.read(pathToFile);</span>
+<span class="nc" id="L24">			} catch (IOException ex) {</span>
+<span class="nc" id="L25">			    ex.printStackTrace();</span>
+			}
+<span class="nc" id="L27">			this.setImage(redImage);</span>
+<span class="nc" id="L28">		}</span>
+		else{
+<span class="nc" id="L30">			Image whiteImage = null;</span>
+			try {
+<span class="nc" id="L32">			    File pathToFile = new File(&quot;images/black-piece.png&quot;);</span>
+<span class="nc" id="L33">			    whiteImage = ImageIO.read(pathToFile);</span>
+<span class="nc" id="L34">			} catch (IOException ex) {</span>
+<span class="nc" id="L35">			    ex.printStackTrace();</span>
+			}
+<span class="nc" id="L37">			this.setImage(whiteImage);</span>
+		}
+<span class="nc" id="L39">	}</span>
+
+    Direction[] getMoveDirections()
+    {
+<span class="nc" id="L43">        return this.directions; </span>
+    }
+
+    /*
+     * Returns true of the piece is the red piece and false if it's not
+     */
+	public boolean getTeam() {
+<span class="nc" id="L50">		return this.team;</span>
+	}
+
+	public void setTeam(boolean team) {
+<span class="nc" id="L54">		this.team = team;</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">		if(team){</span>
+<span class="nc" id="L56">			Image redImage = null;</span>
+			try {
+<span class="nc" id="L58">			    File pathToFile = new File(&quot;images/red-piece.png&quot;);</span>
+<span class="nc" id="L59">			    redImage = ImageIO.read(pathToFile);</span>
+<span class="nc" id="L60">			} catch (IOException ex) {</span>
+<span class="nc" id="L61">			    ex.printStackTrace();</span>
+			}
+<span class="nc" id="L63">			this.setImage(redImage);</span>
+<span class="nc" id="L64">		}</span>
+		else{
+<span class="nc" id="L66">			Image whiteImage = null;</span>
+			try {
+<span class="nc" id="L68">			    File pathToFile = new File(&quot;images/white-piece.png&quot;);</span>
+<span class="nc" id="L69">			    whiteImage = ImageIO.read(pathToFile);</span>
+<span class="nc" id="L70">			} catch (IOException ex) {</span>
+<span class="nc" id="L71">			    ex.printStackTrace();</span>
+			}
+<span class="nc" id="L73">			this.setImage(whiteImage);</span>
+		}
+<span class="nc" id="L75">	}	</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>Checkers (Aug 21, 2016 3:49:23 PM)</div></body></html>
