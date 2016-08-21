@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TCPServer.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Checkers (Aug 21, 2016 5:22:01 PM)</a> &gt; <a href="../../index.html" class="el_group">cs451_groupproject</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">TCPServer.java</span></div><h1>TCPServer.java</h1><pre class="source lang-java linenums">/**
+ * TCP Server, implements networking class used for Checkers game
+ * 
+ * @author phillipryan
+ */
+
+import java.net.*; 
+import java.io.*;
+
+<span class="fc" id="L10">public class TCPServer implements TCPNetwork {</span>
+	
+<span class="fc" id="L12">	ServerSocket serverSocket = null; </span>
+<span class="fc" id="L13">	Socket clientSocket = null; </span>
+	
+	PrintWriter out;
+	BufferedReader in;
+
+	@Override
+	public boolean socket(String ipAddress) {
+		try { 
+<span class="fc" id="L21">			serverSocket = new ServerSocket(10007);</span>
+<span class="fc" id="L22">		} </span>
+<span class="nc" id="L23">		catch (IOException e) </span>
+		{ 
+<span class="nc" id="L25">			e.printStackTrace();</span>
+<span class="nc" id="L26">			System.err.println(&quot;Could not listen on port: 10007: &quot; + e.getMessage()); </span>
+<span class="nc" id="L27">			System.exit(1); </span>
+		}
+<span class="fc" id="L29">		return false;</span>
+	}
+
+	@Override
+	public boolean accept() {
+		try { 
+<span class="fc" id="L35">			clientSocket = serverSocket.accept(); </span>
+			
+<span class="fc" id="L37">			return true;</span>
+		} 
+<span class="nc" id="L39">		catch (IOException e) { </span>
+<span class="nc" id="L40">			System.err.println(&quot;Accept failed.&quot;); </span>
+<span class="nc" id="L41">			return false;</span>
+		} 
+	}
+
+	@Override
+	public String recv() {
+		try {
+<span class="fc" id="L48">			in = new BufferedReader(new InputStreamReader( clientSocket.getInputStream())); </span>
+<span class="fc" id="L49">			String str = in.readLine();</span>
+<span class="fc" id="L50">			System.out.println(&quot;NETWORK TCPServer recveived: &quot; + str);</span>
+<span class="fc" id="L51">			return str;</span>
+		} 
+<span class="nc" id="L53">		catch (IOException e) {</span>
+<span class="nc" id="L54">			e.printStackTrace();</span>
+<span class="nc" id="L55">			return null;</span>
+		}
+	}
+
+	@Override
+	public void send(String str) {
+		try { 
+<span class="fc" id="L62">			out = new PrintWriter(clientSocket.getOutputStream(), true); </span>
+<span class="fc" id="L63">			out.println(str);</span>
+<span class="fc" id="L64">			System.out.println(&quot;NETWORK TCPServer Sent: &quot; + str);</span>
+<span class="fc" id="L65">		} </span>
+<span class="nc" id="L66">		catch (IOException e) {</span>
+<span class="nc" id="L67">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L69">	}</span>
+
+	@Override
+	public void close() {
+		try {
+<span class="fc" id="L74">			serverSocket.close();</span>
+<span class="fc" id="L75">			clientSocket.close();</span>
+<span class="fc" id="L76">			out.close();</span>
+			//in.close();
+<span class="fc" id="L78">		} </span>
+<span class="nc" id="L79">		catch (IOException e) {</span>
+			//e.printStackTrace();
+		}
+<span class="fc" id="L82">	}</span>
+
+	@Override
+	public boolean isConnected() {
+		try {
+<span class="nc" id="L87">			return serverSocket.getInetAddress().isReachable(0);</span>
+<span class="nc" id="L88">		} catch (IOException e) {</span>
+<span class="nc" id="L89">			return false;</span>
+		}
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>Checkers (Aug 21, 2016 5:22:01 PM)</div></body></html>
