@@ -41,6 +41,7 @@ public class PlayerSelectionScreen extends JPanel{
 	
 	//helper vars
 	private DefaultListModel<String> players;
+	private String ourIp;
 	private static final String versionText="Version: ";
 	private static final String version="2.0";
 	
@@ -165,10 +166,10 @@ public class PlayerSelectionScreen extends JPanel{
 		pPnlManualConnect.setLayout(new GridBagLayout());
 
 		//get IP address to display
-		String address = "";
-		try {  address = Checkers.getIps().get(0);  } catch (SocketException e){}
+		
+		ourIp = "";
 
-		pLblYourIp = new JLabel("Your IP address is: "+address);
+		pLblYourIp = new JLabel("Your IP address is: "+ourIp);
 
 	//position all elements on panel
 		layout.gridx=0;
@@ -225,6 +226,10 @@ public class PlayerSelectionScreen extends JPanel{
 	
 	//update the found players list
 	public void updatePlayersList(List<String> newPlayers){
+		
+		ourIp = newPlayers.remove(0);
+		pLblYourIp.setText("Your IP address is: "+ourIp);
+		
 		int ind = pLstPlayers.getSelectedIndex();
 		players.removeAllElements();
 		for(int i = 0;i<newPlayers.size();i++){
