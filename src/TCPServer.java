@@ -79,7 +79,7 @@ public class TCPServer implements TCPNetwork {
 			in.close();
 		} 
 		catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 

@@ -84,6 +84,7 @@ public class NetworkCreator{
 	}
 
 	private void StartTCPServer(){
+		System.out.println("START SERVER");
 		terminate();
 		UDPclient.close();
 		UDPserver.close();
