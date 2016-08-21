@@ -18,6 +18,7 @@ public class TCPServer implements TCPNetwork {
 	@Override
 	public boolean socket(String ipAddress) {
 		try { 
+			serverSocket.setReuseAddress(true);
 			serverSocket = new ServerSocket(10007); 
 		} 
 		catch (IOException e) 

@@ -61,8 +61,6 @@ public class TCPClient implements TCPNetwork {
 	public void close() {
 		try {
 			Socket.close();
-			out.close();
-			in.close();
 		} 
 		catch (IOException e) {
 		}

@@ -28,7 +28,7 @@ public class Player implements ConnectionStatus{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			this.network.SendMove("Hello");
+			this.network.SendMove("MOVE 7 10 null");
 			break;
 		case 2:
 			System.out.println("Player2: Player 1's turn");
@@ -44,6 +44,12 @@ public class Player implements ConnectionStatus{
 		
 		//Start Player2
 		Player2thread();
+		
+		//Start Player1
+		Player1thread();
+				
+		//Start Player2
+		Player2thread();
 	}
 	
 	public static void Player1thread(){
@@ -54,17 +60,17 @@ public class Player implements ConnectionStatus{
 		
 		network.StartNetworking();
 		
-		try {
+		/*try {
 			//Runs for 3 seconds
-			Thread.sleep(3000);
+			Thread.sleep(1000);
 			//This is used to represent the action of a player picking a game
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		List<String> players = network.getAvailablePlayers();
-		System.out.println(Arrays.toString(players.toArray()));
+		System.out.println(Arrays.toString(players.toArray()));*/
 		
-		/*int n = 3;
+		int n = 3;
 		List<String> players = null;
 		
 		while(n == 3){
@@ -77,13 +83,11 @@ public class Player implements ConnectionStatus{
 			n = reader.nextInt();
 		}
 		
-		int turn = network.Connect(players.get(n));*/
-		int turn = network.Connect(players.get(0));
+		int turn = network.Connect(players.get(n));
+		//int turn = network.Connect(players.get(0));
 		
 		System.out.println("turn " + turn);
-		
-		//TODO remove this switch and have it return as a listener after a Connet() is called
-		
+				
 		switch(turn){
 		case 0:
 			System.out.println("Player1: Failed to connect");
@@ -97,7 +101,8 @@ public class Player implements ConnectionStatus{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			network.SendMove("Hello");
+			network.SendMove("MOVE 30 25 null");
+			System.out.println("Player1 sent: MOVE 30 25 null");
 			break;
 		case 2:
 			System.out.println("Player1: Player 2's turn");
