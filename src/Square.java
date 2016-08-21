@@ -125,13 +125,13 @@ public class Square extends JLabel {
 						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.UpRight), neighbour));
 					}
 				}
-				else if((this.neighbours.get(Direction.DownLeft)!=null) && this.neighbours.get(Direction.DownLeft)==neighbour){
-					if(neighbour.neighbours.get(Direction.DownLeft)!=null && neighbour.neighbours.get(Direction.DownLeft).getPiece()==null && neighbour.neighbours.get(Direction.DownLeft).getPiece() instanceof King){
+				else if((this.neighbours.get(Direction.DownLeft)!=null) && this.neighbours.get(Direction.DownLeft)==neighbour && this.getPiece() instanceof King){
+					if(neighbour.neighbours.get(Direction.DownLeft)!=null && neighbour.neighbours.get(Direction.DownLeft).getPiece()==null ){
 						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.DownLeft), neighbour));
 					}
 				}
-				else if((this.neighbours.get(Direction.DownRight)!=null) && this.neighbours.get(Direction.DownRight)==neighbour){
-					if(neighbour.neighbours.get(Direction.DownRight)!=null && neighbour.neighbours.get(Direction.DownRight).getPiece()==null && neighbour.neighbours.get(Direction.DownLeft).getPiece() instanceof King){
+				else if((this.neighbours.get(Direction.DownRight)!=null) && this.neighbours.get(Direction.DownRight)==neighbour && this.getPiece() instanceof King){
+					if(neighbour.neighbours.get(Direction.DownRight)!=null && neighbour.neighbours.get(Direction.DownRight).getPiece()==null){
 						moves.add(new C_Move(this, neighbour.neighbours.get(Direction.DownRight), neighbour));
 					}
 				}
