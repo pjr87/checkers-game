@@ -296,8 +296,14 @@ public class Checkers implements ConnectionStatus{
 		gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);
 		network.CloseNetworking();
 		startNetworking();
-		gui.removeAllPiecesFromBoard();
+		removeAllPiecesFromBoard();
 		gui.refreshScreen();
+	}
+
+	private void removeAllPiecesFromBoard() {
+		for(int i =0;i<board.getSquares().length;i++){
+			board.getSquares()[i].removePiece();
+		}
 	}
 
 	//connects to opponent and if connected successfully it will begin a game

@@ -119,9 +119,6 @@ public class GUI extends JFrame{
 	public void enableDrawAndResign(boolean b){
 		gameScreen.setBtnDrawAndResignEnabled(b);
 	}
-	public void removeAllPiecesFromBoard(){
-		gameScreen.removeAllPiecesFromBoard();
-	}
 	
 	public void displayWinner(int winner){
 		//winner values: 0=white won, 1=red won, 2=Tie 	
