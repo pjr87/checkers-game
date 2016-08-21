@@ -240,7 +240,7 @@ public class Checkers implements ConnectionStatus{
 	public void receivedFromNetwork(String data){
 		int gameOver;
 		if(data == null){
-			gui.setScreen(Screen.GAME_SCREEN);
+			exitToPlayerSelectionScreen();
 			JOptionPane.showMessageDialog(null, "Opponent Disconnected!");
 		}
 		else if(data.split(" ")[0].equals("MOVE")){
@@ -281,8 +281,9 @@ public class Checkers implements ConnectionStatus{
 		}
 	}
 	public void exitToPlayerSelectionScreen(){
-		gui.setScreen(Screen.GAME_SCREEN);
+		gui.setScreen(Screen.PLAYER_SELECTION_SCREEN);
 		network.CloseNetworking();
+		gui.refreshScreen();
 	}
 
 	//connects to opponent and if connected successfully it will begin a game
