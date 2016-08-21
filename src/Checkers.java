@@ -200,9 +200,7 @@ public class Checkers implements ConnectionStatus{
 					gui.deselectAllsquares();
 					board.showAllValidMoves(isRed);
 				}
-
 			}
-
 		});
 	}
 	private void startRecv(){
@@ -218,7 +216,7 @@ public class Checkers implements ConnectionStatus{
 		public void run () {
 			while(true){
 				gui.updatePlayersList( network.getAvailablePlayers() );
-				try { Thread.sleep(2000); } catch (InterruptedException e) { }
+				try { Thread.sleep(2000); } catch (InterruptedException e){ }
 			}
 		}
 	};
@@ -297,6 +295,7 @@ public class Checkers implements ConnectionStatus{
 		network.CloseNetworking();
 		startNetworking();
 		removeAllPiecesFromBoard();
+		gui.deselectAllsquares();
 		gui.refreshScreen();
 	}
 
