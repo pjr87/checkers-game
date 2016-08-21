@@ -12,16 +12,19 @@ public class C_Move extends Move {
 		return captured.getLabel();
 	}
 	
+	@Override
 	public void apply(){
 		end.setPiece(start.getPiece());
 		start.removePiece();
 		captured.removePiece();
 	}
 	
+	@Override
 	public void sendMove(NetworkCreator send, boolean b){
 		send.SendMove(make_send_string(b));
 	}
 	
+	@Override
 	public String make_send_string(boolean b){
 		String s = name;
 		s += delim + String.valueOf(get_start_pos());

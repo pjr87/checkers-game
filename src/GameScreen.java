@@ -104,8 +104,9 @@ public class GameScreen extends JPanel{
 
 	public void setpBtnNotationAction(ActionListener a) { gBtnNotation.addActionListener(a); }
 	
-	public void setBtnDrawEnabled(boolean b){
+	public void setBtnDrawAndResignEnabled(boolean b){
 		gBtnDraw.setEnabled(b);
+		gBtnResign.setEnabled(b);
 	}
 
 	public void setAllSquaresMouseListener(MouseAdapter mouseA) {
