@@ -41,7 +41,7 @@ public class King extends Piece
 //			    ex.printStackTrace();
 //			}
 //			this.setImage(whiteImage);
-			this.setImage(Toolkit.getDefaultToolkit().getImage(Piece.class.getResource("/resources/blak-piece-king.png")));
+			this.setImage(Toolkit.getDefaultToolkit().getImage(Piece.class.getResource("/resources/black-piece-king.png")));
 
 		}
 	}	
