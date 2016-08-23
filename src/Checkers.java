@@ -222,10 +222,18 @@ public class Checkers implements ConnectionStatus{
 		}
 	};
 
-	public boolean checkForKing(Square s){
-		if(s.getLabel() < 4){
-			s.setPiece(new King(isRed));
-			return true;
+	public boolean checkForKing(Square s, boolean team){
+		if(team ==isRed){
+			if(s.getLabel() < 4){
+				s.setPiece(new King(isRed));
+				return true;
+			}
+		}
+		else{
+			if(s.getLabel() > 27){
+				s.setPiece(new King(!isRed));
+				return true;
+			}
 		}
 		return false;
 	}
@@ -351,6 +359,10 @@ public class Checkers implements ConnectionStatus{
 			if(values.length>4 && values[4].equals("king"))
 				board.getSquares()[startID].setPiece(new King(!isRed));
 			
+			if(checkForKing(board.getSquares()[endID],!isRed)){
+				board.getSquares()[startID].setPiece(new King(!isRed));
+			}
+
 			if(values[3].equals("null"))
 				return new Move(board.getSquares()[startID], board.getSquares()[endID]);
 			else
