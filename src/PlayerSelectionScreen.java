@@ -4,6 +4,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -25,7 +26,7 @@ import org.omg.PortableServer.POAPackage.AdapterAlreadyExists;
 public class PlayerSelectionScreen extends JPanel{
 
 	private static final long serialVersionUID = 7893337942915288121L;
-	
+
 	//Manual connect to other player panel 
 	private JPanel pPnlManualConnect;
 	private JScrollPane pSclPnlPlayers;
@@ -40,14 +41,14 @@ public class PlayerSelectionScreen extends JPanel{
 	private JList<Object[]> pLstPlayers;
 	private JButton pBtnPlay;
 	private JButton pBtnRefresh;
-	
+
 	//helper vars
 	private DefaultListModel<String> players;
 	private String ourIp;
 	private boolean alreadySet;
 	private static final String versionText="Version: ";
 	private static final String version="2.6";
-	
+
 	//Constructor - GUI Setup
 	public PlayerSelectionScreen() {
 		alreadySet=false;
@@ -55,124 +56,124 @@ public class PlayerSelectionScreen extends JPanel{
 		players = new DefaultListModel<String>();
 
 		pLblVersion = new JLabel(versionText+version);
-		
+
 		//player Screen sub-panels
 		createManualConnectPanel();
 		createPlayerListPanel();
-		
+
 		updatePlayBtn();
 		updateConnectBtn();
-		
+
 		//add panels to screen
 		Dimension size;
 		Insets insets = this.getInsets();
-		
+
 		size = pPnlManualConnect.getPreferredSize();
 		pPnlManualConnect.setBounds(15+insets.left, 10+insets.top, size.width+120, size.height+30);
 		pPnlManualConnect.setBorder(new TitledBorder("Manually Connect"));
 		this.add(pPnlManualConnect);
-		
+
 		size = pPnlPlayerList.getPreferredSize();
 		pPnlPlayerList.setBounds(86+insets.left, 80+insets.top, size.width+30, size.height+30);
 		pPnlPlayerList.setBorder(new TitledBorder("Select Opponent From List"));
 		this.add(pPnlPlayerList);
-		
+
 		size = pLblVersion.getPreferredSize();
 		pLblVersion.setBounds(5+insets.left, 208+insets.top, size.width, size.height);
 		this.add(pLblVersion);
-	
+
 	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void createPlayerListPanel(){
-		
+
 		pPnlPlayerList = new JPanel();
 		pPnlPlayerList.setToolTipText("sample text");
-		 
+
 		pPnlPlayerList.setLayout(new GridBagLayout());
 		GridBagConstraints layout = new GridBagConstraints();
-		
+
 		//instantiate gui objects
 		pBtnPlay = new JButton("Challenge Selected Player");
 		pBtnRefresh = new JButton("     Refresh Players List      ");
 		pLstPlayers = new JList(players);
 		pSclPnlPlayers = new JScrollPane(pLstPlayers);
-		
+
 		//jlist options
 		pLstPlayers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		pLstPlayers.setLayoutOrientation(JList.VERTICAL);
-		
+
 		pLstPlayers.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent arg) {
 				updatePlayBtn();
 			}
 		});
-		
-	//position all elements on panel
+
+		//position all elements on panel
 		layout.gridx=2;
 		layout.gridy=0;
 		pPnlPlayerList.add(new JLabel("   "),layout);
-		
+
 		layout.gridx=2;
 		layout.gridy=1;
 		layout.gridheight=1;
 		pPnlPlayerList.add(pBtnPlay,layout);
-		
+
 		layout.gridx=1;
 		layout.gridy=0;
 		pPnlPlayerList.add(new JLabel("   "),layout);
-		
+
 		layout.gridx=2;
 		layout.gridy=3;
 		JLabel padding = new JLabel();
 		padding.setPreferredSize(new Dimension(10,0));
 		padding.setOpaque(true);
 		pPnlPlayerList.add(padding,layout);
-		
+
 		layout.gridx=2;
 		layout.gridy=4;
 		pPnlPlayerList.add(pBtnRefresh,layout);
-		
+
 		layout.gridx=0;
 		layout.gridy=0;
 		layout.gridheight=5;
 		pSclPnlPlayers.setPreferredSize(new Dimension(200, 102));
 		pPnlPlayerList.add(pSclPnlPlayers,layout);
 	}
-	
+
 	private void createManualConnectPanel(){
-		
+
 		//gridbag setup
 		GridBagConstraints layout = new GridBagConstraints();
 		layout.fill=GridBagConstraints.HORIZONTAL;
 		layout.anchor=GridBagConstraints.WEST;
-		
+
 		//instantiate Gui objects
 		pPnlManualConnect = new JPanel();
 		pTxtHostAddress = new JTextField();
 		pBtnConnect = new JButton("Challenge");
 		pLblOpponentIp = new JLabel("Opponents IP address: ");
-		
+
 		//add listener for when text in pTxtHostAddress changes.
 		pTxtHostAddress.getDocument().addDocumentListener(new DocumentListener() {
-			
+
 			@Override
 			public void removeUpdate(DocumentEvent e) { updateConnectBtn(); }
-			
+
 			@Override
 			public void insertUpdate(DocumentEvent e) { updateConnectBtn(); }
-			
+
 			@Override
 			public void changedUpdate(DocumentEvent e) { updateConnectBtn(); }
 		});
 
 		pPnlManualConnect.setLayout(new GridBagLayout());
-		
-		ourIp = "";
+
+		try { ourIp = Checkers.getIps().get(0); } catch (SocketException e) {e.printStackTrace();}
 
 		pLblYourIp = new JLabel("Your IP address is: "+ourIp);
 
-	//position all elements on panel
+		//position all elements on panel
 		layout.gridx=0;
 		layout.gridy=0;
 		pPnlManualConnect.add(pLblOpponentIp,layout);
@@ -198,7 +199,7 @@ public class PlayerSelectionScreen extends JPanel{
 		layout.gridy=0;
 		pPnlManualConnect.add(pLblYourIp,layout);
 	}
-	
+
 	//enables and disables the Challenge button
 	public void updateConnectBtn(){
 		String ipText = pTxtHostAddress.getText();
@@ -207,7 +208,7 @@ public class PlayerSelectionScreen extends JPanel{
 		else
 			pBtnConnect.setEnabled(false);
 	}
-	
+
 	//enables and disables the "found players" play button 
 	public void updatePlayBtn(){
 		if (pLstPlayers.getSelectedIndex() == -1)
@@ -224,13 +225,24 @@ public class PlayerSelectionScreen extends JPanel{
 	//returns opponents ip address
 	public String getSelectedIp(){ return (String) players.getElementAt(pLstPlayers.getSelectedIndex()); }
 	public String getInputtedIp(){ return pTxtHostAddress.getText(); }
-	
+
 	//update the found players list
 	public void updatePlayersList(List<String> newPlayers){
 		if(!alreadySet){
-			ourIp = newPlayers.remove(0);
-			pLblYourIp.setText("Your IP address is: "+ourIp);
+
 			alreadySet=true;
+			ArrayList<String> ipStrings = null;
+			try { ipStrings = Checkers.getIps(); } catch (SocketException e) {e.printStackTrace();}
+			if(ipStrings!=null)
+				for (String ip : ipStrings) {
+					for(int i =0;i<newPlayers.size();i++){
+						if(newPlayers.get(i).equals(ip)){
+							ourIp = newPlayers.remove(0);
+							alreadySet=true;
+						}
+					}
+				}
+			pLblYourIp.setText("Your IP address is: "+ourIp);
 		}
 		else{
 			for(int i=newPlayers.size()-1; i>-1; i--){
@@ -238,7 +250,7 @@ public class PlayerSelectionScreen extends JPanel{
 					newPlayers.remove(i);
 			}
 		}
-		
+
 		int ind = pLstPlayers.getSelectedIndex();
 		players.removeAllElements();
 		for(int i = 0;i<newPlayers.size();i++){

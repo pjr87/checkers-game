@@ -361,7 +361,6 @@ public class Checkers implements ConnectionStatus{
 	}
 
 	//will be replaced by method from NetworkCreator when implemented (it returns our ip address)
-	@Deprecated
 	public static ArrayList<String> getIps() throws SocketException{
 		ArrayList<String> arrayList = new ArrayList<String>();
 		@SuppressWarnings("rawtypes")
