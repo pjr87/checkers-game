@@ -163,7 +163,7 @@ public class Checkers implements ConnectionStatus{
 							//if its a jump move
 							if(move instanceof C_Move){
 								((C_Move) move).apply();//just Applies move to local board
-								checkForKing(move.end);
+								checkForKing(move.end,isRed);
 								nextMoves = board.getAvailableMoves(move.end);
 
 								boolean doubleJump=false;
@@ -185,7 +185,7 @@ public class Checkers implements ConnectionStatus{
 							}
 							else{//if a normal move
 								move.apply();//apply move
-								boolean b = checkForKing(move.end);
+								boolean b = checkForKing(move.end,isRed);
 								move.sendMove(network, b);
 								gui.enableDrawAndResign(false);
 								startRecv();
